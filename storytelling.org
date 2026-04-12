@@ -1,0 +1,108 @@
+* dominios
+- cliente
+- veiculo
+- servicos
+- ordem servico (core domainl)
+- gestao pecas e insumos / Inventario (subdominio de suporte)
+- analise metricas (subdominio de suporte)
+- jwt authentication (dominio generico)
+- sistema notificacao cliente (dominio generico)
+
+
+* 1 abertura ordem servico -------
+- cliente solicita atendimento ao atendente
+- pega uma ficha de cliente e
+- anota o cliente
+- anota o veiculo
+
+
+* 2 definicao de servicos, pecas e insumos
+- mecanico conversa com cliente
+- ambos definem servicos, pecas e insumos para order servico
+- define orcamento
+
+* 3 aprovacao orcamento
+- cliente aprova orcamento
+
+* 4 rejeicao orcamento
+- cliente rejeita orcamento
+
+* 5 mecanico faz diagnostico
+- faz diagnostico do veiculo
+- adiciona servicos e pecas quando necessario
+- anota na ficha
+- cliente e notificado
+
+* 6 cliente aprova modificacoes
+- cliente revisa novo orcamento
+- cliente aprova orcamento
+
+* 7 mecanico conserto
+- mecanico eh notificado da aprovacao
+- mecanico realiza os servicos
+- cliente eh notificado da finalizacao do servico
+
+* 8 atualizacao estoque
+- alguem atualiza o estoque da mecanica
+
+* 9 pedir mais insumos e pecas
+- funcionario verifica estoque de pecas e insumos
+- funcionario faz a solicitação de novas pecas e insumos
+
+* 10 finalizacao de ordem servico
+- cliente realiza pagamento da ordem servico
+- cliente pega o veiculo de volta
+
+* 11 acompanhamento pelo cliente
+- cliente autentica no sistema
+- cliente acessa ordem serviço
+- cliente ve status da ordem serviço
+
+
+* dicionario ubiquo
+- cliente
+- veiculo
+- servico
+- peca (peças, componentes e insumos utilizados no serviço)
+- ordem servico
+- jwt
+- autenticacao
+- orçamento
+- mecanico
+- estoque
+- Status:
+  -Recebida
+  -Em Diagnostico
+  -Aguardando Aprovacao
+  -Em Execucao
+  -Finalizada
+  -Entregue
+
+
+* event storming:
+
+Eventos:
+-cadastro cliente
+-cadastro veiculo
+-criacao de ordem servico
+-diagnostico veiculo
+-conserto veiculo
+-vincula servico a ordem servico
+-vincula peca a ordem servico
+-cliente aprova orçamento
+-sistema gera orcamento
+-envio orcamento para cliente
+-cliente checa status
+-cliente rejeita orcamento
+-finaliza servico
+-devolucao veiculo
+-diminui pecas no estoque
+-incrementar peca no estoque
+-pedir mais pecas
+-atualiza status para aguardando aprovacao (ordem servico)
+
+
+
+
+veiculo id: fc30fa6c-003d-440a-9142-494ff8e4ecf7
+cliente id: 6a8a0433-8f31-4ef8-b005-11e094df27f7

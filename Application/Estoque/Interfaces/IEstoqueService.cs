@@ -1,0 +1,22 @@
+namespace Application.Estoque.Interfaces;
+
+using Application.Estoque.DTOs;
+using Domain.Estoque.Entities;
+
+public interface IEstoqueService
+{
+    public Task<IEnumerable<PecaResponseDto>> GetAll();
+
+    public Task<Peca?> GetById(Guid id);
+
+    public Task Create(PecaCreateDto dto);
+
+    public Task Update(Guid id, PecaUpdateDto dto);
+
+    public Task Delete(Guid id);
+
+    public Task Adicionar(Guid id, int quantidade);
+
+    public Task Consumir(Guid id, int quantidade);
+
+}
