@@ -2,18 +2,16 @@ namespace Domain.OrdensServico.Entities;
 
 public class Veiculo
 {
-    public Guid Id { get; private set; }
-    public string Placa { get; private set; }
-    public string Marca { get; private set; }
-    public string Modelo { get; private set; }
-    public int Ano { get; private set; }
+    public Guid Id { get; set; }
+    public string Placa { get; set; }
+    public string Marca { get; set; }
+    public string Modelo { get; set; }
+    public int Ano { get; set; }
 
     protected Veiculo() { }
 
     public Veiculo(string placa, string marca, string modelo, int ano)
     {
-        Id = Guid.NewGuid();
-
         if (string.IsNullOrWhiteSpace(placa))
             throw new Exception("Placa obrigatória");
 

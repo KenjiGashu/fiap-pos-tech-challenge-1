@@ -6,6 +6,10 @@ public interface IOrdemServicoRepository
 {
     Task<OrdemServico> ObterPorId(Guid id);
     Task<IEnumerable<OrdemServico>> ObterTodos();
-    Task Adicionar(OrdemServico os);
+    Task AdicionarPecas(OrdemServico os);
+	  Task AdicionarPecas(Guid id, IEnumerable<OrdemServicoPeca> pecas);
+	  Task AdicionarServicos(OrdemServico os);
     Task Atualizar(OrdemServico os);
+    Task Deletar(Guid id);
+    Task SaveChangesAsync();
 }

@@ -2,15 +2,21 @@ namespace Domain.OrdensServico.Entities;
 
 public class OrdemServicoServico
 {
-    public Guid Id { get; private set; }
-    public Guid ServicoId { get; private set; }
-    public decimal Preco { get; private set; }
+    public Guid Id { get; set; }
+    public decimal Preco { get; set; }
+
+    public Guid OrdemServicoId { get; set; }
+    public OrdemServico OrdemServico { get; set; }
+
+  	public Guid ServicoId { get; set; } 
+    public Servico Servico { get; set; } 
+
 
     protected OrdemServicoServico() { }
 
-    public OrdemServicoServico(Guid servicoId, decimal preco)
+	  public OrdemServicoServico(Guid ordemServicoId, Guid servicoId, decimal preco)
     {
-        Id = Guid.NewGuid();
+        OrdemServicoId = ordemServicoId;
         ServicoId = servicoId;
         Preco = preco;
     }

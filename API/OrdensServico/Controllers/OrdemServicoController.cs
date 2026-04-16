@@ -18,8 +18,7 @@ public class OrdemServicoController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        await _service.GetAll();
-        return Ok();
+        return Ok(await _service.GetAll());
     }
 
     [HttpPost]
@@ -34,5 +33,26 @@ public class OrdemServicoController : ControllerBase
     {
         await _service.AdicionarPecas(dto);
         return Ok();
+    }
+
+    [HttpPost("AdicionaServico")]
+    public async Task<IActionResult> AdicionaServicos([FromBody] OrdemServicoAdicionaServicoDto dto)
+    {
+        await _service.AdicionarServicos(dto);
+        return Ok();
+    }
+
+    [HttpPost("EnviarOrcamento")]
+    public async Task<IActionResult> EnviarOrcamento([FromBody] OrdemServicoEnviaOrcamentoDto dto)
+    {
+        await _service.EnviarOrcamento(dto);
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(OrdemServicoDeleteDto dto)
+    {
+        await _service.Deletar(dto);
+        return NoContent();
     }
 }

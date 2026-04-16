@@ -2,16 +2,16 @@ namespace Domain.OrdensServico.Entities;
 
 public class Servico
 {
-    public Guid Id { get; private set; }
-    public string Nome { get; private set; }
-    public decimal Preco { get; private set; }
+    public Guid Id { get; set; }
+    public string Nome { get; set; }
+    public decimal Preco { get; set; }
 
+    public List<OrdemServicoServico> OrdemServicoServicos { get; set; }
+	
     protected Servico() { }
 
     public Servico(string nome, decimal preco)
     {
-        Id = Guid.NewGuid();
-
         if (string.IsNullOrWhiteSpace(nome))
             throw new Exception("Nome obrigatório");
 

@@ -1,15 +1,18 @@
 namespace Domain.Estoque.Entities;
+using Domain.OrdensServico.Entities;
 
 public class Peca
 {
     public Guid Id { get; private set; }
     public string Nome { get; private set; }
     public decimal Preco { get; private set; }
-	  public int Quantidade {get; private set;}
+    public int Quantidade { get; private set; }
+
+    public List<OrdemServicoPeca> OrdemServicoPecas { get; set; }
 
     protected Peca() { }
 
-	  public Peca(string nome, decimal preco, int quantidade)
+    public Peca(string nome, decimal preco, int quantidade)
     {
         Id = Guid.NewGuid();
 
@@ -19,37 +22,37 @@ public class Peca
         if (preco < 0)
             throw new Exception("Preço inválido");
 
-				if(quantidade < 0)
-					throw new Exception("Quantidade invalida");
+        if (quantidade < 0)
+            throw new Exception("Quantidade invalida");
 
         Nome = nome;
         Preco = preco;
-				Quantidade = quantidade;
+        Quantidade = quantidade;
     }
 
-	  public void Atualizar(string nome, decimal preco, int quantidade)
+    public void Atualizar(string nome, decimal preco, int quantidade)
     {
         Nome = nome;
         Preco = preco;
-				Quantidade = quantidade;
+        Quantidade = quantidade;
     }
 
-	  public void Adicionar(int quantidade)
-	  {
-		  if(quantidade <= 0)
-		  	throw new Exception("Quantidade invalida");
+    public void Adicionar(int quantidade)
+    {
+        if (quantidade <= 0)
+            throw new Exception("Quantidade invalida");
 
-	  	this.Quantidade += quantidade;
-	  }
+        this.Quantidade += quantidade;
+    }
 
-	  public void Consumir(int quantidade)
-  	{
-	  	if(quantidade <= 0)
-	  		throw new Exception("quantidade invalida");
-		
-	  	if(quantidade > this.Quantidade)
-	  		throw new Exception("nao ha estoque suficiente");
+    public void Consumir(int quantidade)
+    {
+        if (quantidade <= 0)
+            throw new Exception("quantidade invalida");
 
-		  this.Quantidade -= quantidade;
-  	}
+        if (quantidade > this.Quantidade)
+            throw new Exception("nao ha estoque suficiente");
+
+        this.Quantidade -= quantidade;
+    }
 }

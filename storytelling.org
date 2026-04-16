@@ -103,6 +103,21 @@ Eventos:
 
 
 
+commands:
+dotnet ef database update \
+--project Infrastructure \
+--startup-project API
 
-veiculo id: fc30fa6c-003d-440a-9142-494ff8e4ecf7
-cliente id: 6a8a0433-8f31-4ef8-b005-11e094df27f7
+dotnet ef database update \
+--project Infrastructure \
+--startup-project API
+
+dotnet ef migrations add InitialCreate \
+--project Infrastructure \
+--startup-project API
+
+dotnet run --project API/
+
+
+"1d45ba5b-1325-4a49-93bb-b3888b4533e6"
+

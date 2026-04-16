@@ -38,6 +38,27 @@ namespace Infrastructure.Migrations
                     b.ToTable("Pecas");
                 });
 
+            modelBuilder.Entity("Domain.Notificacao.Entities.Token", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HashedToken")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("OrdemServicoId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tokens");
+                });
+
             modelBuilder.Entity("Domain.OrdensServico.Entities.Cliente", b =>
                 {
                     b.Property<Guid>("Id")
@@ -102,7 +123,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("OrdemServicoId")
+                    b.Property<Guid>("OrdemServicoId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("PecaId")
@@ -118,6 +139,8 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OrdemServicoId");
 
+                    b.HasIndex("PecaId");
+
                     b.ToTable("OrdemServicoPecas");
                 });
 
@@ -127,7 +150,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("OrdemServicoId")
+                    b.Property<Guid>("OrdemServicoId")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Preco")
@@ -139,6 +162,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrdemServicoId");
+
+                    b.HasIndex("ServicoId");
 
                     b.ToTable("OrdemServicoServicos");
                 });
@@ -187,20 +212,142 @@ namespace Infrastructure.Migrations
                     b.ToTable("Veiculos");
                 });
 
+            modelBuilder.Entity("Domain.Teste.Entities.Blog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Blogs");
+                });
+
+            modelBuilder.Entity("Domain.Teste.Entities.Pedido", b =>
+                {
+                    b.Property<Guid>("PedidoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PessoaId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("PedidoId");
+
+                    b.HasIndex("PessoaId");
+
+                    b.ToTable("Pedidos");
+                });
+
+            modelBuilder.Entity("Domain.Teste.Entities.Pessoa", b =>
+                {
+                    b.Property<Guid>("PessoaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("PessoaId");
+
+                    b.ToTable("Pessoas");
+                });
+
+            modelBuilder.Entity("Domain.Teste.Entities.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BlogId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogId");
+
+                    b.ToTable("Posts");
+                });
+
             modelBuilder.Entity("Domain.OrdensServico.Entities.OrdemServicoPeca", b =>
                 {
-                    b.HasOne("Domain.OrdensServico.Entities.OrdemServico", null)
+                    b.HasOne("Domain.OrdensServico.Entities.OrdemServico", "OrdemServico")
                         .WithMany("Pecas")
                         .HasForeignKey("OrdemServicoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Estoque.Entities.Peca", "Peca")
+                        .WithMany("OrdemServicoPecas")
+                        .HasForeignKey("PecaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrdemServico");
+
+                    b.Navigation("Peca");
                 });
 
             modelBuilder.Entity("Domain.OrdensServico.Entities.OrdemServicoServico", b =>
                 {
-                    b.HasOne("Domain.OrdensServico.Entities.OrdemServico", null)
+                    b.HasOne("Domain.OrdensServico.Entities.OrdemServico", "OrdemServico")
                         .WithMany("Servicos")
                         .HasForeignKey("OrdemServicoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.OrdensServico.Entities.Servico", "Servico")
+                        .WithMany("OrdemServicoServicos")
+                        .HasForeignKey("ServicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrdemServico");
+
+                    b.Navigation("Servico");
+                });
+
+            modelBuilder.Entity("Domain.Teste.Entities.Pedido", b =>
+                {
+                    b.HasOne("Domain.Teste.Entities.Pessoa", "Pessoa")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pessoa");
+                });
+
+            modelBuilder.Entity("Domain.Teste.Entities.Post", b =>
+                {
+                    b.HasOne("Domain.Teste.Entities.Blog", "Blog")
+                        .WithMany("Posts")
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Blog");
+                });
+
+            modelBuilder.Entity("Domain.Estoque.Entities.Peca", b =>
+                {
+                    b.Navigation("OrdemServicoPecas");
                 });
 
             modelBuilder.Entity("Domain.OrdensServico.Entities.OrdemServico", b =>
@@ -208,6 +355,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("Pecas");
 
                     b.Navigation("Servicos");
+                });
+
+            modelBuilder.Entity("Domain.OrdensServico.Entities.Servico", b =>
+                {
+                    b.Navigation("OrdemServicoServicos");
+                });
+
+            modelBuilder.Entity("Domain.Teste.Entities.Blog", b =>
+                {
+                    b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("Domain.Teste.Entities.Pessoa", b =>
+                {
+                    b.Navigation("Pedidos");
                 });
 #pragma warning restore 612, 618
         }
