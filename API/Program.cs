@@ -35,7 +35,6 @@ builder.Services.AddScoped<IServicoRepository, ServicoRepository>();
 builder.Services.AddScoped<IPecaRepository, PecaRepository>();
 builder.Services.AddScoped<IEstoqueService, EstoqueService>();
 builder.Services.AddScoped<ClienteService>();
-builder.Services.AddScoped<EstoqueService>();
 builder.Services.AddScoped<VeiculoService>();
 
 //servico

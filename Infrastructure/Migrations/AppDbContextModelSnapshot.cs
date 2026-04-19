@@ -91,6 +91,9 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("VeiculoId")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("deveAprovarDeNovo")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("OrdemServicos");

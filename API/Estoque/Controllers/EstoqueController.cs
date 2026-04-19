@@ -3,14 +3,15 @@ namespace API.Estoque.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Application.Estoque.Services;
 using Application.Estoque.DTOs;
+using Application.Estoque.Interfaces;
 
 [ApiController]
 [Route("api/[controller]")]
 public class EstoqueController : ControllerBase
 {
-    private readonly EstoqueService _service;
+    private readonly IEstoqueService _service;
 
-    public EstoqueController(EstoqueService service)
+    public EstoqueController(IEstoqueService service)
     {
         _service = service;
     }

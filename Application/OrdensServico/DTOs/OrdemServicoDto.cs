@@ -66,6 +66,26 @@ public class OrdemServicoIniciarDiagnosticoOrcamentoDto
 	public Guid OrdemServicoId { get; set; }
 }
 
+public class OrdemServicoFinalizarDiagnosticoOrcamentoDto
+{
+	public Guid OrdemServicoId { get; set; }
+}
+
+public class OrdemServicoIniciarExecucaoOrcamentoDto
+{
+	public Guid OrdemServicoId { get; set; }
+}
+
+public class OrdemServicoFinalizarExecucaoOrcamentoDto
+{
+	public Guid OrdemServicoId { get; set; }
+}
+
+public class OrdemServicoEntregarVeiculoDto
+{
+	public Guid OrdemServicoId { get; set; }
+}
+
 public class OrdemServicoAprovarOrcamentoDto
 {
 	public Guid TokenGuid { get; set; }

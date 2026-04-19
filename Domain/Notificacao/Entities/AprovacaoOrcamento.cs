@@ -54,7 +54,7 @@ public class AprovacaoOrcamento
 
         string quantidadeString = quantidade > 0 ? " x" + quantidade.ToString() + " " : "";
 
-        return nome + new string(' ', diff) + quantidadeString + "R$" + preco.ToString();
+        return nome + new string(' ', diff) + quantidadeString + "R$" + preco.ToString() + "\n";
     }
 
 		public string MontaCorpoMensagem()

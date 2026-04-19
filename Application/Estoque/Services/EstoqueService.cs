@@ -61,6 +61,9 @@ public class EstoqueService : IEstoqueService
 	{
 		var peca = await _repo.ObterPorId(id);
 
+		if(peca == null)
+			throw new Exception("Peca nao encontrada");
+
 		peca.Adicionar(quantidade);
 
 		await _repo.Atualizar(peca);
@@ -68,11 +71,14 @@ public class EstoqueService : IEstoqueService
 
 	public async Task Consumir(Guid id, int quantidade)
 	{
-			var peca = await _repo.ObterPorId(id);
+		Console.WriteLine($"[EstoqueService] id[{id}] quantidade[{quantidade}]");
 
-		peca.Consumir(quantidade);
+        var peca = await _repo.ObterPorId(id);
+			
+			if(peca == null)
+            throw new Exception("Peca nao encontrada");
 
-		await _repo.Atualizar(peca);	
+        peca.Consumir(quantidade);
 	}
 
 }

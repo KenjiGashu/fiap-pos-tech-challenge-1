@@ -26,6 +26,7 @@ public class TokenService : ITokenService
 
 	  public async Task<Token?> ObterTokenPorGuid(Guid id)
 	  {
+        Console.WriteLine($"[ObterTokenPorGuid] guid {id.ToString("n")}");
         Console.WriteLine($"[ObterTokenPorGuid] {Token.ComputeSha256Hash(id.ToString("n"))}");
         string hash = Token.ComputeSha256Hash(id.ToString("n"));
         return await _repo.ObterToken(hash);

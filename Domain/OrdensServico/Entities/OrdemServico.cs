@@ -6,6 +6,8 @@ public enum StatusOrdemServico
 	OrcamentoAprovado,
 	EmDiagnostico,
 	AguardandoAprovacao,
+	AguardandoAprovacaoRevisao,
+	AguardandoMecanico,
 	EmExecucao,
 	Finalizada,
 	Entregue
@@ -19,6 +21,7 @@ public class OrdemServico
     public DateTime Data { get; set; }
     public decimal Total { get; set; }
 	  public StatusOrdemServico  Status { get; set; }
+	  public bool deveAprovarDeNovo { get; set; }
 
 
     public List<OrdemServicoServico> OrdemServicoServicos { get; private set; } = new();
@@ -38,6 +41,11 @@ public class OrdemServico
 
 	  public void AdicionarServico(Guid servicoId, decimal preco, string nome)
     {
+			if(Status == StatusOrdemServico.EmDiagnostico)
+			{
+				deveAprovarDeNovo = true;
+			}
+			
 			  OrdemServicoServicos.Add(new OrdemServicoServico(this.Id, servicoId, preco, nome));
         RecalcularTotal();
     }
@@ -46,6 +54,11 @@ public class OrdemServico
     {
 			if(quantidade <= 0)
             throw new Exception("Quantidade de Peca invalida.");
+
+			if(Status == StatusOrdemServico.EmDiagnostico)
+			{
+				deveAprovarDeNovo = true;
+			}
 
 			OrdemServicoPecas.Add(new OrdemServicoPeca(this.Id, pecaId, nome, preco, quantidade));
         RecalcularTotal();
@@ -62,7 +75,10 @@ public class OrdemServico
 
 	public void AprovarOrcamento()
 	{
-		Status = StatusOrdemServico.OrcamentoAprovado;
+		if(Status == StatusOrdemServico.AguardandoAprovacao)
+			Status = StatusOrdemServico.OrcamentoAprovado;
+		else if(Status == StatusOrdemServico.AguardandoAprovacaoRevisao)
+      Status = StatusOrdemServico.AguardandoMecanico;
 	}
 
 	public void IniciarDiagnostico()
@@ -70,9 +86,23 @@ public class OrdemServico
 		Status = StatusOrdemServico.EmDiagnostico;
 	}
 
+	public void FinalizarDiagnostico()
+	{
+		Status = StatusOrdemServico.AguardandoAprovacaoRevisao;
+	}
+
 	public void IniciarExecucao()
 	{
 		Status = StatusOrdemServico.EmExecucao;
 	}
 
+	public void FinalizarExecucao()
+	{
+		Status = StatusOrdemServico.Finalizada;
+	}
+
+	public void EntregarVeiculo()
+	{
+		Status = StatusOrdemServico.Entregue;
+	}
 }

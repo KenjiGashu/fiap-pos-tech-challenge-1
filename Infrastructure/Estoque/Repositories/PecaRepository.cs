@@ -18,7 +18,9 @@ public class PecaRepository : IPecaRepository
         => await _context.Pecas.ToListAsync();
 
     public async Task<Peca?> ObterPorId(Guid id)
-        => await _context.Pecas.FindAsync(id);
+		{
+        return _context.Pecas.FirstOrDefault(p => p.Id == id);
+    }
 
     public async Task Adicionar(Peca peca)
     {
@@ -40,5 +42,10 @@ public class PecaRepository : IPecaRepository
             _context.Pecas.Remove(peca);
             await _context.SaveChangesAsync();
         }
+    }
+
+		public async Task SaveChangesAsync()
+		{
+        await _context.SaveChangesAsync();
     }
 }

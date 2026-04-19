@@ -53,7 +53,35 @@ public class OrdemServicoController : ControllerBase
     public async Task<IActionResult> IniciarDiagnostico([FromBody] OrdemServicoIniciarDiagnosticoOrcamentoDto dto)
     {
         await _service.IniciarDiagnostico(dto);
-        return Ok(new {Message = $"orcamento enviado!"});
+        return Ok(new {Message = $"iniciado diagnostico!"});
+    }
+
+    [HttpPost("FinalizarDiagnostico")]
+    public async Task<IActionResult> FinalizarDiagnostico([FromBody] OrdemServicoFinalizarDiagnosticoOrcamentoDto dto)
+    {
+        await _service.FinalizarDiagnostico(dto);
+        return Ok(new {Message = $"finalizado diagnostico! Enviado orçamento para Aprovação da Revisao"});
+    }
+
+    [HttpPost("IniciarExecucao")]
+    public async Task<IActionResult> IniciarExecucao([FromBody] OrdemServicoIniciarExecucaoOrcamentoDto dto)
+    {
+        await _service.IniciarExecucao(dto);
+        return Ok(new {Message = $"iniciado execucao!"});
+    }
+
+    [HttpPost("FinalizarExecucao")]
+    public async Task<IActionResult> FinalizarExecucao([FromBody] OrdemServicoFinalizarExecucaoOrcamentoDto dto)
+    {
+        await _service.FinalizarExecucao(dto);
+        return Ok(new {Message = $"Finalizado execucao!"});
+    }
+
+    [HttpPost("EntregarVeiculo")]
+    public async Task<IActionResult> EntregarVeiculo([FromBody] OrdemServicoEntregarVeiculoDto dto)
+    {
+        await _service.EntregarVeiculo(dto);
+        return Ok(new {Message = $"Entrega de Veiculo Feita!"});
     }
 
     [HttpGet("AprovarOrcamento/{id}")]

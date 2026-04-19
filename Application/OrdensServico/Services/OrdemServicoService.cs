@@ -118,8 +118,9 @@ public class OrdemServicoService
 		public async Task AdicionarPecas(OrdemServicoAdicionaPecaDto dto)
 	  {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
-        foreach (var peca in dto.Pecas){
-					ordemServico.AdicionarPeca(peca.PecaId, peca.Preco, peca.Quantidade, peca.Nome);
+        foreach (var pecaDto in dto.Pecas){
+        var peca = await _pecaRepo.ObterPorId(pecaDto.PecaId);
+					ordemServico.AdicionarPeca(pecaDto.PecaId, pecaDto.Preco, pecaDto.Quantidade, peca.Nome);
         }
 
         await _repo.AdicionarPecas(ordemServico);
@@ -141,7 +142,7 @@ public class OrdemServicoService
 	  {
 			  var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
         var cliente = await _clienteRepo.ObterPorId(ordemServico.ClienteId);
-        var token = await _tokenService.GeraToken(Guid.NewGuid());
+        var token = await _tokenService.GeraToken(ordemServico.Id);
         var aprovacaoOrcamentoDto = new AprovacaoOrcamentoDto
         {
             OrdemServicoId = dto.OrdemServicoId,
@@ -182,23 +183,53 @@ public class OrdemServicoService
         await _repo.SaveChangesAsync();
     }
 
-		public async Task IniciarDiagnostico(OrdemServicoAtualizaStatusDto dto)
+	  public async Task FinalizarDiagnostico(OrdemServicoFinalizarDiagnosticoOrcamentoDto dto)
 	  {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
 
-        ordemServico.IniciarDiagnostico();
+        ordemServico.FinalizarDiagnostico();
+
+				if(ordemServico.deveAprovarDeNovo)
+				{
+					await EnviarOrcamento(new OrdemServicoEnviarOrcamentoDto
+					{
+						OrdemServicoId = dto.OrdemServicoId
+					});
+				}
+
+        await _repo.SaveChangesAsync();
     }
 	
-    public async Task IniciarExecucao(OrdemServicoAtualizaStatusDto dto)
+    public async Task IniciarExecucao(OrdemServicoIniciarExecucaoOrcamentoDto dto)
 	  {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
 
 				foreach (var peca in ordemServico.OrdemServicoPecas)
 				{
-            await _estoqueService.Consumir(peca.Id, peca.Quantidade);
+            await _estoqueService.Consumir(peca.PecaId, peca.Quantidade);
         }
 				
         ordemServico.IniciarExecucao();
+
+        await _repo.SaveChangesAsync();
+    }
+
+    public async Task FinalizarExecucao(OrdemServicoFinalizarExecucaoOrcamentoDto dto)
+	  {
+        var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
+
+        ordemServico.FinalizarExecucao();
+
+        await _repo.SaveChangesAsync();
+    }
+
+    public async Task EntregarVeiculo(OrdemServicoEntregarVeiculoDto dto)
+	  {
+        var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
+
+        ordemServico.EntregarVeiculo();
+
+        await _repo.SaveChangesAsync();
     }
 
     // public async Task Criar(OrdemServicoCreateDto dto)
