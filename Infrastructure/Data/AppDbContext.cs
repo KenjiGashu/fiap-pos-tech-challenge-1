@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Domain.OrdensServico.Entities;
 using Domain.Estoque.Entities;
 using Domain.Teste.Entities;
-using Domain.Notificacao.Entities;
 
 namespace Infrastructure.Data;
 
@@ -89,8 +88,8 @@ public class AppDbContext : DbContext
             var peca = context.Set<Peca>().First();
             var servico = context.Set<Servico>().First();
 
-            ordemServico.AdicionarPeca(peca.Id, peca.Preco, 1);
-            ordemServico.AdicionarServico(servico.Id, servico.Preco);
+            ordemServico.AdicionarPeca(peca.Id, peca.Preco, 1, peca.Nome);
+            ordemServico.AdicionarServico(servico.Id, servico.Preco, servico.Nome);
             await context.Set<OrdemServico>().AddAsync(ordemServico);
             await context.SaveChangesAsync();
         }
@@ -153,8 +152,8 @@ public class AppDbContext : DbContext
             var peca = context.Set<Peca>().First();
             var servico = context.Set<Servico>().First();
 
-            ordemServico.AdicionarPeca(peca.Id, peca.Preco, 1);
-            ordemServico.AdicionarServico(servico.Id, servico.Preco);
+            ordemServico.AdicionarPeca(peca.Id, peca.Preco, 1, peca.Nome);
+            ordemServico.AdicionarServico(servico.Id, servico.Preco, servico.Nome);
              context.Set<OrdemServico>().Add(ordemServico);
              context.SaveChanges();
         }

@@ -2,12 +2,12 @@ namespace Application.OrdensServico.Services;
 
 using Domain.OrdensServico.Interfaces;
 using Application.OrdensServico.DTOs;
+using Application.Notificacao.DTOs;
 using Domain.OrdensServico.Entities;
 using Domain.Estoque.Interfaces;
-using Application.Estoque.DTOs;
-using Domain.Estoque.Entities;
 using Application.Estoque.Interfaces;
 using Application.Notificacao.Interfaces;
+using Application.OrdensServico.Interfaces;
 
 public class OrdemServicoService
 {
@@ -16,19 +16,25 @@ public class OrdemServicoService
     private readonly IPecaRepository _pecaRepo;
     private readonly IEstoqueService _estoqueService;
     private readonly INotificacaoService _notificacaoService;
+    private readonly ITokenService _tokenService;
+    private readonly IClienteRepository _clienteRepo;
 
     public OrdemServicoService(
         IOrdemServicoRepository repo,
         IServicoRepository servicoRepo,
         IPecaRepository pecaRepo,
 			  IEstoqueService estoqueService,
-				INotificacaoService notificacaoService)
+			  INotificacaoService notificacaoService,
+			  ITokenService tokenService,
+			  IClienteRepository clienteRepo)
     {
         _repo = repo;
         _servicoRepo = servicoRepo;
         _pecaRepo = pecaRepo;
         _estoqueService = estoqueService;
         _notificacaoService = notificacaoService;
+        _tokenService = tokenService;
+        _clienteRepo = clienteRepo;
     }
 
     public async Task<IEnumerable<OrdemServicoResponseDto>> GetAll()
@@ -113,7 +119,7 @@ public class OrdemServicoService
 	  {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
         foreach (var peca in dto.Pecas){
-					ordemServico.AdicionarPeca(peca.PecaId, peca.Preco, peca.Quantidade);
+					ordemServico.AdicionarPeca(peca.PecaId, peca.Preco, peca.Quantidade, peca.Nome);
         }
 
         await _repo.AdicionarPecas(ordemServico);
@@ -125,22 +131,55 @@ public class OrdemServicoService
 
 				foreach (var servico in dto.Servicos)
 				{
-            ordemServico.AdicionarServico(servico.ServicoId, servico.Preco);
+					  ordemServico.AdicionarServico(servico.ServicoId, servico.Preco, servico.Nome);
         }
 
         await _repo.SaveChangesAsync();
     }
 
-	  public async Task EnviarOrcamento(OrdemServicoEnviaOrcamentoDto dto)
+	  public async Task EnviarOrcamento(OrdemServicoEnviarOrcamentoDto dto)
 	  {
-        await _notificacaoService.EnviarOrcamento(dto.OrdemServicoId);
+			  var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
+        var cliente = await _clienteRepo.ObterPorId(ordemServico.ClienteId);
+        var token = await _tokenService.GeraToken(Guid.NewGuid());
+        var aprovacaoOrcamentoDto = new AprovacaoOrcamentoDto
+        {
+            OrdemServicoId = dto.OrdemServicoId,
+            Servicos = ordemServico.OrdemServicoServicos.Select(oss => new ItemOrcamentoDto(oss.Nome, oss.Preco, 0)),
+            Pecas = ordemServico.OrdemServicoPecas.Select(osp => new ItemOrcamentoDto(osp.Nome, osp.Preco, osp.Quantidade)),
+            Total = ordemServico.Total,
+            NomeCliente = cliente.Nome,
+            Destinatario = cliente.GetDestinatario(),
+            Token = token.GuidToken,
+        };
+
+        await _notificacaoService.EnviarOrcamento(aprovacaoOrcamentoDto);
     }
 
-	  public async Task AprovarOrcamento(OrdemServicoAtualizaStatusDto dto)
+	  public async Task AprovarOrcamento(OrdemServicoAprovarOrcamentoDto dto)
 	  {
-        var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
+        var token = await _tokenService.ObterTokenPorGuid(dto.TokenGuid);
 
-        ordemServico.AprovarOrcamento();
+				if(token == null)
+            throw new Exception("Token inexistente");
+
+        if(!token.IsValid())
+            throw new Exception("Token Expirado ou ja consumido");
+
+        token.ConsumirToken();
+
+        var os = await _repo.ObterPorId(token.OrdemServicoId);
+        os.AprovarOrcamento();
+
+        await _repo.SaveChangesAsync();
+    }
+
+    public async Task IniciarDiagnostico(OrdemServicoIniciarDiagnosticoOrcamentoDto dto)
+	  {
+        var os = await _repo.ObterPorId(dto.OrdemServicoId);
+        os.IniciarDiagnostico();
+
+        await _repo.SaveChangesAsync();
     }
 
 		public async Task IniciarDiagnostico(OrdemServicoAtualizaStatusDto dto)

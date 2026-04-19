@@ -13,11 +13,11 @@ using Application.Teste.Services;
 using Infrastructure.Teste.Repositories;
 using Domain.Teste.Interfaces;
 
-using Domain.Notificacao.Entities;
 using Domain.Notificacao.Interfaces;
-using Infrastructure.Notificacao.Repositories;
-using Application.Notificacao.Service;
+using Application.OrdensServico.Interfaces;
+using Application.Notificacao.Services;
 using Application.Notificacao.Interfaces;
+using Infrastructure.Notificacao.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,9 +50,17 @@ builder.Services.AddScoped<IOrdemServicoRepository, OrdemServicoRepository>();
 builder.Services.AddScoped<PessoaService>();
 builder.Services.AddScoped<IPessoaRepository, PessoaRepository>();
 
+// token
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
 //Notificacao
+// builder.Services.AddScoped<IEmailService, EmailService>();
+// builder.Services.AddScoped<IConfirmacaoEmailService, ConfirmacaoEmailService>();
 builder.Services.AddScoped<INotificacaoService, NotificacaoService>();
-builder.Services.AddScoped<INotificacaoRepository, NotificacaoRepository>();
+builder.Services.AddScoped<ICanalNotificacao, CanalNotificacaoEmail>();
+
+
 
 builder.Services.AddControllers();
 

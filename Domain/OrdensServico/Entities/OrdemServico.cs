@@ -36,18 +36,18 @@ public class OrdemServico
         OrdemServicoPecas = new List<OrdemServicoPeca>();
     }
 
-    public void AdicionarServico(Guid servicoId, decimal preco)
+	  public void AdicionarServico(Guid servicoId, decimal preco, string nome)
     {
-			  OrdemServicoServicos.Add(new OrdemServicoServico(this.Id, servicoId, preco));
+			  OrdemServicoServicos.Add(new OrdemServicoServico(this.Id, servicoId, preco, nome));
         RecalcularTotal();
     }
 
-    public void AdicionarPeca(Guid pecaId, decimal preco, int quantidade)
+	public void AdicionarPeca(Guid pecaId, decimal preco, int quantidade, string nome)
     {
 			if(quantidade <= 0)
             throw new Exception("Quantidade de Peca invalida.");
 
-        OrdemServicoPecas.Add(new OrdemServicoPeca(this.Id, pecaId, preco, quantidade));
+			OrdemServicoPecas.Add(new OrdemServicoPeca(this.Id, pecaId, nome, preco, quantidade));
         RecalcularTotal();
     }
 

@@ -11,12 +11,14 @@ public class OrdemServicoPeca
     public Guid PecaId { get; set; } 
     public Peca Peca { get; set; }  
 
+	  public string Nome { get; set; }
     public decimal Preco { get; set; }
     public int Quantidade { get; set; }
 
-	  public OrdemServicoPeca(Guid ordemServicoId, Guid pecaId, decimal preco, int quantidade)
+	  public OrdemServicoPeca(Guid ordemServicoId, Guid pecaId, string nome, decimal preco, int quantidade)
     {
         OrdemServicoId = ordemServicoId;
+        Nome = nome;
         PecaId = pecaId;
         Preco = preco;
         Quantidade = quantidade;

@@ -16,7 +16,6 @@ public class Cliente
     public string Cnpj { get; set; }
     public TipoPessoa TipoPessoa { get; set; }
 
-
     public Cliente(string nome, string email, string cpf, string cnpj, TipoPessoa tipoPessoa)
     {
         Console.WriteLine($"tipopessao {tipoPessoa} ");
@@ -41,6 +40,11 @@ public class Cliente
         Cpf = cpf;
         Cnpj = cnpj;
         TipoPessoa = tipoPessoa;
+    }
+
+	  public string GetDestinatario()
+	  {
+        return Email;
     }
 
 	public bool ValidarCpf(string cpf)

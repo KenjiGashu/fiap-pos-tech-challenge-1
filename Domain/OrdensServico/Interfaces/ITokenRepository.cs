@@ -1,8 +1,8 @@
-namespace Domain.Notificacao.Interfaces;
+namespace Domain.OrdensServico.Interfaces;
 
-using Domain.Notificacao.Entities;
+using Domain.OrdensServico.Entities;
 
-public interface INotificacaoRepository
+public interface ITokenRepository
 {
     public Task SalvaToken(string token, Guid ordemServicoId);
 

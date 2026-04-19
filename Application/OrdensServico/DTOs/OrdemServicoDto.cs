@@ -56,9 +56,19 @@ public class OrdemServicoAdicionaServicoDto
     public List<OrdemServicoServicoDto> Servicos { get; set; }
 }
 
-public class OrdemServicoEnviaOrcamentoDto
+public class OrdemServicoEnviarOrcamentoDto
 {
 	public Guid OrdemServicoId { get; set; }
+}
+
+public class OrdemServicoIniciarDiagnosticoOrcamentoDto
+{
+	public Guid OrdemServicoId { get; set; }
+}
+
+public class OrdemServicoAprovarOrcamentoDto
+{
+	public Guid TokenGuid { get; set; }
 }
 
 public class OrdemServicoDeleteDto

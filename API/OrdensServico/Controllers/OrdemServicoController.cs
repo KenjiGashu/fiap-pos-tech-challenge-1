@@ -43,10 +43,24 @@ public class OrdemServicoController : ControllerBase
     }
 
     [HttpPost("EnviarOrcamento")]
-    public async Task<IActionResult> EnviarOrcamento([FromBody] OrdemServicoEnviaOrcamentoDto dto)
+    public async Task<IActionResult> EnviarOrcamento([FromBody] OrdemServicoEnviarOrcamentoDto dto)
     {
         await _service.EnviarOrcamento(dto);
-        return Ok();
+        return Ok(new {Message = $"orcamento enviado!"});
+    }
+
+    [HttpPost("IniciarDiagnostico")]
+    public async Task<IActionResult> IniciarDiagnostico([FromBody] OrdemServicoIniciarDiagnosticoOrcamentoDto dto)
+    {
+        await _service.IniciarDiagnostico(dto);
+        return Ok(new {Message = $"orcamento enviado!"});
+    }
+
+    [HttpGet("AprovarOrcamento/{id}")]
+    public async Task<IActionResult> AprovarOrcamento(Guid id)
+    {
+			  await _service.AprovarOrcamento(new OrdemServicoAprovarOrcamentoDto{TokenGuid = id});
+        return Ok(new {Message = $"Orcamento {id} aprovado com sucesso"});
     }
 
     [HttpDelete("{id}")]
