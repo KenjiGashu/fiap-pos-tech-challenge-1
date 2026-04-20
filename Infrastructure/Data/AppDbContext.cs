@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Domain.OrdensServico.Entities;
 using Domain.Estoque.Entities;
-using Domain.Teste.Entities;
 
 namespace Infrastructure.Data;
 
@@ -19,15 +18,7 @@ public class AppDbContext : DbContext
 		// Notificacao
 		public DbSet<Token> Tokens { get; set; }
 
-    // teste
-    public DbSet<Pessoa> Pessoas { get; set; }
-    public DbSet<Pedido> Pedidos { get; set; }
-		
-		//blogs
-		public DbSet<Blog> Blogs { get; set; }
-		public DbSet<Post> Posts { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 => optionsBuilder
           .UseSqlite("Data Source=clientes.db")
     .UseAsyncSeeding(async (context, _, cancellationToken) =>
@@ -229,18 +220,5 @@ public class AppDbContext : DbContext
             .WithMany(p => p.OrdemServicoServicos)
             .HasForeignKey(op => op.ServicoId);
 
-        // teste
-        modelBuilder.Entity<Pessoa>()
-					.HasMany(p => p.Pedidos)
-					.WithOne(p => p.Pessoa)
-					.HasForeignKey(p => p.PessoaId)
-					.IsRequired();
-
-
-				// Blogs
-				modelBuilder.Entity<Blog>()
-					.HasMany(b => b.Posts)
-					.WithOne(p => p.Blog)
-					.HasForeignKey(p => p.BlogId);
     }
 }

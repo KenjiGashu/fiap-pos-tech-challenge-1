@@ -9,10 +9,6 @@ using Infrastructure.Estoque.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
-using Application.Teste.Services;
-using Infrastructure.Teste.Repositories;
-using Domain.Teste.Interfaces;
-
 using Domain.Notificacao.Interfaces;
 using Application.OrdensServico.Interfaces;
 using Application.Notificacao.Services;
@@ -30,41 +26,36 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
+//repository
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IServicoRepository, ServicoRepository>();
 builder.Services.AddScoped<IPecaRepository, PecaRepository>();
+
+//pecas, clientes e veiculos 
 builder.Services.AddScoped<IEstoqueService, EstoqueService>();
-builder.Services.AddScoped<ClienteService>();
-builder.Services.AddScoped<VeiculoService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IVeiculoService, VeiculoService>();
 
 //servico
-builder.Services.AddScoped<ServicoService>();
+builder.Services.AddScoped<IServicoService, ServicoService>();
 builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
 
 //ordem servico
 builder.Services.AddScoped<OrdemServicoService>();
 builder.Services.AddScoped<IOrdemServicoRepository, OrdemServicoRepository>();
 
-//Pessoa (Teste)
-builder.Services.AddScoped<PessoaService>();
-builder.Services.AddScoped<IPessoaRepository, PessoaRepository>();
-
 // token
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 //Notificacao
-// builder.Services.AddScoped<IEmailService, EmailService>();
-// builder.Services.AddScoped<IConfirmacaoEmailService, ConfirmacaoEmailService>();
 builder.Services.AddScoped<INotificacaoService, NotificacaoService>();
 builder.Services.AddScoped<ICanalNotificacao, CanalNotificacaoEmail>();
-
 
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
-
 
 using (var scope = app.Services.CreateScope())
 {

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Application.OrdensServico.Services;
 using Application.OrdensServico.DTOs;
+using Application.OrdensServico.Interfaces;
 
 namespace API.OrdensServico.Controllers;
 
@@ -8,9 +9,9 @@ namespace API.OrdensServico.Controllers;
 [Route("api/[controller]")]
 public class ClienteController : ControllerBase
 {
-    private readonly ClienteService _service;
+    private readonly IClienteService _service;
 
-    public ClienteController(ClienteService service)
+    public ClienteController(IClienteService service)
     {
         _service = service;
     }

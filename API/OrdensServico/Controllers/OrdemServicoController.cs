@@ -25,21 +25,21 @@ public class OrdemServicoController : ControllerBase
     public async Task<IActionResult> Post([FromBody] OrdemServicoCreateDto dto)
     {
         await _service.Criar(dto);
-        return Ok();
+        return Ok(new {Message = $"criado Servico!"});
     }
 
     [HttpPost("AdicionaPeca")]
     public async Task<IActionResult> AdicionaPecas([FromBody] OrdemServicoAdicionaPecaDto dto)
     {
         await _service.AdicionarPecas(dto);
-        return Ok();
+        return Ok(new {Message = $"Peca Adicionada!"});
     }
 
     [HttpPost("AdicionaServico")]
     public async Task<IActionResult> AdicionaServicos([FromBody] OrdemServicoAdicionaServicoDto dto)
     {
         await _service.AdicionarServicos(dto);
-        return Ok();
+        return Ok(new {Message = $"Servico Adicionado!"});
     }
 
     [HttpPost("EnviarOrcamento")]

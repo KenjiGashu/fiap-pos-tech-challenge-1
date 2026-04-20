@@ -3,8 +3,9 @@ namespace Application.OrdensServico.Services;
 using Application.OrdensServico.DTOs;
 using Domain.OrdensServico.Entities;
 using Domain.OrdensServico.Interfaces;
+using Application.OrdensServico.Interfaces;
 
-public class ServicoService
+public class ServicoService : IServicoService
 {
     private readonly IServicoRepository _repo;
 

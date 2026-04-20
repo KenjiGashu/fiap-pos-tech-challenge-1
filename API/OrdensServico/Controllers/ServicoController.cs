@@ -3,14 +3,15 @@ namespace API.OrdensServico.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Application.OrdensServico.Services;
 using Application.OrdensServico.DTOs;
+using Application.OrdensServico.Interfaces;
 
 [ApiController]
 [Route("api/[controller]")]
 public class ServicoController : ControllerBase
 {
-    private readonly ServicoService _service;
+    private readonly IServicoService _service;
 
-    public ServicoController(ServicoService service)
+    public ServicoController(IServicoService service)
     {
         _service = service;
     }

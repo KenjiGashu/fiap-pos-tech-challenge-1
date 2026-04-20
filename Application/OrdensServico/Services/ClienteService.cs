@@ -1,10 +1,11 @@
 using Domain.OrdensServico.Entities;
 using Domain.OrdensServico.Interfaces;
+using Application.OrdensServico.Interfaces;
 using Application.OrdensServico.DTOs;
 
 namespace Application.OrdensServico.Services;
 
-public class ClienteService
+public class ClienteService : IClienteService
 {
     private readonly IClienteRepository _repository;
 

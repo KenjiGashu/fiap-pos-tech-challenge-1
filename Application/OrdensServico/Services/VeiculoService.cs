@@ -1,10 +1,11 @@
 using Domain.OrdensServico.Entities;
 using Domain.OrdensServico.Interfaces;
 using Application.OrdensServico.DTOs;
+using Application.OrdensServico.Interfaces;
 
 namespace Application.OrdensServico.Services;
 
-public class VeiculoService
+public class VeiculoService : IVeiculoService
 {
     private readonly IVeiculoRepository _repo;
 
