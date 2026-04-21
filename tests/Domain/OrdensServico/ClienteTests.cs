@@ -1,6 +1,6 @@
-namespace Tests;
+namespace Tests.Domain.OrdensServico;
 
-using Domain.OrdensServico.Entities;
+using global::Domain.OrdensServico.Entities;
 
 public class ClienteTests
 {
