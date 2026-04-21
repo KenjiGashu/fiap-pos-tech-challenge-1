@@ -88,7 +88,10 @@ public class OrdemServico
 
 	public void FinalizarDiagnostico()
 	{
-		Status = StatusOrdemServico.AguardandoAprovacaoRevisao;
+		if(deveAprovarDeNovo)
+			Status = StatusOrdemServico.AguardandoAprovacaoRevisao;
+		else
+			Status = StatusOrdemServico.AguardandoMecanico;
 	}
 
 	public void IniciarExecucao()

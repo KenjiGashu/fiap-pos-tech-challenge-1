@@ -18,7 +18,7 @@ public class EstoqueController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> Get()
-        => Ok(await _service.GetAll());
+    => Ok(await _service.GetAll());
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
@@ -35,13 +35,13 @@ public class EstoqueController : ControllerBase
         return Ok();
     }
 
-[HttpPut("{id}")]
-public async Task<IActionResult> Put(Guid id, [FromBody] PecaUpdateDto dto)
-{
-	await _service.Update(id, dto);
-	return Ok();
-}
-		
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(Guid id, [FromBody] PecaUpdateDto dto)
+    {
+        await _service.Update(id, dto);
+        return Ok();
+    }
+        
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {

@@ -17,7 +17,7 @@ public class ItemOrcamentoDto
 public class AprovacaoOrcamentoDto
 {
 	  public Guid OrdemServicoId { get; set; }
-	  public string Token { get; set; }
+	  public string TokenGuid { get; set; }
 	  public IEnumerable<ItemOrcamentoDto> Servicos { get; set; }
 	  public IEnumerable<ItemOrcamentoDto> Pecas { get; set; }
 	  public decimal Total { get; set; }

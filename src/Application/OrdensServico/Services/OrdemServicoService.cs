@@ -23,10 +23,10 @@ public class OrdemServicoService
         IOrdemServicoRepository repo,
         IServicoRepository servicoRepo,
         IPecaRepository pecaRepo,
-			  IEstoqueService estoqueService,
-			  INotificacaoService notificacaoService,
-			  ITokenService tokenService,
-			  IClienteRepository clienteRepo)
+              IEstoqueService estoqueService,
+              INotificacaoService notificacaoService,
+              ITokenService tokenService,
+              IClienteRepository clienteRepo)
     {
         _repo = repo;
         _servicoRepo = servicoRepo;
@@ -38,43 +38,43 @@ public class OrdemServicoService
     }
 
     public async Task<IEnumerable<OrdemServicoResponseDto>> GetAll()
-	  {
+    {
         var ordemServicos = await _repo.ObterTodos();
 
-				foreach(var ordemServico in ordemServicos)
-				{
-					foreach(var servico in ordemServico.OrdemServicoServicos)
-					{
-                Console.WriteLine($"servico: {servico.Id} FK: {servico.ServicoId}");
-            }
-				}
+        foreach(var ordemServico in ordemServicos)
+                {
+                    foreach(var servico in ordemServico.OrdemServicoServicos)
+                    {
+                        Console.WriteLine($"servico: {servico.Id} FK: {servico.ServicoId}");
+                    }
+                }
 
         return ordemServicos.Select(os => new OrdemServicoResponseDto
         {
             Id = os.Id,
             ClienteId = os.ClienteId,
-						VeiculoId = os.VeiculoId,
-						Total = os.Total,
-						Status = os.Status,
-						Servicos = os.OrdemServicoServicos?.Select(s => new OrdemServicoServicoDto
-						{
-							ServicoId = s.ServicoId,
-							Preco = s.Preco,
-							Nome = s.Servico?.Nome
-						}).ToList() ?? new List<OrdemServicoServicoDto>(),
-						
-						Pecas = os.OrdemServicoPecas?.Select(p => new OrdemServicoPecaDto
-						{
-							PecaId = p.PecaId,
-							Preco = p.Preco,
-							Quantidade = p.Quantidade,
-							Nome = p.Peca.Nome
-						}).ToList() ?? new List<OrdemServicoPecaDto>()
-				});
-		}
+            VeiculoId = os.VeiculoId,
+            Total = os.Total,
+            Status = os.Status,
+            Servicos = os.OrdemServicoServicos?.Select(s => new OrdemServicoServicoDto
+            {
+                ServicoId = s.ServicoId,
+                Preco = s.Preco,
+                Nome = s.Servico?.Nome
+            }).ToList() ?? new List<OrdemServicoServicoDto>(),
+                        
+            Pecas = os.OrdemServicoPecas?.Select(p => new OrdemServicoPecaDto
+            {
+                PecaId = p.PecaId,
+                Preco = p.Preco,
+                Quantidade = p.Quantidade,
+                Nome = p.Peca.Nome
+            }).ToList() ?? new List<OrdemServicoPecaDto>()
+        });
+    }
 
-		public async Task<OrdemServicoResponseDto> ObterPorId(Guid id)
-	  {
+    public async Task<OrdemServicoResponseDto> ObterPorId(Guid id)
+    {
         var os = await _repo.ObterPorId(id);
         var dto = new OrdemServicoResponseDto
         {
@@ -101,8 +101,8 @@ public class OrdemServicoService
         return dto;
     }
 
-		public async Task Criar(OrdemServicoCreateDto dto)
-	  {
+    public async Task Criar(OrdemServicoCreateDto dto)
+    {
         var ordemServico = new OrdemServico(dto.ClienteId, dto.VeiculoId);
 
         ordemServico.Status = StatusOrdemServico.Recebida;
@@ -110,39 +110,40 @@ public class OrdemServicoService
         await _repo.AdicionarPecas(ordemServico);
     }
 
-		public async Task Deletar(OrdemServicoDeleteDto dto)
-	{
+    public async Task Deletar(OrdemServicoDeleteDto dto)
+    {
         await _repo.Deletar(dto.Id);
     }
 
-		public async Task AdicionarPecas(OrdemServicoAdicionaPecaDto dto)
-	  {
+    public async Task AdicionarPecas(OrdemServicoAdicionaPecaDto dto)
+    {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
         foreach (var pecaDto in dto.Pecas){
-        var peca = await _pecaRepo.ObterPorId(pecaDto.PecaId);
-					ordemServico.AdicionarPeca(pecaDto.PecaId, pecaDto.Preco, pecaDto.Quantidade, peca.Nome);
+            var peca = await _pecaRepo.ObterPorId(pecaDto.PecaId);
+            ordemServico.AdicionarPeca(pecaDto.PecaId, pecaDto.Preco, pecaDto.Quantidade, peca.Nome);
         }
 
         await _repo.AdicionarPecas(ordemServico);
     }
 
-	  public async Task AdicionarServicos(OrdemServicoAdicionaServicoDto dto)
-	  {
+    public async Task AdicionarServicos(OrdemServicoAdicionaServicoDto dto)
+    {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
 
-				foreach (var servico in dto.Servicos)
-				{
-					  ordemServico.AdicionarServico(servico.ServicoId, servico.Preco, servico.Nome);
-        }
+        foreach (var servico in dto.Servicos)
+                {
+                    ordemServico.AdicionarServico(servico.ServicoId, servico.Preco, servico.Nome);
+                }
 
         await _repo.SaveChangesAsync();
     }
 
-	  public async Task EnviarOrcamento(OrdemServicoEnviarOrcamentoDto dto)
-	  {
-			  var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
+    public async Task EnviarOrcamento(OrdemServicoEnviarOrcamentoDto dto)
+    {
+        var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
         var cliente = await _clienteRepo.ObterPorId(ordemServico.ClienteId);
         var token = await _tokenService.GeraToken(ordemServico.Id);
+
         var aprovacaoOrcamentoDto = new AprovacaoOrcamentoDto
         {
             OrdemServicoId = dto.OrdemServicoId,
@@ -151,17 +152,17 @@ public class OrdemServicoService
             Total = ordemServico.Total,
             NomeCliente = cliente.Nome,
             Destinatario = cliente.GetDestinatario(),
-            Token = token.GuidToken,
+            TokenGuid = token.GuidToken,
         };
 
         await _notificacaoService.EnviarOrcamento(aprovacaoOrcamentoDto);
     }
 
-	  public async Task AprovarOrcamento(OrdemServicoAprovarOrcamentoDto dto)
-	  {
+    public async Task AprovarOrcamento(OrdemServicoAprovarOrcamentoDto dto)
+    {
         var token = await _tokenService.ObterTokenPorGuid(dto.TokenGuid);
 
-				if(token == null)
+        if(token == null)
             throw new Exception("Token inexistente");
 
         if(!token.IsValid())
@@ -176,46 +177,46 @@ public class OrdemServicoService
     }
 
     public async Task IniciarDiagnostico(OrdemServicoIniciarDiagnosticoOrcamentoDto dto)
-	  {
+    {
         var os = await _repo.ObterPorId(dto.OrdemServicoId);
         os.IniciarDiagnostico();
 
         await _repo.SaveChangesAsync();
     }
 
-	  public async Task FinalizarDiagnostico(OrdemServicoFinalizarDiagnosticoOrcamentoDto dto)
-	  {
+    public async Task FinalizarDiagnostico(OrdemServicoFinalizarDiagnosticoOrcamentoDto dto)
+    {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
 
         ordemServico.FinalizarDiagnostico();
 
-				if(ordemServico.deveAprovarDeNovo)
-				{
-					await EnviarOrcamento(new OrdemServicoEnviarOrcamentoDto
-					{
-						OrdemServicoId = dto.OrdemServicoId
-					});
-				}
+        if(ordemServico.deveAprovarDeNovo)
+        {
+            await EnviarOrcamento(new OrdemServicoEnviarOrcamentoDto
+            {
+                OrdemServicoId = dto.OrdemServicoId
+            });
+        }
 
         await _repo.SaveChangesAsync();
     }
-	
+    
     public async Task IniciarExecucao(OrdemServicoIniciarExecucaoOrcamentoDto dto)
-	  {
+    {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
 
-				foreach (var peca in ordemServico.OrdemServicoPecas)
-				{
-            await _estoqueService.Consumir(peca.PecaId, peca.Quantidade);
-        }
-				
+        foreach (var peca in ordemServico.OrdemServicoPecas)
+                {
+                    await _estoqueService.Consumir(peca.PecaId, peca.Quantidade);
+                }
+                
         ordemServico.IniciarExecucao();
 
         await _repo.SaveChangesAsync();
     }
 
     public async Task FinalizarExecucao(OrdemServicoFinalizarExecucaoOrcamentoDto dto)
-	  {
+    {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
 
         ordemServico.FinalizarExecucao();
@@ -224,7 +225,7 @@ public class OrdemServicoService
     }
 
     public async Task EntregarVeiculo(OrdemServicoEntregarVeiculoDto dto)
-	  {
+    {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
 
         ordemServico.EntregarVeiculo();

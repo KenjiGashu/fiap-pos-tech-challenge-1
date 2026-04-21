@@ -10,8 +10,6 @@ public class Peca
 
     public List<OrdemServicoPeca> OrdemServicoPecas { get; set; }
 
-    protected Peca() { }
-
     public Peca(string nome, decimal preco, int quantidade)
     {
         Id = Guid.NewGuid();
@@ -19,15 +17,16 @@ public class Peca
         if (string.IsNullOrWhiteSpace(nome))
             throw new Exception("Nome obrigatório");
 
-        if (preco < 0)
+        if (preco <= 0)
             throw new Exception("Preço inválido");
 
-        if (quantidade < 0)
+        if (quantidade <= 0)
             throw new Exception("Quantidade invalida");
 
         Nome = nome;
         Preco = preco;
         Quantidade = quantidade;
+        OrdemServicoPecas = new List<OrdemServicoPeca>();
     }
 
     public void Atualizar(string nome, decimal preco, int quantidade)

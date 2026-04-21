@@ -23,7 +23,7 @@ public class EstoqueService : IEstoqueService
             Id = p.Id,
             Nome = p.Nome,
             Preco = p.Preco,
-						Quantidade = p.Quantidade
+            Quantidade = p.Quantidade
         });
     }
 
@@ -32,53 +32,49 @@ public class EstoqueService : IEstoqueService
 
     public async Task Create(PecaCreateDto dto)
     {
-			  var peca = new Peca(dto.Nome, dto.Preco, dto.Quantidade);
+        var peca = new Peca(dto.Nome, dto.Preco, dto.Quantidade);
         await _repo.Adicionar(peca);
     }
 
-	public async Task Update(Guid id, PecaUpdateDto dto)
-	{
-    var peca = await _repo.ObterPorId(id);
+    public async Task Update(Guid id, PecaUpdateDto dto)
+    {
+        var peca = await _repo.ObterPorId(id);
 
-    if (peca == null)
-        throw new Exception("Cliente não encontrado");
+        if (peca == null)
+            throw new Exception("Cliente não encontrado");
 
-    peca.Atualizar(dto.Nome, dto.Preco, dto.Quantidade);
+        peca.Atualizar(dto.Nome, dto.Preco, dto.Quantidade);
 
-    await _repo.Atualizar(peca);
-	}
-
-    // public async Task Create(string nome, string email)
-    // {
-    //     var cliente = new Cliente(nome, email);
-    //     await _repository.Adicionar(cliente);
-    // }
+        await _repo.Atualizar(peca);
+    }
 
     public async Task Delete(Guid id)
         => await _repo.Remover(id);
 
-	public async Task Adicionar(Guid id, int quantidade)
-	{
-		var peca = await _repo.ObterPorId(id);
+    public async Task Adicionar(Guid id, int quantidade)
+    {
+        var peca = await _repo.ObterPorId(id);
 
-		if(peca == null)
-			throw new Exception("Peca nao encontrada");
+        if(peca == null)
+            throw new Exception("Peca nao encontrada");
 
-		peca.Adicionar(quantidade);
+        peca.Adicionar(quantidade);
 
-		await _repo.Atualizar(peca);
-	}
+        await _repo.SaveChangesAsync();
+    }
 
-	public async Task Consumir(Guid id, int quantidade)
-	{
-		Console.WriteLine($"[EstoqueService] id[{id}] quantidade[{quantidade}]");
+    public async Task Consumir(Guid id, int quantidade)
+    {
+        Console.WriteLine($"[EstoqueService] id[{id}] quantidade[{quantidade}]");
 
         var peca = await _repo.ObterPorId(id);
-			
-			if(peca == null)
+            
+        if(peca == null)
             throw new Exception("Peca nao encontrada");
 
         peca.Consumir(quantidade);
-	}
+
+        await _repo.SaveChangesAsync();
+    }
 
 }
