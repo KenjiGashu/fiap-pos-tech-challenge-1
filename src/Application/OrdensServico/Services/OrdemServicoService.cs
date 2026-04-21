@@ -42,12 +42,12 @@ public class OrdemServicoService
         var ordemServicos = await _repo.ObterTodos();
 
         foreach(var ordemServico in ordemServicos)
-                {
-                    foreach(var servico in ordemServico.OrdemServicoServicos)
-                    {
-                        Console.WriteLine($"servico: {servico.Id} FK: {servico.ServicoId}");
-                    }
-                }
+        {
+            foreach(var servico in ordemServico.OrdemServicoServicos)
+            {
+                Console.WriteLine($"servico: {servico.Id} FK: {servico.ServicoId}");
+            }
+        }
 
         return ordemServicos.Select(os => new OrdemServicoResponseDto
         {
@@ -123,7 +123,7 @@ public class OrdemServicoService
             ordemServico.AdicionarPeca(pecaDto.PecaId, pecaDto.Preco, pecaDto.Quantidade, peca.Nome);
         }
 
-        await _repo.AdicionarPecas(ordemServico);
+        await _repo.SaveChangesAsync();
     }
 
     public async Task AdicionarServicos(OrdemServicoAdicionaServicoDto dto)
@@ -131,9 +131,9 @@ public class OrdemServicoService
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
 
         foreach (var servico in dto.Servicos)
-                {
-                    ordemServico.AdicionarServico(servico.ServicoId, servico.Preco, servico.Nome);
-                }
+        {
+            ordemServico.AdicionarServico(servico.ServicoId, servico.Preco, servico.Nome);
+        }
 
         await _repo.SaveChangesAsync();
     }
@@ -206,9 +206,9 @@ public class OrdemServicoService
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
 
         foreach (var peca in ordemServico.OrdemServicoPecas)
-                {
-                    await _estoqueService.Consumir(peca.PecaId, peca.Quantidade);
-                }
+        {
+            await _estoqueService.Consumir(peca.PecaId, peca.Quantidade);
+        }
                 
         ordemServico.IniciarExecucao();
 
@@ -232,25 +232,4 @@ public class OrdemServicoService
 
         await _repo.SaveChangesAsync();
     }
-
-    // public async Task Criar(OrdemServicoCreateDto dto)
-    // {
-    //     var os = new OrdemServico(dto.ClienteId, dto.VeiculoId);
-
-    //     // Serviços
-    //     foreach (var servicoDto in dto.Servicos)
-    //     {
-    //         var servico = await _servicoRepo.ObterPorId(servicoDto.ServicoId);
-    //         os.AdicionarServico(servico.Id, servico.Preco);
-    //     }
-
-    //     // Peças
-    //     foreach (var item in dto.Pecas)
-    //     {
-    //         var peca = await _pecaRepo.ObterPorId(item.PecaId);
-    //         os.AdicionarPeca(peca.Id, peca.Preco, item.Quantidade);
-    //     }
-
-    //     await _repo.Adicionar(os);
-    // }
 }
