@@ -246,7 +246,7 @@ public class OrdemServicoServiceTests
         _mockOsRepo.Verify(repo => repo.ObterPorId(It.Is<Guid>(guid => guid == ordemServico.Id)));
         _mockTokenService.Verify(repo => repo.ObterTokenPorGuid(It.IsAny<Guid>()));
         Assert.Equal(to, ordemServico.Status);
-        Assert.Equal(true, token.Consumido);
+        Assert.True(token.Consumido);
     }
 
     [Fact]

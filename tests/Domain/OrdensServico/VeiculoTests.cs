@@ -21,9 +21,9 @@ public class VeiculoTests
 	{
 		var veiculo = new Veiculo("TKJ5A20", "marca", "modelo", 1999);
 
-		Assert.Equal(veiculo.Placa, "TKJ5A20");
-		Assert.Equal(veiculo.Marca, "marca");
-		Assert.Equal(veiculo.Modelo, "modelo");
-		Assert.Equal(veiculo.Ano, 1999);
+		Assert.Equal("TKJ5A20", veiculo.Placa);
+		Assert.Equal("marca", veiculo.Marca);
+		Assert.Equal("modelo", veiculo.Modelo);
+		Assert.Equal(1999, veiculo.Ano);
 	}
 }

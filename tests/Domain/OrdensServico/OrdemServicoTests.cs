@@ -27,7 +27,7 @@ public class OrdemServicoTests
         os.AdicionarServico(servicoId, preco, nome);
 
         Assert.Equal(preco, os.Total);
-        Assert.Equal(1, os.OrdemServicoServicos.Count());
+        Assert.Single(os.OrdemServicoServicos);
     }
 
     [Fact]
@@ -42,8 +42,8 @@ public class OrdemServicoTests
         os.AdicionarServico(servicoId, preco, nome);
 
         Assert.Equal(preco, os.Total);
-        Assert.Equal(true, os.deveAprovarDeNovo);
-        Assert.Equal(1, os.OrdemServicoServicos.Count());
+        Assert.True(os.deveAprovarDeNovo);
+        Assert.Single(os.OrdemServicoServicos);
     }
 
     [Fact]
@@ -59,8 +59,8 @@ public class OrdemServicoTests
         os.AdicionarPeca(pecaId, preco, quantidade, nome);
 
         Assert.Equal(preco, os.Total);
-        Assert.Equal(true, os.deveAprovarDeNovo);
-        Assert.Equal(1, os.OrdemServicoPecas.Count());
+        Assert.True(os.deveAprovarDeNovo);
+        Assert.Single(os.OrdemServicoPecas);
     }
 
 	  [Fact]
@@ -85,7 +85,7 @@ public class OrdemServicoTests
         os.AdicionarPeca(pecaId, preco, quantidade, nome);
 
         Assert.Equal(preco, os.Total);
-        Assert.Equal(1, os.OrdemServicoPecas.Count());
+        Assert.Single(os.OrdemServicoPecas);
     }
 
     [Fact]
@@ -104,8 +104,8 @@ public class OrdemServicoTests
         os.AdicionarServico(servicoId, precoServico, nomeServico);
 
         Assert.Equal(preco+precoServico, os.Total);
-        Assert.Equal(1, os.OrdemServicoPecas.Count());
-        Assert.Equal(1, os.OrdemServicoServicos.Count());
+        Assert.Single(os.OrdemServicoPecas);
+        Assert.Single(os.OrdemServicoServicos);
     }
 
 	  [Fact]

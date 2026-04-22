@@ -14,7 +14,7 @@ public class TokenTests
 
 				token.ConsumirToken();
 
-        Assert.Equal(token.IsValid(), false);
+        Assert.False(token.IsValid());
     }
 
 	  [Fact]
@@ -26,7 +26,7 @@ public class TokenTests
 
 				token.ConsumirToken();
 
-        Assert.Equal(token.IsValid(), false);
+        Assert.False(token.IsValid());
     }
 
 
@@ -39,7 +39,7 @@ public class TokenTests
 
 				token.ConsumirToken();
 
-        Assert.Equal(token.IsExpired(), true);
+        Assert.True(token.IsExpired());
     }
 }
 
