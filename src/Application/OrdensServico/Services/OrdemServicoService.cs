@@ -4,16 +4,13 @@ using Domain.OrdensServico.Interfaces;
 using Application.OrdensServico.DTOs;
 using Application.Notificacao.DTOs;
 using Domain.OrdensServico.Entities;
-using Domain.Estoque.Interfaces;
 using Application.Estoque.Interfaces;
 using Application.Notificacao.Interfaces;
 using Application.OrdensServico.Interfaces;
 
-public class OrdemServicoService
+public class OrdemServicoService : IOrdemServicoService
 {
     private readonly IOrdemServicoRepository _repo;
-    private readonly IServicoRepository _servicoRepo;
-    private readonly IPecaRepository _pecaRepo;
     private readonly IEstoqueService _estoqueService;
     private readonly INotificacaoService _notificacaoService;
     private readonly ITokenService _tokenService;
@@ -21,16 +18,12 @@ public class OrdemServicoService
 
     public OrdemServicoService(
         IOrdemServicoRepository repo,
-        IServicoRepository servicoRepo,
-        IPecaRepository pecaRepo,
-              IEstoqueService estoqueService,
-              INotificacaoService notificacaoService,
-              ITokenService tokenService,
-              IClienteRepository clienteRepo)
+        IEstoqueService estoqueService,
+        INotificacaoService notificacaoService,
+        ITokenService tokenService,
+        IClienteRepository clienteRepo)
     {
         _repo = repo;
-        _servicoRepo = servicoRepo;
-        _pecaRepo = pecaRepo;
         _estoqueService = estoqueService;
         _notificacaoService = notificacaoService;
         _tokenService = tokenService;
@@ -107,7 +100,7 @@ public class OrdemServicoService
 
         ordemServico.Status = StatusOrdemServico.Recebida;
 
-        await _repo.AdicionarPecas(ordemServico);
+        await _repo.Criar(ordemServico);
     }
 
     public async Task Deletar(OrdemServicoDeleteDto dto)
@@ -119,8 +112,7 @@ public class OrdemServicoService
     {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
         foreach (var pecaDto in dto.Pecas){
-            var peca = await _pecaRepo.ObterPorId(pecaDto.PecaId);
-            ordemServico.AdicionarPeca(pecaDto.PecaId, pecaDto.Preco, pecaDto.Quantidade, peca.Nome);
+            ordemServico.AdicionarPeca(pecaDto.PecaId, pecaDto.Preco, pecaDto.Quantidade, pecaDto.Nome);
         }
 
         await _repo.SaveChangesAsync();
@@ -161,9 +153,6 @@ public class OrdemServicoService
     public async Task AprovarOrcamento(OrdemServicoAprovarOrcamentoDto dto)
     {
         var token = await _tokenService.ObterTokenPorGuid(dto.TokenGuid);
-
-        if(token == null)
-            throw new Exception("Token inexistente");
 
         if(!token.IsValid())
             throw new Exception("Token Expirado ou ja consumido");

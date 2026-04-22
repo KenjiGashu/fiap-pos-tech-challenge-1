@@ -70,8 +70,6 @@ public class AprovacaoOrcamentoTestes
 
         var result = ao.MontaCorpoMensagem();
 
-        Console.WriteLine(result);
-
         Assert.Equal(expected, result);
     }
 }

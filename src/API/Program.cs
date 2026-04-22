@@ -41,7 +41,7 @@ builder.Services.AddScoped<IServicoService, ServicoService>();
 builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
 
 //ordem servico
-builder.Services.AddScoped<OrdemServicoService>();
+builder.Services.AddScoped<IOrdemServicoService, OrdemServicoService>();
 builder.Services.AddScoped<IOrdemServicoRepository, OrdemServicoRepository>();
 
 // token

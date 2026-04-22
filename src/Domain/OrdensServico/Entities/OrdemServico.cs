@@ -2,15 +2,15 @@ namespace Domain.OrdensServico.Entities;
 
 public enum StatusOrdemServico
 {
-	Recebida,
-	OrcamentoAprovado,
-	EmDiagnostico,
-	AguardandoAprovacao,
-	AguardandoAprovacaoRevisao,
-	AguardandoMecanico,
-	EmExecucao,
-	Finalizada,
-	Entregue
+    Recebida,
+    OrcamentoAprovado,
+    EmDiagnostico,
+    AguardandoAprovacao,
+    AguardandoAprovacaoRevisao,
+    AguardandoMecanico,
+    EmExecucao,
+    Finalizada,
+    Entregue
 }
 
 public class OrdemServico
@@ -20,8 +20,8 @@ public class OrdemServico
     public Guid VeiculoId { get; set; }
     public DateTime Data { get; set; }
     public decimal Total { get; set; }
-	  public StatusOrdemServico  Status { get; set; }
-	  public bool deveAprovarDeNovo { get; set; }
+    public StatusOrdemServico  Status { get; set; }
+    public bool deveAprovarDeNovo { get; set; }
 
 
     public List<OrdemServicoServico> OrdemServicoServicos { get; private set; } = new();
@@ -39,73 +39,71 @@ public class OrdemServico
         OrdemServicoPecas = new List<OrdemServicoPeca>();
     }
 
-	  public void AdicionarServico(Guid servicoId, decimal preco, string nome)
+    public void AdicionarServico(Guid servicoId, decimal preco, string nome)
     {
-			if(Status == StatusOrdemServico.EmDiagnostico)
-			{
-				deveAprovarDeNovo = true;
-			}
-			
-			  OrdemServicoServicos.Add(new OrdemServicoServico(this.Id, servicoId, preco, nome));
+        if(Status == StatusOrdemServico.EmDiagnostico)
+        {
+            deveAprovarDeNovo = true;
+        }
+            
+        OrdemServicoServicos.Add(new OrdemServicoServico(this.Id, servicoId, preco, nome));
         RecalcularTotal();
     }
 
-	public void AdicionarPeca(Guid pecaId, decimal preco, int quantidade, string nome)
+    public void AdicionarPeca(Guid pecaId, decimal preco, int quantidade, string nome)
     {
-			if(quantidade <= 0)
+        if(quantidade <= 0)
             throw new Exception("Quantidade de Peca invalida.");
 
-			if(Status == StatusOrdemServico.EmDiagnostico)
-			{
-				deveAprovarDeNovo = true;
-			}
+        if(Status == StatusOrdemServico.EmDiagnostico)
+        {
+            deveAprovarDeNovo = true;
+        }
 
-			OrdemServicoPecas.Add(new OrdemServicoPeca(this.Id, pecaId, nome, preco, quantidade));
+        OrdemServicoPecas.Add(new OrdemServicoPeca(this.Id, pecaId, nome, preco, quantidade));
         RecalcularTotal();
     }
 
     private void RecalcularTotal()
     {
         Total =
-					  OrdemServicoServicos.Sum(s => s.Preco) +
-            OrdemServicoPecas.Sum(p => p.Preco * p.Quantidade);
-
-        Console.WriteLine($"Novo Total: {Total}");
+          OrdemServicoServicos.Sum(s => s.Preco) +
+          OrdemServicoPecas.Sum(p => p.Preco * p.Quantidade);
     }
 
-	public void AprovarOrcamento()
-	{
-		if(Status == StatusOrdemServico.AguardandoAprovacao)
-			Status = StatusOrdemServico.OrcamentoAprovado;
-		else if(Status == StatusOrdemServico.AguardandoAprovacaoRevisao)
-      Status = StatusOrdemServico.AguardandoMecanico;
-	}
+    public void AprovarOrcamento()
+    {
+        if(Status == StatusOrdemServico.AguardandoAprovacao)
+            Status = StatusOrdemServico.OrcamentoAprovado;
+        else if(Status == StatusOrdemServico.AguardandoAprovacaoRevisao)
+            Status = StatusOrdemServico.AguardandoMecanico;
+    }
 
-	public void IniciarDiagnostico()
-	{
-		Status = StatusOrdemServico.EmDiagnostico;
-	}
+    public void IniciarDiagnostico()
+    {
+        Status = StatusOrdemServico.EmDiagnostico;
+    }
 
-	public void FinalizarDiagnostico()
-	{
-		if(deveAprovarDeNovo)
-			Status = StatusOrdemServico.AguardandoAprovacaoRevisao;
-		else
-			Status = StatusOrdemServico.AguardandoMecanico;
-	}
+    public void FinalizarDiagnostico()
+    {
+        if(deveAprovarDeNovo)
+            Status = StatusOrdemServico.AguardandoAprovacaoRevisao;
+        else
+            Status = StatusOrdemServico.AguardandoMecanico;
+    }
 
-	public void IniciarExecucao()
-	{
-		Status = StatusOrdemServico.EmExecucao;
-	}
+    public void IniciarExecucao()
+    {
+        Status = StatusOrdemServico.EmExecucao;
+    }
 
-	public void FinalizarExecucao()
-	{
-		Status = StatusOrdemServico.Finalizada;
-	}
+    public void FinalizarExecucao()
+    {
+        Status = StatusOrdemServico.Finalizada;
+    }
 
-	public void EntregarVeiculo()
-	{
-		Status = StatusOrdemServico.Entregue;
-	}
+    public void EntregarVeiculo()
+    {
+        Status = StatusOrdemServico.Entregue;
+    }
 }

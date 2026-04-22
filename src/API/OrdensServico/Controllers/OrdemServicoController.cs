@@ -1,16 +1,16 @@
 namespace API.OrdensServico.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using Application.OrdensServico.Services;
 using Application.OrdensServico.DTOs;
+using Application.OrdensServico.Interfaces;
 
 [ApiController]
 [Route("api/[controller]")]
 public class OrdemServicoController : ControllerBase
 {
-    private readonly OrdemServicoService _service;
+    private readonly IOrdemServicoService _service;
 
-    public OrdemServicoController(OrdemServicoService service)
+    public OrdemServicoController(IOrdemServicoService service)
     {
         _service = service;
     }

@@ -18,7 +18,6 @@ public class Cliente
 
     public Cliente(string nome, string email, string cpf, string cnpj, TipoPessoa tipoPessoa)
     {
-        Console.WriteLine($"tipopessao {tipoPessoa} ");
         bool pessoaValida = tipoPessoa == TipoPessoa.Fisica ? ValidarCpf(cpf) : ValidarCnpj(cnpj);
 
         if (!pessoaValida)

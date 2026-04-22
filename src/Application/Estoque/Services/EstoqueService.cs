@@ -65,8 +65,6 @@ public class EstoqueService : IEstoqueService
 
     public async Task Consumir(Guid id, int quantidade)
     {
-        Console.WriteLine($"[EstoqueService] id[{id}] quantidade[{quantidade}]");
-
         var peca = await _repo.ObterPorId(id);
             
         if(peca == null)

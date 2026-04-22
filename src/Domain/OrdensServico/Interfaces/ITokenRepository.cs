@@ -6,5 +6,5 @@ public interface ITokenRepository
 {
     public Task SalvaToken(string token, Guid ordemServicoId);
 
-    public Task<Token?> ObterToken(string token);
+    public Task<Token> ObterToken(string token);
 }

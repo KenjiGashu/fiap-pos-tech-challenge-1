@@ -16,53 +16,64 @@ public class OrdemServicoRepository : IOrdemServicoRepository
         _context = context;
     }
 
+    public async Task Criar(OrdemServico os)
+    {
+        _context.OrdemServicos.Add(os);
+
+        _context.SaveChanges();
+    }
+
     public async Task AdicionarPecas(OrdemServico os)
     {
-			var idsExistentes = _context.OrdemServicoPecas
-        .Where(x => x.OrdemServicoId == os.Id)
-        .Select(x => x.PecaId)
-        .ToList();
+        var idsExistentes = _context.OrdemServicoPecas
+            .Where(x => x.OrdemServicoId == os.Id)
+            .Select(x => x.PecaId)
+            .ToList();
 
-			var novos = os.OrdemServicoPecas
-        .Where(p => !idsExistentes.Contains(p.PecaId))
-        .ToList();
-			
-			await _context.OrdemServicoPecas.AddRangeAsync(novos);
-			
-			await _context.SaveChangesAsync();
+        var novos = os.OrdemServicoPecas
+            .Where(p => !idsExistentes.Contains(p.PecaId))
+            .ToList();
+            
+        await _context.OrdemServicoPecas.AddRangeAsync(novos);
+            
+        await _context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<OrdemServico>> ObterTodos()
     {
         return await _context.OrdemServicos
-					  .Include(o => o.OrdemServicoServicos)
-					  .ThenInclude(s => s.Servico)
+            .Include(o => o.OrdemServicoServicos)
+            .ThenInclude(s => s.Servico)
             .Include(o => o.OrdemServicoPecas)
-					  .ThenInclude(p => p.Peca)
+            .ThenInclude(p => p.Peca)
             .ToListAsync();
     }
 
     public async Task<OrdemServico> ObterPorId(Guid id)
     {
         OrdemServico? ordemServico = await _context.OrdemServicos
-					  .Include(o => o.OrdemServicoServicos)
-					.ThenInclude(oss => oss.Servico)
+            .Include(o => o.OrdemServicoServicos)
+            .ThenInclude(oss => oss.Servico)
             .Include(o => o.OrdemServicoPecas)
-					.ThenInclude(osp => osp.Peca)
-					  .AsTracking()
+            .ThenInclude(osp => osp.Peca)
+            .AsTracking()
             .FirstOrDefaultAsync(o => o.Id == id);
+
+        if(ordemServico == null)
+            throw new Exception("Ordem Servico nao encontrado");
+
         return ordemServico;
     }
 
     public async Task Atualizar(OrdemServico os)
     {
-			//_context.OrdemServicos.Update(os);
+        //_context.OrdemServicos.Update(os);
         await _context.SaveChangesAsync();
     }
 
     public async Task Deletar(Guid id)
     {
-			  var os = await _context.OrdemServicos.FindAsync(id);
+        var os = await _context.OrdemServicos.FindAsync(id);
         if (os != null)
         {
             _context.OrdemServicos.Remove(os);
@@ -70,54 +81,54 @@ public class OrdemServicoRepository : IOrdemServicoRepository
         }
     }
 
-		public async Task AdicionarPecas(Guid id, IEnumerable<OrdemServicoPeca> pecas)
+    public async Task AdicionarPecas(Guid id, IEnumerable<OrdemServicoPeca> pecas)
     {
-			var ordemServico = _context.OrdemServicos
-				.Include(os => os.OrdemServicoPecas)
-				.Include(os => os.OrdemServicoServicos)
-				.FirstOrDefault(os => os.Id == id);
+        var ordemServico = _context.OrdemServicos
+            .Include(os => os.OrdemServicoPecas)
+            .Include(os => os.OrdemServicoServicos)
+            .FirstOrDefault(os => os.Id == id);
 
-			if (ordemServico == null)
-				throw new Exception("Cliente não encontrado");
+        if (ordemServico == null)
+            throw new Exception("Cliente não encontrado");
 
-			foreach( var p in pecas)
-			{
-				_context.Entry(p).State = EntityState.Added;
-				ordemServico.OrdemServicoPecas.Add(p);
-			}
-			
-			_context.SaveChanges();
+        foreach( var p in pecas)
+            {
+                _context.Entry(p).State = EntityState.Added;
+                ordemServico.OrdemServicoPecas.Add(p);
+            }
+            
+        _context.SaveChanges();
     }
 
-		public async Task AdicionarServicos(OrdemServico os)
+    public async Task AdicionarServicos(OrdemServico os)
     {
-			var idsExistentes = _context.OrdemServicoServicos
-        .Where(x => x.OrdemServicoId == os.Id)
-        .Select(x => x.ServicoId)
-        .ToList();
+        var idsExistentes = _context.OrdemServicoServicos
+            .Where(x => x.OrdemServicoId == os.Id)
+            .Select(x => x.ServicoId)
+            .ToList();
 
-			var novos = os.OrdemServicoServicos
-        .Where(s => !idsExistentes.Contains(s.ServicoId))
-        .ToList();
-			
-			await _context.OrdemServicoServicos.AddRangeAsync(novos);
-			
-			await _context.SaveChangesAsync();
+        var novos = os.OrdemServicoServicos
+            .Where(s => !idsExistentes.Contains(s.ServicoId))
+            .ToList();
+            
+        await _context.OrdemServicoServicos.AddRangeAsync(novos);
+            
+        await _context.SaveChangesAsync();
     }
 
     public async Task SaveChangesAsync()
     {
-			var entries = _context.ChangeTracker.Entries();
+        var entries = _context.ChangeTracker.Entries();
 
-      // var entry = _context.Entry(ordemServico);
-      // Console.WriteLine(entry.State);
+        // var entry = _context.Entry(ordemServico);
+        // Console.WriteLine(entry.State);
 
-			foreach (var e in entries)
-			{
-				Console.WriteLine($"{e.Entity.GetType().Name} - {e.State}");
-			}
-			
-			await _context.SaveChangesAsync();
+        foreach (var e in entries)
+            {
+                Console.WriteLine($"{e.Entity.GetType().Name} - {e.State}");
+            }
+            
+        await _context.SaveChangesAsync();
     }
 
     

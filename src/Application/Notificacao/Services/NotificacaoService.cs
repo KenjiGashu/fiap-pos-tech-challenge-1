@@ -9,7 +9,6 @@ using Domain.Notificacao.Interfaces;
 public class NotificacaoService : INotificacaoService
 {
     private readonly ICanalNotificacao _canalNotificacao;
-    private readonly int numColumns = 40;
 
     public NotificacaoService(ICanalNotificacao canalNotificacao)
     {
