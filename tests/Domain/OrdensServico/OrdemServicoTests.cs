@@ -10,16 +10,16 @@ public class OrdemServicoTests
     private Guid veiculoId;
 
     public OrdemServicoTests()
-	  {
+    {
         clienteId = Guid.NewGuid();
         veiculoId = Guid.NewGuid();
 
         os = new OrdemServico(clienteId, veiculoId);
     }
 
-	  [Fact]
-	  public async Task OrdemServico_AdicionaServicoTest()
-	  {
+    [Fact]
+    public async Task OrdemServico_AdicionaServicoTest()
+    {
         var servicoId = Guid.NewGuid();
         decimal preco = 12;
         var nome = "troca oleo";
@@ -31,8 +31,8 @@ public class OrdemServicoTests
     }
 
     [Fact]
-	  public async Task OrdemServico_WhenStateEmDiagnostico_AdicionaServicoShould_DeveAprovarDeNovo_True()
-	  {
+    public async Task OrdemServico_WhenStateEmDiagnostico_AdicionaServicoShould_DeveAprovarDeNovo_True()
+    {
         var servicoId = Guid.NewGuid();
         decimal preco = 12;
         var nome = "troca oleo";
@@ -47,8 +47,8 @@ public class OrdemServicoTests
     }
 
     [Fact]
-	  public async Task OrdemServico_WhenStateEmDiagnostico_AdicionaPecaShould_DeveAprovarDeNovo_True()
-	  {
+    public async Task OrdemServico_WhenStateEmDiagnostico_AdicionaPecaShould_DeveAprovarDeNovo_True()
+    {
         var pecaId = Guid.NewGuid();
         decimal preco = 12;
         int quantidade = 1;
@@ -63,9 +63,9 @@ public class OrdemServicoTests
         Assert.Single(os.OrdemServicoPecas);
     }
 
-	  [Fact]
-	  public async Task OrdemServico_AdicionaPecaShouldThrownWhenInvalidQuantidade()
-	  {
+    [Fact]
+    public async Task OrdemServico_AdicionaPecaShouldThrownWhenInvalidQuantidade()
+    {
         var pecaId = Guid.NewGuid();
         decimal preco = 12;
         int quantidade = 0;
@@ -74,9 +74,9 @@ public class OrdemServicoTests
         Assert.Throws<Exception>(() => os.AdicionarPeca(pecaId, preco, quantidade, nome));
     }
 
-	  [Fact]
-	  public async Task OrdemServico_AdicionaPecaTest()
-	  {
+    [Fact]
+    public async Task OrdemServico_AdicionaPecaTest()
+    {
         var pecaId = Guid.NewGuid();
         decimal preco = 12;
         int quantidade = 1;
@@ -89,8 +89,8 @@ public class OrdemServicoTests
     }
 
     [Fact]
-	  public async Task OrdemServico_RecalcularTotalShouldProperlyCalculate()
-	  {
+    public async Task OrdemServico_RecalcularTotalShouldProperlyCalculate()
+    {
         var pecaId = Guid.NewGuid();
         decimal preco = 12;
         int quantidade = 1;
@@ -108,9 +108,9 @@ public class OrdemServicoTests
         Assert.Single(os.OrdemServicoServicos);
     }
 
-	  [Fact]
-	  public async Task OrdemServico_AprovarOrcamentoTest_WhenAguardandoAprovacao_ShouldGoToOrcamentoAprovado()
-	  {
+    [Fact]
+    public async Task OrdemServico_AprovarOrcamentoTest_WhenAguardandoAprovacao_ShouldGoToOrcamentoAprovado()
+    {
         os.Status = StatusOrdemServico.AguardandoAprovacao;
 
         os.AprovarOrcamento();
@@ -119,8 +119,8 @@ public class OrdemServicoTests
     }
 
     [Fact]
-	  public async Task OrdemServico_AprovarOrcamentoTest_WhenAguardandoAprovacaoRevisao_ShouldGoToAguardandoMecanico()
-	  {
+    public async Task OrdemServico_AprovarOrcamentoTest_WhenAguardandoAprovacaoRevisao_ShouldGoToAguardandoMecanico()
+    {
         os.Status = StatusOrdemServico.AguardandoAprovacaoRevisao;
 
         os.AprovarOrcamento();
@@ -129,24 +129,24 @@ public class OrdemServicoTests
     }
 
     [Fact]
-	  public async Task OrdemServico_IniciarDiagnosticoTest()
-	  {
+    public async Task OrdemServico_IniciarDiagnosticoTest()
+    {
         os.IniciarDiagnostico();
 
         Assert.Equal( StatusOrdemServico.EmDiagnostico, os.Status);
     }
 
     [Fact]
-	  public async Task OrdemServico_FinalizarDiagnosticoTest()
-	  {
+    public async Task OrdemServico_FinalizarDiagnosticoTest()
+    {
         os.FinalizarDiagnostico();
 
         Assert.Equal( StatusOrdemServico.AguardandoMecanico, os.Status);
     }
 
     [Fact]
-	  public async Task OrdemServico_FinalizarDiagnosticoTest_WhenDeveAprovarDeNovo_ShouldGoToAprovacao()
-	  {
+    public async Task OrdemServico_FinalizarDiagnosticoTest_WhenDeveAprovarDeNovo_ShouldGoToAprovacao()
+    {
         os.deveAprovarDeNovo = true;
 
         os.FinalizarDiagnostico();
@@ -155,24 +155,24 @@ public class OrdemServicoTests
     }
 
     [Fact]
-	  public async Task OrdemServico_IniciarExecucaoTest()
-	  {
+    public async Task OrdemServico_IniciarExecucaoTest()
+    {
         os.IniciarExecucao();
 
         Assert.Equal( StatusOrdemServico.EmExecucao, os.Status);
     }
 
     [Fact]
-	  public async Task OrdemServico_FinalizarExecucaoTest()
-	  {
+    public async Task OrdemServico_FinalizarExecucaoTest()
+    {
         os.FinalizarExecucao();
 
         Assert.Equal( StatusOrdemServico.Finalizada, os.Status);
     }
 
     [Fact]
-	  public async Task OrdemServico_EntergarVeiculoTest()
-	  {
+    public async Task OrdemServico_EntergarVeiculoTest()
+    {
         os.EntregarVeiculo();
 
         Assert.Equal( StatusOrdemServico.Entregue, os.Status);
