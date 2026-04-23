@@ -1,6 +1,8 @@
 namespace Domain.OrdensServico.Entities;
 using System.Text.RegularExpressions;
 
+using Domain.Identidade.Entities;
+
 
 public enum TipoPessoa {
 	Fisica = 1,
@@ -15,6 +17,9 @@ public class Cliente
     public string Cpf { get; set; }
     public string Cnpj { get; set; }
     public TipoPessoa TipoPessoa { get; set; }
+
+    Guid UsuarioId { get; set; }
+    Usuario Usuario { get; set; }
 
     public Cliente(string nome, string email, string cpf, string cnpj, TipoPessoa tipoPessoa)
     {

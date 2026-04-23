@@ -14,6 +14,13 @@ using Application.OrdensServico.Interfaces;
 using Application.Notificacao.Services;
 using Application.Notificacao.Interfaces;
 using Infrastructure.Notificacao.Services;
+using System.Text;
+using Application.Identidade.Interfaces;
+using Application.Identidade.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Infrastructure.Identidade.Repositories;
+using Domain.Identidade.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +32,25 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
+builder.Services
+    .AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.ASCII.GetBytes("minha_chave_super_secreta_com_32_chars!!")
+            )
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 //repository
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
@@ -52,6 +78,10 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<INotificacaoService, NotificacaoService>();
 builder.Services.AddScoped<ICanalNotificacao, CanalNotificacaoEmail>();
 
+//autenticacao
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IIdentidadeService, IdentidadeService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddControllers();
 
@@ -63,6 +93,11 @@ using (var scope = app.Services.CreateScope())
 
     await context.Database.EnsureCreatedAsync();
 }
+
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 
 app.MapControllers();
 

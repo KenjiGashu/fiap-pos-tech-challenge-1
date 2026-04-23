@@ -17,6 +17,40 @@ namespace Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
 
+            modelBuilder.Entity("Domain.Autenticacao.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("Domain.Autenticacao.Entities.Usuario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
+                });
+
             modelBuilder.Entity("Domain.Estoque.Entities.Peca", b =>
                 {
                     b.Property<Guid>("Id")
@@ -230,77 +264,19 @@ namespace Infrastructure.Migrations
                     b.ToTable("Veiculos");
                 });
 
-            modelBuilder.Entity("Domain.Teste.Entities.Blog", b =>
+            modelBuilder.Entity("RoleUsuario", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<Guid>("RolesId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Blogs");
-                });
-
-            modelBuilder.Entity("Domain.Teste.Entities.Pedido", b =>
-                {
-                    b.Property<Guid>("PedidoId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("UsuariosId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Data")
-                        .HasColumnType("TEXT");
+                    b.HasKey("RolesId", "UsuariosId");
 
-                    b.Property<Guid>("PessoaId")
-                        .HasColumnType("TEXT");
+                    b.HasIndex("UsuariosId");
 
-                    b.HasKey("PedidoId");
-
-                    b.HasIndex("PessoaId");
-
-                    b.ToTable("Pedidos");
-                });
-
-            modelBuilder.Entity("Domain.Teste.Entities.Pessoa", b =>
-                {
-                    b.Property<Guid>("PessoaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("PessoaId");
-
-                    b.ToTable("Pessoas");
-                });
-
-            modelBuilder.Entity("Domain.Teste.Entities.Post", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("BlogId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogId");
-
-                    b.ToTable("Posts");
+                    b.ToTable("RoleUsuario");
                 });
 
             modelBuilder.Entity("Domain.OrdensServico.Entities.OrdemServicoPeca", b =>
@@ -341,26 +317,19 @@ namespace Infrastructure.Migrations
                     b.Navigation("Servico");
                 });
 
-            modelBuilder.Entity("Domain.Teste.Entities.Pedido", b =>
+            modelBuilder.Entity("RoleUsuario", b =>
                 {
-                    b.HasOne("Domain.Teste.Entities.Pessoa", "Pessoa")
-                        .WithMany("Pedidos")
-                        .HasForeignKey("PessoaId")
+                    b.HasOne("Domain.Autenticacao.Entities.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Pessoa");
-                });
-
-            modelBuilder.Entity("Domain.Teste.Entities.Post", b =>
-                {
-                    b.HasOne("Domain.Teste.Entities.Blog", "Blog")
-                        .WithMany("Posts")
-                        .HasForeignKey("BlogId")
+                    b.HasOne("Domain.Autenticacao.Entities.Usuario", null)
+                        .WithMany()
+                        .HasForeignKey("UsuariosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Blog");
                 });
 
             modelBuilder.Entity("Domain.Estoque.Entities.Peca", b =>
@@ -378,16 +347,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.OrdensServico.Entities.Servico", b =>
                 {
                     b.Navigation("OrdemServicoServicos");
-                });
-
-            modelBuilder.Entity("Domain.Teste.Entities.Blog", b =>
-                {
-                    b.Navigation("Posts");
-                });
-
-            modelBuilder.Entity("Domain.Teste.Entities.Pessoa", b =>
-                {
-                    b.Navigation("Pedidos");
                 });
 #pragma warning restore 612, 618
         }

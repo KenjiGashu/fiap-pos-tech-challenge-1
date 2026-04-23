@@ -6,24 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Blogs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Blogs", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Clientes",
                 columns: table => new
@@ -72,15 +59,15 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pessoas",
+                name: "Roles",
                 columns: table => new
                 {
-                    PessoaId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Nome = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pessoas", x => x.PessoaId);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,6 +100,19 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Usuarios",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Veiculos",
                 columns: table => new
                 {
@@ -125,27 +125,6 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Veiculos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Posts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Content = table.Column<string>(type: "TEXT", nullable: false),
-                    BlogId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Posts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Posts_Blogs_BlogId",
-                        column: x => x.BlogId,
-                        principalTable: "Blogs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,25 +156,6 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pedidos",
-                columns: table => new
-                {
-                    PedidoId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Data = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    PessoaId = table.Column<Guid>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pedidos", x => x.PedidoId);
-                    table.ForeignKey(
-                        name: "FK_Pedidos_Pessoas_PessoaId",
-                        column: x => x.PessoaId,
-                        principalTable: "Pessoas",
-                        principalColumn: "PessoaId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OrdemServicoServicos",
                 columns: table => new
                 {
@@ -222,6 +182,30 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RoleUsuario",
+                columns: table => new
+                {
+                    RolesId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    UsuariosId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleUsuario", x => new { x.RolesId, x.UsuariosId });
+                    table.ForeignKey(
+                        name: "FK_RoleUsuario_Roles_RolesId",
+                        column: x => x.RolesId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoleUsuario_Usuarios_UsuariosId",
+                        column: x => x.UsuariosId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_OrdemServicoPecas_OrdemServicoId",
                 table: "OrdemServicoPecas",
@@ -243,14 +227,9 @@ namespace Infrastructure.Migrations
                 column: "ServicoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pedidos_PessoaId",
-                table: "Pedidos",
-                column: "PessoaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Posts_BlogId",
-                table: "Posts",
-                column: "BlogId");
+                name: "IX_RoleUsuario_UsuariosId",
+                table: "RoleUsuario",
+                column: "UsuariosId");
         }
 
         /// <inheritdoc />
@@ -266,10 +245,7 @@ namespace Infrastructure.Migrations
                 name: "OrdemServicoServicos");
 
             migrationBuilder.DropTable(
-                name: "Pedidos");
-
-            migrationBuilder.DropTable(
-                name: "Posts");
+                name: "RoleUsuario");
 
             migrationBuilder.DropTable(
                 name: "Tokens");
@@ -287,10 +263,10 @@ namespace Infrastructure.Migrations
                 name: "Servicos");
 
             migrationBuilder.DropTable(
-                name: "Pessoas");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Blogs");
+                name: "Usuarios");
         }
     }
 }

@@ -446,7 +446,7 @@ public class OrdemServicoServiceTests
         Assert.Equal(StatusOrdemServico.Finalizada, ordemServico.Status);
     }
 
-[Fact]
+    [Fact]
     public async Task OrdemServicoEntregarVeiculoTest()
     {
         //Arrange
