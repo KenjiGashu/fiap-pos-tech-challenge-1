@@ -13,15 +13,14 @@ public class Cliente
 {
     public Guid Id { get; set; }
     public string Nome { get; set; }
-    public string Email { get; set; }
     public string Cpf { get; set; }
     public string Cnpj { get; set; }
     public TipoPessoa TipoPessoa { get; set; }
 
-    Guid UsuarioId { get; set; }
-    Usuario Usuario { get; set; }
+    public Guid UsuarioId { get; set; }
+    public Usuario? Usuario { get; set; }
 
-    public Cliente(string nome, string email, string cpf, string cnpj, TipoPessoa tipoPessoa)
+    public Cliente(string nome, string cpf, string cnpj, TipoPessoa tipoPessoa)
     {
         bool pessoaValida = tipoPessoa == TipoPessoa.Fisica ? ValidarCpf(cpf) : ValidarCnpj(cnpj);
 
@@ -31,24 +30,22 @@ public class Cliente
         }
 
         Nome = nome;
-        Email = email;
         Cpf = cpf;
         Cnpj = cnpj;
         TipoPessoa = tipoPessoa;
     }
 
-    public void Atualizar(string nome, string email, string cpf, string cnpj, TipoPessoa tipoPessoa)
+    public void Atualizar(string nome, string cpf, string cnpj, TipoPessoa tipoPessoa)
     {
         Nome = nome;
-        Email = email;
         Cpf = cpf;
         Cnpj = cnpj;
         TipoPessoa = tipoPessoa;
     }
 
-	  public string GetDestinatario()
-	  {
-        return Email;
+    public string GetDestinatario()
+    {
+        return this.Usuario.Email;
     }
 
 	public bool ValidarCpf(string cpf)

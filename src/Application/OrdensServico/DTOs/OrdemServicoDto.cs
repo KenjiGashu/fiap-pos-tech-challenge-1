@@ -20,6 +20,11 @@ public class OrdemServicoResponseDto
     public List<OrdemServicoPecaDto> Pecas { get; set; }
 }
 
+public class ListaOrdemServicoResponseDto
+{
+    public List<OrdemServicoResponseDto> OrdemServicos { get; set; }
+}
+
 
 public class OrdemServicoAtualizaStatusDto
 {

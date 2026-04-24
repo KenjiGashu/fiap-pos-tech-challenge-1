@@ -94,6 +94,38 @@ public class OrdemServicoService : IOrdemServicoService
         return dto;
     }
 
+    public async Task<ListaOrdemServicoResponseDto> ObterPorIdCliente(Guid clienteId)
+    {
+        var ordemServicos = await _repo.ObterPorIdCliente(clienteId);
+        var dto = new ListaOrdemServicoResponseDto
+        {
+            OrdemServicos = ordemServicos.Select(os => new OrdemServicoResponseDto
+            {
+                ClienteId = os.ClienteId,
+                VeiculoId = os.VeiculoId,
+                Total = os.Total,
+                Status = os.Status,
+                Servicos = os.OrdemServicoServicos?.Select(s => new OrdemServicoServicoDto
+                {
+                    ServicoId = s.ServicoId,
+                    Preco = s.Preco,
+                    Nome = s.Servico?.Nome
+                }).ToList() ?? new List<OrdemServicoServicoDto>(),
+
+                Pecas = os.OrdemServicoPecas?.Select(p => new OrdemServicoPecaDto
+                {
+                    PecaId = p.PecaId,
+                    Preco = p.Preco,
+                    Quantidade = p.Quantidade,
+                    Nome = p.Peca.Nome
+                }).ToList() ?? new List<OrdemServicoPecaDto>()
+
+            }).ToList()
+        };
+
+        return dto;
+    }
+
     public async Task Criar(OrdemServicoCreateDto dto)
     {
         var ordemServico = new OrdemServico(dto.ClienteId, dto.VeiculoId);

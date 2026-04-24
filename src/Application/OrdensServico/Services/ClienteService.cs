@@ -14,52 +14,59 @@ public class ClienteService : IClienteService
         _repository = repository;
     }
 
-	public async Task<IEnumerable<ClienteResponseDto>> GetAll()
-	{
-    var clientes = await _repository.ObterTodos();
-
-    return clientes.Select(c => new ClienteResponseDto
+    public async Task<IEnumerable<ClienteResponseDto>> GetAll()
     {
-        Id = c.Id,
-        Nome = c.Nome,
-        Email = c.Email,
-				Cpf = c.Cpf,
-				Cnpj = c.Cnpj,
-				TipoPessoa = c.TipoPessoa
-    });
-	}
-	
-    // public async Task<IEnumerable<Cliente>> GetAll()
-    //     => await _repository.ObterTodos();
+        var clientes = await _repository.ObterTodos();
 
-    public async Task<Cliente?> GetById(Guid id)
-        => await _repository.ObterPorId(id);
+        return clientes.Select(c => new ClienteResponseDto
+        {
+            Id = c.Id,
+            Nome = c.Nome,
+            Email = c.Usuario.Email,
+            Cpf = c.Cpf,
+            Cnpj = c.Cnpj,
+            TipoPessoa = c.TipoPessoa
+        });
+    }
 
-	public async Task Create(ClienteCreateDto dto)
-	{
-    var cliente = new Cliente(dto.Nome, dto.Email, dto.Cpf, dto.Cnpj, dto.TipoPessoa);
-    await _repository.Adicionar(cliente);
-	}
+    public async Task<ClienteResponseDto> GetById(Guid id)
+    {
+        var cliente = await _repository.ObterPorId(id);
+        if(cliente == null)
+            throw new Exception("Cliente nao encontrado");
 
-	public async Task Update(Guid id, ClienteUpdateDto dto)
-	{
-    var cliente = await _repository.ObterPorId(id);
+        return new ClienteResponseDto
+        {
+            Id = cliente.Id,
+            Nome = cliente.Nome,
+            Email = cliente.Usuario.Email,
+            Cpf = cliente.Cpf,
+            Cnpj = cliente.Cnpj,
+            TipoPessoa = cliente.TipoPessoa
 
-    if (cliente == null)
-        throw new Exception("Cliente não encontrado");
+        };
+    }
 
-    cliente.Atualizar(dto.Nome, dto.Email, dto.Cpf, dto.Cnpj, dto.TipoPessoa);
+    public async Task Create(ClienteCreateDto dto)
+    {
+        var cliente = new Cliente(dto.Nome, dto.Cpf, dto.Cnpj, dto.TipoPessoa);
+        cliente.UsuarioId = dto.UsuarioId;
+        Console.WriteLine($"adicionando cliente nome: {dto.Nome} usuario {dto.UsuarioId}");
+        await _repository.Adicionar(cliente);
+    }
 
-    await _repository.Atualizar(cliente);
-	}
+    public async Task Update(Guid id, ClienteUpdateDto dto)
+    {
+        var cliente = await _repository.ObterPorId(id);
 
-    // public async Task Create(string nome, string email)
-    // {
-    //     var cliente = new Cliente(nome, email);
-    //     await _repository.Adicionar(cliente);
-    // }
+        if (cliente == null)
+            throw new Exception("Cliente não encontrado");
 
+        cliente.Atualizar(dto.Nome,  dto.Cpf, dto.Cnpj, dto.TipoPessoa);
+
+        await _repository.Atualizar(cliente);
+    }
 
     public async Task Delete(Guid id)
-        => await _repository.Remover(id);
+    => await _repository.Remover(id);
 }

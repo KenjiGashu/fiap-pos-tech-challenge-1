@@ -3,6 +3,7 @@ using Domain.OrdensServico.Entities;
 using Domain.Estoque.Entities;
 using Domain.Identidade.Entities;
 using System.Security.Cryptography;
+using Application.Identidade.Services;
 
 namespace Infrastructure.Data;
 
@@ -24,36 +25,59 @@ public class AppDbContext : DbContext
     // Notificacao
     public DbSet<Token> Tokens { get; set; }
 
+
+    private string hashPassword(string password)
+    {
+				// gera senha com hash
+				var salt = RandomNumberGenerator.GetBytes(16);
+      
+				var hash = Rfc2898DeriveBytes.Pbkdf2(
+						password,
+						salt,
+						100000,
+						HashAlgorithmName.SHA256,
+						32
+        );
+				
+				// junta salt + hash
+				var hashBytes = new byte[48];
+				Buffer.BlockCopy(salt, 0, hashBytes, 0, 16);
+				Buffer.BlockCopy(hash, 0, hashBytes, 16, 32);
+				
+				var hashedPassword =  Convert.ToBase64String(hashBytes);
+        
+				return hashedPassword;
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
         .UseSqlite("Data Source=clientes.db")
         .UseAsyncSeeding(async (context, _, cancellationToken) =>
         {
             //Usuario
-            var password = "1234";
             if (context.Set<Usuario>().Count() <= 0)
             {
-                // gera senha com hash
-                var salt = RandomNumberGenerator.GetBytes(16);
-
-                var hash = Rfc2898DeriveBytes.Pbkdf2(
-                    password,
-                    salt,
-                    100000,
-                    HashAlgorithmName.SHA256,
-                    32
-                    );
-
-                // junta salt + hash
-                var hashBytes = new byte[48];
-                Buffer.BlockCopy(salt, 0, hashBytes, 0, 16);
-                Buffer.BlockCopy(hash, 0, hashBytes, 16, 32);
-
-                var hashedPassword =  Convert.ToBase64String(hashBytes);
-
-                
+                var hashedPassword = hashPassword("1234");
                 var usuario = new Usuario("Admin@gmail.com", hashedPassword);
                 var role = new Role("Admin");
+                usuario.Roles.Add(role);
+                context.Set<Usuario>().Add(usuario);
+
+                hashedPassword = hashPassword("1234");
+                usuario = new Usuario("maria@gmail.com", hashedPassword);
+                role = new Role("Cliente");
+                usuario.Roles.Add(role);
+                context.Set<Usuario>().Add(usuario);
+
+                hashedPassword = hashPassword("1234");
+                usuario = new Usuario("jose@gmail.com", hashedPassword);
+                role = new Role("Cliente");
+                usuario.Roles.Add(role);
+                context.Set<Usuario>().Add(usuario);
+
+								hashedPassword = hashPassword("1234");
+                usuario = new Usuario("itau@gmail.com", hashedPassword);
+                role = new Role("Cliente");
                 usuario.Roles.Add(role);
                 context.Set<Usuario>().Add(usuario);
 
@@ -62,10 +86,16 @@ public class AppDbContext : DbContext
             
             if (context.Set<Cliente>().Count() <= 0)
             {
-                var cliente = new Cliente("maria", "maria@gmail.com", "200.766.210-81", "", TipoPessoa.Fisica);
-                var cliente2 = new Cliente("jose", "jose@gmail.com", "848.288.680-03", "", TipoPessoa.Fisica);
-                var cliente3 = new Cliente("itau", "itau@gmail.com", "", "60.701.190/0001-04", TipoPessoa.Juridica);
+                var cliente = new Cliente("maria", "200.766.210-81", "", TipoPessoa.Fisica);
+                var cliente2 = new Cliente("jose", "848.288.680-03", "", TipoPessoa.Fisica);
+                var cliente3 = new Cliente("itau", "", "60.701.190/0001-04", TipoPessoa.Juridica);
                 var clienteSet = context.Set<Cliente>();
+                var usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "maria@gmail.com");
+                cliente.UsuarioId = usuario.Id;
+								usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "jose@gmail.com");
+                cliente2.UsuarioId = usuario.Id;
+								usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "itau@gmail.com");
+                cliente3.UsuarioId = usuario.Id;
                 await clienteSet.AddAsync(cliente);
                 await clienteSet.AddAsync(cliente2);
                 await clienteSet.AddAsync(cliente3);
@@ -128,9 +158,9 @@ public class AppDbContext : DbContext
         {
             if (context.Set<Cliente>().Count() <= 0)
             {
-                var cliente = new Cliente("maria", "maria@gmail.com", "200.766.210-81", "", TipoPessoa.Fisica);
-                var cliente2 = new Cliente("jose", "jose@gmail.com", "848.288.680-03", "", TipoPessoa.Fisica);
-                var cliente3 = new Cliente("itau", "itau@gmail.com", "", "60.701.190/0001-04", TipoPessoa.Juridica);
+                var cliente = new Cliente("maria", "200.766.210-81", "", TipoPessoa.Fisica);
+                var cliente2 = new Cliente("jose", "848.288.680-03", "", TipoPessoa.Fisica);
+                var cliente3 = new Cliente("itau", "", "60.701.190/0001-04", TipoPessoa.Juridica);
                 var clienteSet = context.Set<Cliente>();
                 clienteSet.Add(cliente);
                 clienteSet.Add(cliente2);
@@ -212,10 +242,6 @@ public class AppDbContext : DbContext
             entity.Property(c => c.Nome)
                 .IsRequired()
                 .HasMaxLength(100);
-
-            entity.Property(c => c.Email)
-                .IsRequired()
-                .HasMaxLength(150);
         });
 
         modelBuilder.Entity<Peca>()

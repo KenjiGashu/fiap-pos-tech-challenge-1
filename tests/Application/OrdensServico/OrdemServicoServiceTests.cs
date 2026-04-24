@@ -9,6 +9,7 @@ using global::Application.OrdensServico.Interfaces;
 using global::Application.Estoque.Interfaces;
 using global::Application.Notificacao.Interfaces;
 using global::Application.Notificacao.DTOs;
+using global::Domain.Identidade.Entities;
 
 public class OrdemServicoServiceTests
 {
@@ -165,7 +166,9 @@ public class OrdemServicoServiceTests
         //cliente
         var nomeCliente = "maria";
         var emailCliente = "maria@gmail.com";
-        var cliente = new Cliente(nomeCliente, emailCliente, "433.023.538-20", "", TipoPessoa.Fisica);
+        var usuario = new Usuario(emailCliente, "1234");
+        var cliente = new Cliente(nomeCliente, "433.023.538-20", "", TipoPessoa.Fisica);
+        cliente.Usuario = usuario;
         cliente.Id = ordemServico.ClienteId;
 
         _mockClienteRepo.Setup(repo =>
@@ -330,7 +333,9 @@ public class OrdemServicoServiceTests
         //cliente
         var nomeCliente = "maria";
         var emailCliente = "maria@gmail.com";
-        var cliente = new Cliente(nomeCliente, emailCliente, "433.023.538-20", "", TipoPessoa.Fisica);
+        var usuario = new Usuario(emailCliente, "1234");
+        var cliente = new Cliente(nomeCliente, "433.023.538-20", "", TipoPessoa.Fisica);
+        cliente.Usuario = usuario;
         cliente.Id = ordemServico.ClienteId;
 
         _mockClienteRepo.Setup(repo =>

@@ -15,10 +15,10 @@ public class ClienteRepository : IClienteRepository
     }
 
     public async Task<IEnumerable<Cliente>> ObterTodos()
-        => await _context.Clientes.ToListAsync();
+        => await _context.Clientes.Include(c => c.Usuario).ToListAsync();
 
     public async Task<Cliente?> ObterPorId(Guid id)
-        => await _context.Clientes.FindAsync(id);
+        => await _context.Clientes.Include(c => c.Usuario).FirstOrDefaultAsync(c => c.Id == id);
 
     public async Task Adicionar(Cliente cliente)
     {

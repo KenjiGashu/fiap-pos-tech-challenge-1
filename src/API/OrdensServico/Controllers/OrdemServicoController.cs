@@ -3,6 +3,7 @@ namespace API.OrdensServico.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Application.OrdensServico.DTOs;
 using Application.OrdensServico.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -15,12 +16,26 @@ public class OrdemServicoController : ControllerBase
         _service = service;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Get()
     {
         return Ok(await _service.GetAll());
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> ObterPorId(Guid id)
+    {
+        return Ok(await _service.ObterPorId(id));
+    }
+
+    [HttpGet("cliente/{id}")]
+    public async Task<IActionResult> ObterPorIdCliente(Guid id)
+    {
+        return Ok(await _service.ObterPorId(id));
+    }
+
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] OrdemServicoCreateDto dto)
     {
@@ -28,6 +43,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"criado Servico!"});
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("AdicionaPeca")]
     public async Task<IActionResult> AdicionaPecas([FromBody] OrdemServicoAdicionaPecaDto dto)
     {
@@ -35,6 +51,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"Peca Adicionada!"});
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("AdicionaServico")]
     public async Task<IActionResult> AdicionaServicos([FromBody] OrdemServicoAdicionaServicoDto dto)
     {
@@ -42,6 +59,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"Servico Adicionado!"});
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("EnviarOrcamento")]
     public async Task<IActionResult> EnviarOrcamento([FromBody] OrdemServicoEnviarOrcamentoDto dto)
     {
@@ -49,6 +67,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"orcamento enviado!"});
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("IniciarDiagnostico")]
     public async Task<IActionResult> IniciarDiagnostico([FromBody] OrdemServicoIniciarDiagnosticoOrcamentoDto dto)
     {
@@ -56,6 +75,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"iniciado diagnostico!"});
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("FinalizarDiagnostico")]
     public async Task<IActionResult> FinalizarDiagnostico([FromBody] OrdemServicoFinalizarDiagnosticoOrcamentoDto dto)
     {
@@ -63,6 +83,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"finalizado diagnostico! Enviado orçamento para Aprovação da Revisao"});
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("IniciarExecucao")]
     public async Task<IActionResult> IniciarExecucao([FromBody] OrdemServicoIniciarExecucaoOrcamentoDto dto)
     {
@@ -70,6 +91,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"iniciado execucao!"});
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("FinalizarExecucao")]
     public async Task<IActionResult> FinalizarExecucao([FromBody] OrdemServicoFinalizarExecucaoOrcamentoDto dto)
     {
@@ -77,6 +99,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"Finalizado execucao!"});
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("EntregarVeiculo")]
     public async Task<IActionResult> EntregarVeiculo([FromBody] OrdemServicoEntregarVeiculoDto dto)
     {
@@ -84,6 +107,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"Entrega de Veiculo Feita!"});
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("AprovarOrcamento/{id}")]
     public async Task<IActionResult> AprovarOrcamento(Guid id)
     {
@@ -91,6 +115,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"Orcamento {id} aprovado com sucesso"});
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(OrdemServicoDeleteDto dto)
     {

@@ -51,7 +51,7 @@ public class OrdemServicoRepository : IOrdemServicoRepository
 
     public async Task<OrdemServico> ObterPorId(Guid id)
     {
-        OrdemServico? ordemServico = await _context.OrdemServicos
+        var ordemServico = await _context.OrdemServicos
             .Include(o => o.OrdemServicoServicos)
             .ThenInclude(oss => oss.Servico)
             .Include(o => o.OrdemServicoPecas)
@@ -60,10 +60,24 @@ public class OrdemServicoRepository : IOrdemServicoRepository
             .FirstOrDefaultAsync(o => o.Id == id);
 
         if(ordemServico == null)
-            throw new Exception("Ordem Servico nao encontrado");
+            throw new Exception("ordem servico nao encontrada");
 
         return ordemServico;
     }
+
+    public async Task<IEnumerable<OrdemServico>> ObterPorIdCliente(Guid clienteId)
+    {
+        IEnumerable<OrdemServico> ordemServicos = _context.OrdemServicos
+            .Include(o => o.OrdemServicoServicos)
+            .ThenInclude(oss => oss.Servico)
+            .Include(o => o.OrdemServicoPecas)
+            .ThenInclude(osp => osp.Peca)
+            .AsTracking()
+            .Where(o => o.ClienteId == clienteId);
+
+        return ordemServicos;
+    }
+
 
     public async Task Atualizar(OrdemServico os)
     {

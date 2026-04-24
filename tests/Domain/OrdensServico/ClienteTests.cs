@@ -9,7 +9,7 @@ public class ClienteTests
 	{
 		var cpfInvalido = "433.023.538-00";
 
-		Assert.Throws<Exception>(() => new Cliente("nome", "email", cpfInvalido, "", TipoPessoa.Fisica));
+		Assert.Throws<Exception>(() => new Cliente("nome", cpfInvalido, "", TipoPessoa.Fisica));
 	}
 
   [Fact]
@@ -17,7 +17,7 @@ public class ClienteTests
 	{
 		var cpfValido = "433.023.538-20";
 		
-		var cliente = new Cliente("nome", "email", cpfValido, "", TipoPessoa.Fisica);
+		var cliente = new Cliente("nome", cpfValido, "", TipoPessoa.Fisica);
 
 		Assert.Equal(cliente.Cpf, cpfValido);
 	}
@@ -27,14 +27,14 @@ public class ClienteTests
 	{
 		var cnpjInvalido = "60.701.190/0001-00";
 
-		Assert.Throws<Exception>(() => new Cliente("nome", "email", "", cnpjInvalido, TipoPessoa.Juridica));
+		Assert.Throws<Exception>(() => new Cliente("nome", "", cnpjInvalido, TipoPessoa.Juridica));
 	}
 
   [Fact]
 	public async Task WhenValidCnpj_CreatesCliente()
 	{
 		var cnpjValido = "60.701.190/0001-04";
-		var cliente = new Cliente("nome", "email", "", cnpjValido, TipoPessoa.Juridica);
+		var cliente = new Cliente("nome", "", cnpjValido, TipoPessoa.Juridica);
 
 		Assert.Equal(cliente.Cnpj, cnpjValido);
 	}

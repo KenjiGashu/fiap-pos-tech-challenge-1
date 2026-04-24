@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.OrdensServico.Services;
 using Application.OrdensServico.DTOs;
 using Application.OrdensServico.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.OrdensServico.Controllers;
 
@@ -16,14 +17,17 @@ public class VeiculoController : ControllerBase
         _service = service;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Get()
         => Ok(await _service.GetAll());
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
         => Ok(await _service.GetById(id));
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] VeiculoCreateDto dto)
     {
@@ -31,6 +35,7 @@ public class VeiculoController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] VeiculoUpdateDto dto)
     {
@@ -38,6 +43,7 @@ public class VeiculoController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {

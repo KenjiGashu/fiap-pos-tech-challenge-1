@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Estoque.Services;
 using Application.Estoque.DTOs;
 using Application.Estoque.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -16,10 +17,13 @@ public class EstoqueController : ControllerBase
         _service = service;
     }
 
+
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Get()
     => Ok(await _service.GetAll());
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
@@ -28,6 +32,7 @@ public class EstoqueController : ControllerBase
         return Ok(peca);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] PecaCreateDto dto)
     {
@@ -35,6 +40,7 @@ public class EstoqueController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] PecaUpdateDto dto)
     {
@@ -42,6 +48,7 @@ public class EstoqueController : ControllerBase
         return Ok();
     }
         
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {

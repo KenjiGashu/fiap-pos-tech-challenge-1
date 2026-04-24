@@ -31,25 +31,40 @@ public class IdentidadeService : IIdentidadeService
         return _jwtService.GenerateToken(user);
     }
 
-    public async Task CriaUsuario(string email, string password)
+    public async Task CriaUsuario(string email, string password, IEnumerable<string> roles)
     {
         var hashedPassword = HashPassword(password);
         var usuario = new Usuario(email, hashedPassword);
+        usuario.Roles.AddRange(roles.Select(r => new Role(r)));
 
         await _usuarioRepo.Adicionar(usuario);
     }
 
-    public async Task<IEnumerable<ObterTodosResponseDto>> ObterTodos()
+    public async Task<IEnumerable<UsuarioResponseDto>> ObterTodos()
     {
         var usuarios =  await _usuarioRepo.ObterTodos();
-        var responseDto = usuarios.Select(u => new ObterTodosResponseDto
+        var responseDto = usuarios.Select(u => new UsuarioResponseDto
         {
+            Id = u.Id,
             Email = u.Email,
             Password = u.PasswordHash,
             Roles = u.Roles.Select(r => r.Nome).ToList()
         });
 
         return responseDto;
+    }
+
+    public async Task<UsuarioResponseDto> ObterPorEmail(string email)
+    {
+        Console.WriteLine($"Obter por email::     email {email}");
+        var usuario =  await _usuarioRepo.ObterPorEmail(email);
+        return new UsuarioResponseDto
+        {
+            Id = usuario.Id,
+            Email = usuario.Email,
+            Password = usuario.PasswordHash,
+            Roles = usuario.Roles.Select(r => r.Nome).ToList()
+        };
     }
 
     public string HashPassword(string password)

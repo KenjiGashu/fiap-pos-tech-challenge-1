@@ -26,11 +26,29 @@ public class IdentidadeController : ControllerBase
         return Ok(new {Mensagem = "login efetuado com sucesso", Token = token});
     }
 
-    [HttpGet("usuarios")]
+
     [Authorize(Roles = "Admin")]
+    [HttpGet("usuarios")]
     public async Task<IActionResult> ObterTodosOsUsuarios()
     {
         var usuarios = await _service.ObterTodos();
         return Ok(new { Usuarios = usuarios.ToList() });
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("usuarios/{email}")]
+    public async Task<IActionResult> ObterPorEmail(string email)
+    {
+        var usuario = await _service.ObterPorEmail(email);
+        return Ok(new { Usuarios = usuario });
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("usuarios/criar")]
+    public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDto dto)
+    {
+        Console.WriteLine($"[cria usuario] roles: {dto.Roles}");
+        await _service.CriaUsuario(dto.Email, dto.Password, dto.Roles);
+        return Ok(new { Mensagem = "Usuario Criado!" });
     }
 }

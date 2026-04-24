@@ -6,6 +6,7 @@ public interface IOrdemServicoService
 {
     public Task<IEnumerable<OrdemServicoResponseDto>> GetAll();
     public Task<OrdemServicoResponseDto> ObterPorId(Guid id);
+    public Task<ListaOrdemServicoResponseDto> ObterPorIdCliente(Guid clienteId);
     public Task Criar(OrdemServicoCreateDto dto);
     public Task Deletar(OrdemServicoDeleteDto dto);
     public Task AdicionarPecas(OrdemServicoAdicionaPecaDto dto);
