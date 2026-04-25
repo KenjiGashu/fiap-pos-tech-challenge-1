@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260422150032_InitialCreate")]
+    [Migration("20260425160304_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -19,40 +19,6 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
-
-            modelBuilder.Entity("Domain.Autenticacao.Entities.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-                });
-
-            modelBuilder.Entity("Domain.Autenticacao.Entities.Usuario", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Usuarios");
-                });
 
             modelBuilder.Entity("Domain.Estoque.Entities.Peca", b =>
                 {
@@ -75,6 +41,60 @@ namespace Infrastructure.Migrations
                     b.ToTable("Pecas");
                 });
 
+            modelBuilder.Entity("Domain.Identidade.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("Domain.Identidade.Entities.Usuario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("Domain.Metricas.Entities.MetricaOrdemServico", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("OrdemServicoId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Metricas");
+                });
+
             modelBuilder.Entity("Domain.OrdensServico.Entities.Cliente", b =>
                 {
                     b.Property<Guid>("Id")
@@ -89,11 +109,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -102,7 +117,12 @@ namespace Infrastructure.Migrations
                     b.Property<int>("TipoPessoa")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("UsuarioId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Clientes");
                 });
@@ -282,6 +302,17 @@ namespace Infrastructure.Migrations
                     b.ToTable("RoleUsuario");
                 });
 
+            modelBuilder.Entity("Domain.OrdensServico.Entities.Cliente", b =>
+                {
+                    b.HasOne("Domain.Identidade.Entities.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("Domain.OrdensServico.Entities.OrdemServicoPeca", b =>
                 {
                     b.HasOne("Domain.OrdensServico.Entities.OrdemServico", "OrdemServico")
@@ -322,13 +353,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("RoleUsuario", b =>
                 {
-                    b.HasOne("Domain.Autenticacao.Entities.Role", null)
+                    b.HasOne("Domain.Identidade.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Autenticacao.Entities.Usuario", null)
+                    b.HasOne("Domain.Identidade.Entities.Usuario", null)
                         .WithMany()
                         .HasForeignKey("UsuariosId")
                         .OnDelete(DeleteBehavior.Cascade)

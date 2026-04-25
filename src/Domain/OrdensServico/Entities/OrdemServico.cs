@@ -72,6 +72,11 @@ public class OrdemServico
           OrdemServicoPecas.Sum(p => p.Preco * p.Quantidade);
     }
 
+    public void EnviarOrcamento()
+    {
+        this.Status = StatusOrdemServico.AguardandoAprovacao;
+    }
+
     public void AprovarOrcamento()
     {
         if(Status == StatusOrdemServico.AguardandoAprovacao)

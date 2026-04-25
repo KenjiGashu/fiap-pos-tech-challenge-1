@@ -7,6 +7,8 @@ using Domain.OrdensServico.Entities;
 using Application.Estoque.Interfaces;
 using Application.Notificacao.Interfaces;
 using Application.OrdensServico.Interfaces;
+using Application.Metricas.Interfaces;
+using Application.Metricas.DTOs;
 
 public class OrdemServicoService : IOrdemServicoService
 {
@@ -15,19 +17,22 @@ public class OrdemServicoService : IOrdemServicoService
     private readonly INotificacaoService _notificacaoService;
     private readonly ITokenService _tokenService;
     private readonly IClienteRepository _clienteRepo;
+    private readonly IMetricaOrdemServicoService _metricaService;
 
     public OrdemServicoService(
         IOrdemServicoRepository repo,
         IEstoqueService estoqueService,
         INotificacaoService notificacaoService,
         ITokenService tokenService,
-        IClienteRepository clienteRepo)
+        IClienteRepository clienteRepo,
+        IMetricaOrdemServicoService metricaService)
     {
         _repo = repo;
         _estoqueService = estoqueService;
         _notificacaoService = notificacaoService;
         _tokenService = tokenService;
         _clienteRepo = clienteRepo;
+        _metricaService = metricaService;
     }
 
     public async Task<IEnumerable<OrdemServicoResponseDto>> GetAll()
@@ -135,6 +140,14 @@ public class OrdemServicoService : IOrdemServicoService
         ordemServico.Status = StatusOrdemServico.Recebida;
 
         await _repo.Criar(ordemServico);
+
+        // atualiza metricas
+        SalvarMetricaOrdemServicoDto metricaDto = new SalvarMetricaOrdemServicoDto()
+        {
+            OrdemServicoId = ordemServico.Id,
+            Status = ordemServico.Status.ToString()
+        };
+        await _metricaService.SalvaMetricaOrdemServico(metricaDto);
     }
 
     public async Task Deletar(OrdemServicoDeleteDto dto)
@@ -170,6 +183,15 @@ public class OrdemServicoService : IOrdemServicoService
         var cliente = await _clienteRepo.ObterPorId(ordemServico.ClienteId);
         var token = await _tokenService.GeraToken(ordemServico.Id);
 
+        ordemServico.EnviarOrcamento();
+
+        // atualiza metricas
+        SalvarMetricaOrdemServicoDto metricaDto = new SalvarMetricaOrdemServicoDto()
+        {
+            OrdemServicoId = dto.OrdemServicoId,
+            Status = ordemServico.Status.ToString()
+        };
+
         var aprovacaoOrcamentoDto = new AprovacaoOrcamentoDto
         {
             OrdemServicoId = dto.OrdemServicoId,
@@ -182,34 +204,50 @@ public class OrdemServicoService : IOrdemServicoService
         };
 
         await _notificacaoService.EnviarOrcamento(aprovacaoOrcamentoDto);
+
+        await _metricaService.SalvaMetricaOrdemServico(metricaDto);
     }
 
     public async Task AprovarOrcamento(OrdemServicoAprovarOrcamentoDto dto)
     {
+        // token
         var token = await _tokenService.ObterTokenPorGuid(dto.TokenGuid);
-
-        if(!token.IsValid())
+        if(token == null || !token.IsValid())
             throw new Exception("Token Expirado ou ja consumido");
-
         token.ConsumirToken();
 
         var os = await _repo.ObterPorId(token.OrdemServicoId);
         os.AprovarOrcamento();
+
+        // atualiza metricas
+        SalvarMetricaOrdemServicoDto metricaDto = new SalvarMetricaOrdemServicoDto()
+        {
+            OrdemServicoId = os.Id,
+            Status = os.Status.ToString()
+        };
+        await _metricaService.SalvaMetricaOrdemServico(metricaDto);
 
         await _repo.SaveChangesAsync();
     }
 
     public async Task RejeitarOrcamento(OrdemServicoRejeitarOrcamentoDto dto)
     {
+        // token
         var token = await _tokenService.ObterTokenPorGuid(dto.TokenGuid);
-
-        if(!token.IsValid())
+        if(token == null || !token.IsValid())
             throw new Exception("Token Expirado ou ja consumido");
-
         token.ConsumirToken();
 
         var os = await _repo.ObterPorId(token.OrdemServicoId);
         os.RejeitarOrcamento();
+
+        // atualiza metricas
+        SalvarMetricaOrdemServicoDto metricaDto = new SalvarMetricaOrdemServicoDto()
+        {
+            OrdemServicoId = os.Id,
+            Status = os.Status.ToString()
+        };
+        await _metricaService.SalvaMetricaOrdemServico(metricaDto);
 
         await _repo.SaveChangesAsync();
     }
@@ -218,6 +256,14 @@ public class OrdemServicoService : IOrdemServicoService
     {
         var os = await _repo.ObterPorId(dto.OrdemServicoId);
         os.IniciarDiagnostico();
+
+        // atualiza metricas
+        SalvarMetricaOrdemServicoDto metricaDto = new SalvarMetricaOrdemServicoDto()
+        {
+            OrdemServicoId = os.Id,
+            Status = os.Status.ToString()
+        };
+        await _metricaService.SalvaMetricaOrdemServico(metricaDto);
 
         await _repo.SaveChangesAsync();
     }
@@ -236,6 +282,14 @@ public class OrdemServicoService : IOrdemServicoService
             });
         }
 
+        // atualiza metricas
+        SalvarMetricaOrdemServicoDto metricaDto = new SalvarMetricaOrdemServicoDto()
+        {
+            OrdemServicoId = ordemServico.Id,
+            Status = ordemServico.Status.ToString()
+        };
+        await _metricaService.SalvaMetricaOrdemServico(metricaDto);
+
         await _repo.SaveChangesAsync();
     }
     
@@ -250,6 +304,14 @@ public class OrdemServicoService : IOrdemServicoService
                 
         ordemServico.IniciarExecucao();
 
+        // atualiza metricas
+        SalvarMetricaOrdemServicoDto metricaDto = new SalvarMetricaOrdemServicoDto()
+        {
+            OrdemServicoId = ordemServico.Id,
+            Status = ordemServico.Status.ToString()
+        };
+        await _metricaService.SalvaMetricaOrdemServico(metricaDto);
+
         await _repo.SaveChangesAsync();
     }
 
@@ -259,6 +321,14 @@ public class OrdemServicoService : IOrdemServicoService
 
         ordemServico.FinalizarExecucao();
 
+        // atualiza metricas
+        SalvarMetricaOrdemServicoDto metricaDto = new SalvarMetricaOrdemServicoDto()
+        {
+            OrdemServicoId = ordemServico.Id,
+            Status = ordemServico.Status.ToString()
+        };
+        await _metricaService.SalvaMetricaOrdemServico(metricaDto);
+
         await _repo.SaveChangesAsync();
     }
 
@@ -267,6 +337,14 @@ public class OrdemServicoService : IOrdemServicoService
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
 
         ordemServico.EntregarVeiculo();
+
+        // atualiza metricas
+        SalvarMetricaOrdemServicoDto metricaDto = new SalvarMetricaOrdemServicoDto()
+        {
+            OrdemServicoId = ordemServico.Id,
+            Status = ordemServico.Status.ToString()
+        };
+        await _metricaService.SalvaMetricaOrdemServico(metricaDto);
 
         await _repo.SaveChangesAsync();
     }

@@ -76,7 +76,9 @@
 
 (defun get-all-usuarios ()
 	(let* ((body (do-get "identidade/usuarios" nil)))
-		(format t "response: ~A~%" body)))
+		(when body
+			(format t "Response Body: ~A~%" (shasht:write-json (shasht:read-json body) nil)))
+		body))
 
 (get-all-usuarios)
 
@@ -102,8 +104,7 @@
 (defun cria-cliente (nome cpf cnpj tipopessoa)
 	(let* ((data (cl-json:encode-json-to-string `(("Nome" . ,nome) ("UsuarioId" . ,*usuario-id*) ("Cpf" . ,cpf) ("Cnpj" . ,cnpj) ("TipoPessoa" . ,tipopessoa))))
 				 (body (do-post "Cliente" data)))
-		(setf *cliente-nome* nome)
-		body))
+		(setf *cliente-nome* nome)))
 
 (cria-cliente "apenasumnome" "433.023.538-20" "" "Fisica")
 
@@ -119,8 +120,7 @@
 (defun cria-veiculo (placa marca modelo ano)
 	(let* ((data (cl-json:encode-json-to-string `(("placa" . ,placa) ("marca" . ,marca) ("modelo" . ,modelo) ("ano" . ,ano))))
 				 (body (do-post "veiculo" data)))
-		(setf *veiculo-placa* placa)
-		body))
+		(setf *veiculo-placa* placa)))
 
 (cria-veiculo "TKJ5A20" "toyota" "yaris" 2000)
 
@@ -221,6 +221,8 @@
 		body))
 
 (envia-orcamento)
+(do-login)
+(all-ordem-servico)
 
 (defun iniciar-diagnostico ()
 	(let* ((data (cl-json:encode-json-to-string `(("ordemservicoid" . ,*ordem-servico-id*))))
@@ -256,6 +258,26 @@
 		body))
 
 (entregar-veiculo)
+
+(defun todas-metricas ()
+	(let* ((body (do-get "metricas/" nil)))
+		body))
+
+(todas-metricas)
+
+(defun metrica-tempo-medio-atualizacao ()
+	(let* ((url (concatenate 'string "metricas/tempoMedio/" *ordem-servico-id*))
+				 (body (do-get url nil)))
+		body))
+
+(metrica-tempo-medio-atualizacao)
+
+(defun metrica-tempo-total-atualizacao ()
+	(let* ((url (concatenate 'string "metricas/tempoTotal/" *ordem-servico-id*))
+				 (body (do-get url nil)))
+		body))
+
+(metrica-tempo-total-atualizacao)
 
 (do-get "cliente" (cl-json:encode-json-to-string `(("password" . ,*admin-password*) ("email" . ,*admin-email*))))
 (do-get "identidade/usuarios" (cl-json:encode-json-to-string `(("password" . ,*admin-password*) ("email" . ,*admin-email*))))

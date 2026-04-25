@@ -1,0 +1,65 @@
+namespace Application.Metricas.Services;
+
+using Application.Metricas.DTOs;
+using Application.Metricas.Interfaces;
+using Domain.Metricas.Entities;
+using Domain.Metricas.Interfaces;
+using System.Linq;
+
+public class MetricaOrdemServicoService : IMetricaOrdemServicoService
+{
+    IMetricaOrdemServicoRepository _repo;
+
+    public MetricaOrdemServicoService(IMetricaOrdemServicoRepository repo)
+    {
+        _repo = repo;
+    }
+
+    public async Task<IEnumerable<MetricaOrdemServicoResponseDto>> GetAll()
+    {
+        var metrics = await _repo.ObterTodos();
+        return metrics.Select(m => new MetricaOrdemServicoResponseDto
+        {
+            OrdemServicoId = m.OrdemServicoId,
+            DateTime = m.DateTime,
+            Status = m.Status
+        });
+    }
+
+    public async Task SalvaMetricaOrdemServico(SalvarMetricaOrdemServicoDto dto)
+    {
+        Enum.TryParse<StatusOrdemServico>(dto.Status, out var status);
+        var metrica = new MetricaOrdemServico(dto.OrdemServicoId, status, DateTime.Now);
+        await _repo.Adicionar(metrica);
+    }
+
+    public async Task<int> TempoMedioOrdemServico(TempoMedioOrdemServicoDto dto)
+    {
+        var atualizacoesOrdemServico = await _repo.ObterPorOrdemServicoId(dto.OrdemServicoId);
+        var eventosOrdenados = atualizacoesOrdemServico.OrderBy(m => m.DateTime).ToList();
+
+        var diferencas = new List<TimeSpan>();
+
+        for (int i = 1; i < eventosOrdenados.Count; i++)
+        {
+            var atual = eventosOrdenados[i].DateTime;
+            var anterior = eventosOrdenados[i - 1].DateTime;
+
+            Console.WriteLine($"[tempo medio...] diff[{(atual-anterior).Seconds}] ");
+
+            diferencas.Add(atual - anterior);
+        }
+
+        return (int)diferencas.Average(d => d.Seconds);
+    }
+
+    public async Task<int> TempoTotalOrdemServico(TempoTotalOrdemServicoDto dto)
+    {
+        var atualizacoesOrdemServico = await _repo.ObterPorOrdemServicoId(dto.OrdemServicoId);
+        var timeSpanStatus = atualizacoesOrdemServico.OrderBy(m => m.DateTime)
+            .Zip(atualizacoesOrdemServico.OrderBy(x => x.DateTime).Skip(1),
+                 (anterior, atual) => new { TimeSpan =  atual.DateTime - anterior.DateTime });;
+
+        return timeSpanStatus.Sum(d => d.TimeSpan.Seconds);
+    }
+}

@@ -20,7 +20,11 @@ using Application.Identidade.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Infrastructure.Identidade.Repositories;
-using Domain.Identidade.Interfaces;
+using Domain.Identidade.Interfaces;
+using Domain.Metricas.Interfaces;
+using Infrastructure.Metricas.Repositories;
+using Application.Metricas.Interfaces;
+using Application.Metricas.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,6 +87,10 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IIdentidadeService, IdentidadeService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
+//metricas
+builder.Services.AddScoped<IMetricaOrdemServicoRepository, MetricaOrdemServicoRepository>();
+builder.Services.AddScoped<IMetricaOrdemServicoService, MetricaOrdemServicoService>();
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -93,7 +101,6 @@ using (var scope = app.Services.CreateScope())
 
     await context.Database.EnsureCreatedAsync();
 }
-
 
 app.UseAuthentication();
 app.UseAuthorization();

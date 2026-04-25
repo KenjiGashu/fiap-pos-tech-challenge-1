@@ -4,6 +4,7 @@ using Domain.Estoque.Entities;
 using Domain.Identidade.Entities;
 using System.Security.Cryptography;
 using Application.Identidade.Services;
+using Domain.Metricas.Entities;
 
 namespace Infrastructure.Data;
 
@@ -25,32 +26,34 @@ public class AppDbContext : DbContext
     // Notificacao
     public DbSet<Token> Tokens { get; set; }
 
+    // Metricas
+    public DbSet<MetricaOrdemServico> Metricas { get; set; }
 
     private string hashPassword(string password)
     {
-				// gera senha com hash
-				var salt = RandomNumberGenerator.GetBytes(16);
+        // gera senha com hash
+        var salt = RandomNumberGenerator.GetBytes(16);
       
-				var hash = Rfc2898DeriveBytes.Pbkdf2(
-						password,
-						salt,
-						100000,
-						HashAlgorithmName.SHA256,
-						32
+        var hash = Rfc2898DeriveBytes.Pbkdf2(
+            password,
+            salt,
+            100000,
+            HashAlgorithmName.SHA256,
+            32
         );
-				
-				// junta salt + hash
-				var hashBytes = new byte[48];
-				Buffer.BlockCopy(salt, 0, hashBytes, 0, 16);
-				Buffer.BlockCopy(hash, 0, hashBytes, 16, 32);
-				
-				var hashedPassword =  Convert.ToBase64String(hashBytes);
+                
+        // junta salt + hash
+        var hashBytes = new byte[48];
+        Buffer.BlockCopy(salt, 0, hashBytes, 0, 16);
+        Buffer.BlockCopy(hash, 0, hashBytes, 16, 32);
+                
+        var hashedPassword =  Convert.ToBase64String(hashBytes);
         
-				return hashedPassword;
+        return hashedPassword;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder
+    => optionsBuilder
         .UseSqlite("Data Source=clientes.db")
         .UseAsyncSeeding(async (context, _, cancellationToken) =>
         {
@@ -75,7 +78,7 @@ public class AppDbContext : DbContext
                 usuario.Roles.Add(role);
                 context.Set<Usuario>().Add(usuario);
 
-								hashedPassword = hashPassword("1234");
+                hashedPassword = hashPassword("1234");
                 usuario = new Usuario("itau@gmail.com", hashedPassword);
                 role = new Role("Cliente");
                 usuario.Roles.Add(role);
@@ -92,9 +95,9 @@ public class AppDbContext : DbContext
                 var clienteSet = context.Set<Cliente>();
                 var usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "maria@gmail.com");
                 cliente.UsuarioId = usuario.Id;
-								usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "jose@gmail.com");
+                usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "jose@gmail.com");
                 cliente2.UsuarioId = usuario.Id;
-								usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "itau@gmail.com");
+                usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "itau@gmail.com");
                 cliente3.UsuarioId = usuario.Id;
                 await clienteSet.AddAsync(cliente);
                 await clienteSet.AddAsync(cliente2);
@@ -156,16 +159,53 @@ public class AppDbContext : DbContext
         })
         .UseSeeding((context, _) =>
         {
+
+            //Usuario
+            if (context.Set<Usuario>().Count() <= 0)
+            {
+                var hashedPassword = hashPassword("1234");
+                var usuario = new Usuario("Admin@gmail.com", hashedPassword);
+                var role = new Role("Admin");
+                usuario.Roles.Add(role);
+                context.Set<Usuario>().Add(usuario);
+
+                hashedPassword = hashPassword("1234");
+                usuario = new Usuario("maria@gmail.com", hashedPassword);
+                role = new Role("Cliente");
+                usuario.Roles.Add(role);
+                context.Set<Usuario>().Add(usuario);
+
+                hashedPassword = hashPassword("1234");
+                usuario = new Usuario("jose@gmail.com", hashedPassword);
+                role = new Role("Cliente");
+                usuario.Roles.Add(role);
+                context.Set<Usuario>().Add(usuario);
+
+                hashedPassword = hashPassword("1234");
+                usuario = new Usuario("itau@gmail.com", hashedPassword);
+                role = new Role("Cliente");
+                usuario.Roles.Add(role);
+                context.Set<Usuario>().Add(usuario);
+
+                context.SaveChanges();
+            }
+            
             if (context.Set<Cliente>().Count() <= 0)
             {
                 var cliente = new Cliente("maria", "200.766.210-81", "", TipoPessoa.Fisica);
                 var cliente2 = new Cliente("jose", "848.288.680-03", "", TipoPessoa.Fisica);
                 var cliente3 = new Cliente("itau", "", "60.701.190/0001-04", TipoPessoa.Juridica);
                 var clienteSet = context.Set<Cliente>();
-                clienteSet.Add(cliente);
-                clienteSet.Add(cliente2);
-                clienteSet.Add(cliente3);
-                context.SaveChanges();
+                var usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "maria@gmail.com");
+                cliente.UsuarioId = usuario.Id;
+                usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "jose@gmail.com");
+                cliente2.UsuarioId = usuario.Id;
+                usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "itau@gmail.com");
+                cliente3.UsuarioId = usuario.Id;
+                clienteSet.AddAsync(cliente);
+                clienteSet.AddAsync(cliente2);
+                clienteSet.AddAsync(cliente3);
+                context.SaveChangesAsync();
             }
 
             if (context.Set<Veiculo>().Count() <= 0)
@@ -177,7 +217,6 @@ public class AppDbContext : DbContext
                 context.Set<Veiculo>().Add(veiculo2);
                 context.Set<Veiculo>().Add(veiculo3);
                 context.SaveChanges();
-
             }
 
             if (context.Set<Peca>().Count() <= 0)
@@ -189,7 +228,6 @@ public class AppDbContext : DbContext
                 context.Set<Peca>().Add(peca2);
                 context.Set<Peca>().Add(peca3);
                 context.SaveChanges();
-
             }
 
             if (context.Set<Servico>().Count() <= 0)
@@ -217,21 +255,10 @@ public class AppDbContext : DbContext
                 context.Set<OrdemServico>().Add(ordemServico);
                 context.SaveChanges();
             }
-
-            //Usuario
-            if (context.Set<Usuario>().Count() <= 0)
-            {
-                var usuario = new Usuario("Admin@gmail.com", "1234");
-                var role = new Role("Admin");
-                usuario.Roles.Add(role);
-                context.Set<Usuario>().Add(usuario);
-
-                context.SaveChanges();
-            }
         });
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options) { }
+    : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
