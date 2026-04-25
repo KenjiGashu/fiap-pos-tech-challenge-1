@@ -32,6 +32,15 @@ public class ClienteController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
+    [HttpGet("byNome/{nome}")]
+    public async Task<IActionResult> GetByNome(string nome)
+    {
+        var cliente = await _service.GetByNome(nome);
+        if (cliente == null) return NotFound();
+        return Ok(cliente);
+    }
+
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] ClienteCreateDto dto)
     {

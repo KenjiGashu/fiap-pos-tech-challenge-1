@@ -13,6 +13,7 @@ public interface IOrdemServicoService
     public Task AdicionarServicos(OrdemServicoAdicionaServicoDto dto);
     public Task EnviarOrcamento(OrdemServicoEnviarOrcamentoDto dto);
     public Task AprovarOrcamento(OrdemServicoAprovarOrcamentoDto dto);
+    public Task RejeitarOrcamento(OrdemServicoRejeitarOrcamentoDto dto);
     public Task IniciarDiagnostico(OrdemServicoIniciarDiagnosticoOrcamentoDto dto);
     public Task FinalizarDiagnostico(OrdemServicoFinalizarDiagnosticoOrcamentoDto dto);
     public Task IniciarExecucao(OrdemServicoIniciarExecucaoOrcamentoDto dto);

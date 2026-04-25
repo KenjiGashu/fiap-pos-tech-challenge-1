@@ -20,6 +20,9 @@ public class VeiculoRepository : IVeiculoRepository
     public async Task<Veiculo> ObterPorId(Guid id)
         => await _context.Veiculos.FindAsync(id);
 
+    public async Task<Veiculo> ObterPorPlaca(string placa)
+        => await _context.Veiculos.FirstOrDefaultAsync(v => v.Placa == placa);
+
     public async Task Adicionar(Veiculo veiculo)
     {
         await _context.Veiculos.AddAsync(veiculo);

@@ -4,6 +4,7 @@ public enum StatusOrdemServico
 {
     Recebida,
     OrcamentoAprovado,
+    OrcamentoRejeitado,
     EmDiagnostico,
     AguardandoAprovacao,
     AguardandoAprovacaoRevisao,
@@ -77,6 +78,13 @@ public class OrdemServico
             Status = StatusOrdemServico.OrcamentoAprovado;
         else if(Status == StatusOrdemServico.AguardandoAprovacaoRevisao)
             Status = StatusOrdemServico.AguardandoMecanico;
+        else
+            Status = StatusOrdemServico.OrcamentoAprovado;
+    }
+
+    public void RejeitarOrcamento()
+    {
+        Status = StatusOrdemServico.OrcamentoRejeitado;
     }
 
     public void IniciarDiagnostico()

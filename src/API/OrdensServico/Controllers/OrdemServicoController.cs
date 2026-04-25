@@ -32,7 +32,8 @@ public class OrdemServicoController : ControllerBase
     [HttpGet("cliente/{id}")]
     public async Task<IActionResult> ObterPorIdCliente(Guid id)
     {
-        return Ok(await _service.ObterPorId(id));
+        Console.WriteLine($"[controller] {id}");
+        return Ok(await _service.ObterPorIdCliente(id));
     }
 
     [Authorize(Roles = "Admin")]
@@ -65,6 +66,20 @@ public class OrdemServicoController : ControllerBase
     {
         await _service.EnviarOrcamento(dto);
         return Ok(new {Message = $"orcamento enviado!"});
+    }
+
+    [HttpGet("AprovarOrcamento/{id}")]
+    public async Task<IActionResult> AprovarOrcamento(Guid id)
+    {
+        await _service.AprovarOrcamento(new OrdemServicoAprovarOrcamentoDto{TokenGuid = id});
+        return Ok(new {Message = $"Orcamento {id} aprovado com sucesso"});
+    }
+
+    [HttpGet("RejeitarOrcamento/{id}")]
+    public async Task<IActionResult> RejeitarOrcamento(Guid id)
+    {
+        await _service.RejeitarOrcamento(new OrdemServicoRejeitarOrcamentoDto{TokenGuid = id});
+        return Ok(new {Message = $"Orcamento {id} rejeitado. ):"});
     }
 
     [Authorize(Roles = "Admin")]
@@ -107,13 +122,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(new {Message = $"Entrega de Veiculo Feita!"});
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpGet("AprovarOrcamento/{id}")]
-    public async Task<IActionResult> AprovarOrcamento(Guid id)
-    {
-			  await _service.AprovarOrcamento(new OrdemServicoAprovarOrcamentoDto{TokenGuid = id});
-        return Ok(new {Message = $"Orcamento {id} aprovado com sucesso"});
-    }
+
 
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]

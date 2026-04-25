@@ -96,11 +96,13 @@ public class OrdemServicoService : IOrdemServicoService
 
     public async Task<ListaOrdemServicoResponseDto> ObterPorIdCliente(Guid clienteId)
     {
+        Console.WriteLine($"[obter por id cliente] {clienteId}");
         var ordemServicos = await _repo.ObterPorIdCliente(clienteId);
         var dto = new ListaOrdemServicoResponseDto
         {
             OrdemServicos = ordemServicos.Select(os => new OrdemServicoResponseDto
             {
+                Id = os.Id,
                 ClienteId = os.ClienteId,
                 VeiculoId = os.VeiculoId,
                 Total = os.Total,
@@ -193,6 +195,21 @@ public class OrdemServicoService : IOrdemServicoService
 
         var os = await _repo.ObterPorId(token.OrdemServicoId);
         os.AprovarOrcamento();
+
+        await _repo.SaveChangesAsync();
+    }
+
+    public async Task RejeitarOrcamento(OrdemServicoRejeitarOrcamentoDto dto)
+    {
+        var token = await _tokenService.ObterTokenPorGuid(dto.TokenGuid);
+
+        if(!token.IsValid())
+            throw new Exception("Token Expirado ou ja consumido");
+
+        token.ConsumirToken();
+
+        var os = await _repo.ObterPorId(token.OrdemServicoId);
+        os.RejeitarOrcamento();
 
         await _repo.SaveChangesAsync();
     }

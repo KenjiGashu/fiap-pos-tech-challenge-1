@@ -93,6 +93,11 @@ public class OrdemServicoAprovarOrcamentoDto
     public Guid TokenGuid { get; set; }
 }
 
+public class OrdemServicoRejeitarOrcamentoDto
+{
+    public Guid TokenGuid { get; set; }
+}
+
 public class OrdemServicoDeleteDto
 {
     public Guid Id { get; set; }

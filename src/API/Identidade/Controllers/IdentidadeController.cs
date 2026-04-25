@@ -44,10 +44,9 @@ public class IdentidadeController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpGet("usuarios/criar")]
+    [HttpPost("usuarios/criar")]
     public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDto dto)
     {
-        Console.WriteLine($"[cria usuario] roles: {dto.Roles}");
         await _service.CriaUsuario(dto.Email, dto.Password, dto.Roles);
         return Ok(new { Mensagem = "Usuario Criado!" });
     }

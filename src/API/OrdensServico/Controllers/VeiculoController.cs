@@ -28,6 +28,11 @@ public class VeiculoController : ControllerBase
         => Ok(await _service.GetById(id));
 
     [Authorize(Roles = "Admin")]
+    [HttpGet("byPlaca/{placa}")]
+    public async Task<IActionResult> GetByPlaca(string placa)
+        => Ok(await _service.GetByPlaca(placa));
+
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] VeiculoCreateDto dto)
     {

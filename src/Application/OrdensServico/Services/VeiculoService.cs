@@ -43,6 +43,21 @@ public class VeiculoService : IVeiculoService
         };
     }
 
+    public async Task<VeiculoResponseDto> GetByPlaca(string placa)
+    {
+        var v = await _repo.ObterPorPlaca(placa);
+        if (v == null) return null;
+
+        return new VeiculoResponseDto
+        {
+            Id = v.Id,
+            Placa = v.Placa,
+            Marca = v.Marca,
+            Modelo = v.Modelo,
+            Ano = v.Ano
+        };
+    }
+
     public async Task Create(VeiculoCreateDto dto)
     {
         var veiculo = new Veiculo(dto.Placa, dto.Marca, dto.Modelo, dto.Ano);

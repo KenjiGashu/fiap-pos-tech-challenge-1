@@ -47,6 +47,23 @@ public class ClienteService : IClienteService
         };
     }
 
+    public async Task<ClienteResponseDto> GetByNome(string nome)
+    {
+        var cliente = await _repository.ObterPorNome(nome);
+        if(cliente == null)
+            throw new Exception("Cliente nao encontrado");
+
+        return new ClienteResponseDto
+        {
+            Id = cliente.Id,
+            Nome = cliente.Nome,
+            Email = cliente.Usuario.Email,
+            Cpf = cliente.Cpf,
+            Cnpj = cliente.Cnpj,
+            TipoPessoa = cliente.TipoPessoa
+        };
+    }
+
     public async Task Create(ClienteCreateDto dto)
     {
         var cliente = new Cliente(dto.Nome, dto.Cpf, dto.Cnpj, dto.TipoPessoa);
