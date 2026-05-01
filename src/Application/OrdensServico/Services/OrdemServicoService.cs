@@ -39,14 +39,6 @@ public class OrdemServicoService : IOrdemServicoService
     {
         var ordemServicos = await _repo.ObterTodos();
 
-        foreach(var ordemServico in ordemServicos)
-        {
-            foreach(var servico in ordemServico.OrdemServicoServicos)
-            {
-                Console.WriteLine($"servico: {servico.Id} FK: {servico.ServicoId}");
-            }
-        }
-
         return ordemServicos.Select(os => new OrdemServicoResponseDto
         {
             Id = os.Id,
@@ -76,6 +68,7 @@ public class OrdemServicoService : IOrdemServicoService
         var os = await _repo.ObterPorId(id);
         var dto = new OrdemServicoResponseDto
         {
+					  Id = os.Id,
             ClienteId = os.ClienteId,
             VeiculoId = os.VeiculoId,
             Total = os.Total,

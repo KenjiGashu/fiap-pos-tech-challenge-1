@@ -1,5 +1,8 @@
 namespace Domain.OrdensServico.Entities;
 
+using System.Linq;
+using System.Text.Json.Serialization;
+
 public enum StatusOrdemServico
 {
     Recebida,
@@ -21,6 +24,7 @@ public class OrdemServico
     public Guid VeiculoId { get; set; }
     public DateTime Data { get; set; }
     public decimal Total { get; set; }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public StatusOrdemServico  Status { get; set; }
     public bool deveAprovarDeNovo { get; set; }
 
@@ -47,7 +51,13 @@ public class OrdemServico
             deveAprovarDeNovo = true;
         }
             
-        OrdemServicoServicos.Add(new OrdemServicoServico(this.Id, servicoId, preco, nome));
+				var foundServico = OrdemServicoServicos.FirstOrDefault(o => o.ServicoId == servicoId);
+        if (foundServico == null)
+        {
+            Console.WriteLine($"Servico ja existe na ordem serviço");
+            OrdemServicoServicos.Add(new OrdemServicoServico(this.Id, servicoId, preco, nome));
+        }
+				
         RecalcularTotal();
     }
 
@@ -61,7 +71,15 @@ public class OrdemServico
             deveAprovarDeNovo = true;
         }
 
-        OrdemServicoPecas.Add(new OrdemServicoPeca(this.Id, pecaId, nome, preco, quantidade));
+        var foundPeca = OrdemServicoPecas.FirstOrDefault(o => o.PecaId == pecaId);
+        if (foundPeca != null)
+        {
+            foundPeca.Quantidade += quantidade;
+        } else
+        {
+						OrdemServicoPecas.Add(new OrdemServicoPeca(this.Id, pecaId, nome, preco, quantidade));
+				}
+
         RecalcularTotal();
     }
 

@@ -22,7 +22,7 @@ public class TokenRepository : ITokenRepository
     public async Task<Token> ObterToken(string token)
     {
         var result = _context.Tokens.FirstOrDefault(t => t.HashedToken == token);
-    
+
         if(result == null)
             throw new Exception("Token not found");
 

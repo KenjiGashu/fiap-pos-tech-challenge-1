@@ -41,7 +41,7 @@ public class EstoqueService : IEstoqueService
         var peca = await _repo.ObterPorId(id);
 
         if (peca == null)
-            throw new Exception("Cliente não encontrado");
+            throw new Exception("Peca não encontrada");
 
         peca.Atualizar(dto.Nome, dto.Preco, dto.Quantidade);
 
@@ -66,7 +66,7 @@ public class EstoqueService : IEstoqueService
     public async Task Consumir(Guid id, int quantidade)
     {
         var peca = await _repo.ObterPorId(id);
-            
+
         if(peca == null)
             throw new Exception("Peca nao encontrada");
 

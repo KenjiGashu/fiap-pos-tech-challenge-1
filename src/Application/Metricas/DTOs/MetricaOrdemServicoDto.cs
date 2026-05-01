@@ -1,5 +1,6 @@
 namespace Application.Metricas.DTOs;
 
+using System.Text.Json.Serialization;
 using Domain.Metricas.Entities;
 
 public class SalvarMetricaOrdemServicoDto
@@ -21,6 +22,8 @@ public class TempoTotalOrdemServicoDto
 public class MetricaOrdemServicoResponseDto
 {
     public Guid OrdemServicoId { get; set; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public StatusOrdemServico Status { get; set; }
     public DateTime DateTime { get; set; }
 }

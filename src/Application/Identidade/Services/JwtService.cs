@@ -9,10 +9,13 @@ using Application.Identidade.Interfaces;
 
 public class JwtService : IJwtService
 {
-    private readonly string _secret = "minha_chave_super_secreta_com_32_chars!!";
+    private readonly string? _secret = Environment.GetEnvironmentVariable("FIAP_POS_SECRET");
 
     public string GenerateToken(Usuario usuario)
     {
+				if(_secret == null)
+            throw new Exception("secret inexistente");
+
         var key = Encoding.ASCII.GetBytes(_secret);
 
         var claims = new List<Claim>

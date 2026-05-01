@@ -23,13 +23,13 @@
 		(format t "gashu ~a~%" token)
 		token))
 
-(defun do-post (api body)
+(defun do-api-call (api body type)
 	(let* ((url (concatenate 'string *api-url* api)))
-		(format t "Doing POST request to ~A~%" url)
+		(format t "Doing ~A request to ~A~%" type url)
 		(multiple-value-bind (body status-code headers uri stream must-close status-text)
 				(drakma:http-request
 				 url
-				 :method :post
+				 :method type
 				 :content body
 				 :additional-headers
 				 `(("Content-Type" . "application/json")
@@ -39,26 +39,21 @@
 			(when body
 				(format t "Response Body: ~A~%" (shasht:write-json (shasht:read-json body) nil)))
 			body)))
+
+(defun do-post (api body)
+	(do-api-call api body :post))
 
 (defun do-get (api body)
-	(let* ((url (concatenate 'string *api-url* api)))
-		(format t "Doing GET request to ~A~%" url)
-		(multiple-value-bind (body status-code headers uri stream must-close status-text)
-				(drakma:http-request
-				 url
-				 :method :get
-				 :content body
-				 :additional-headers
-				 `(("Content-Type" . "application/json")
-					 ("Authorization" . ,(format nil "Bearer ~A" *jwt-token*))))
+	(do-api-call api body :get))
 
-			(format t "Status: ~A ~A~%" status-code status-text)
-			(when body
-				(format t "Response Body: ~A~%" (shasht:write-json (shasht:read-json body) nil)))
-			body)))
+(defun do-delete (api body)
+	(do-api-call api body :delete))
 
-(defun do-login ()
-	(let* ((data (cl-json:encode-json-to-string `(("password" . ,*admin-password*) ("email" . ,*admin-email*))))
+(defun do-put (api body)
+	(do-api-call api body :put))
+
+(defun do-login (password email)
+	(let* ((data (cl-json:encode-json-to-string `(("password" . ,password) ("email" . ,email))))
 				 (url (concatenate 'string *api-url* "identidade/login"))
 				 (response (drakma:http-request
 										url
@@ -72,7 +67,13 @@
 					 (resp (get-token json-obj)))
 			(setf *jwt-token* resp))))
 
-(do-login)
+(defun do-login-admin ()
+	(do-login *admin-password* *admin-email*))
+
+(defun do-login-cliente ()
+	(do-login *usuario-password* *usuario-email*))
+
+(do-login-admin)
 
 (defun get-all-usuarios ()
 	(let* ((body (do-get "identidade/usuarios" nil)))
@@ -86,7 +87,8 @@
 	(let* ((data (cl-json:encode-json-to-string `(("password" . ,password) ("email" . ,email) ("roles" . ,roles))))
 				 (body (do-post "identidade/usuarios/criar" data)))
 		(format t "response: ~A~%" body)
-		(setf *usuario-email* email)))
+		(setf *usuario-email* email)
+		(setf *usuario-password* password)))
 
 (cria-usuario "1234" "umemail@gmail.com" '("cliente" "teste"))
 
@@ -279,72 +281,103 @@
 
 (metrica-tempo-total-atualizacao)
 
-(do-get "cliente" (cl-json:encode-json-to-string `(("password" . ,*admin-password*) ("email" . ,*admin-email*))))
-(do-get "identidade/usuarios" (cl-json:encode-json-to-string `(("password" . ,*admin-password*) ("email" . ,*admin-email*))))
+(defun media-todas-metricas ()
+	(let* ((body (do-get "metricas/TempoMedio" nil)))
+		body))
 
-(do-login "identidade/login" (cl-json:encode-json-to-string `(("password" . ,*admin-password*) ("email" . ,*admin-email*))))
-
-(do-post "identidade/usuarios/criar" (cl-json:encode-json-to-string `(("password" . "oioi") ("email" . "oi@gmail.com") ("roles" . ("cliente")))))
-
-(do-post "cliente" (cl-json:encode-json-to-string `(("Nome" . "umNome") ("UsuarioId" . "DE1E8FFF-6184-4DB8-8641-4CB00B71B85E") ("Cpf" . "433.023.538-20") ("TipoPessoa" . "Fisica") ("Cnpj" . ""))))
-
-;; authenticated
-(let* ((data `(("password" . *admin-password*)
-               ("email" . *admin-email*)))
-       (json-body (cl-json:encode-json-to-string data)))
-  (let* ((response (drakma:http-request
-										"http://localhost:5129/api/cliente"
-										:method :get
-										:content json-body
-										:additional-headers
-										`(("Content-Type" . "application/json")
-											("Authorization" . ,(format nil "Bearer ~A" *jwt-token*)))))
-				 (json-obj (cl-json:decode-json-from-string response))
-				 (test (shasht:read-json response))
-				 (resp (get-token json-obj)))
-		
-		(format t "aodkqwoeqwe: ~A~%" (shasht:write-json test nil))
-		
-		
-		(setf *jwt-token* resp)
-		(format t "Resposta bruta: ~A~%" response)
-		
-		(let ((json (cl-json:decode-json-from-string response)))
-			(format t "JSON parseado: ~A~%" json))))
-
-;; post
-(let* ((data `(("password" . ,*admin-password*)
-               ("email" . ,*admin-email*)))
-       (json-body (cl-json:encode-json-to-string data)))
-  (let* ((response (drakma:http-request
-										"http://localhost:5129/api/identidade/login"
-										:method :post
-										:content json-body
-										:additional-headers
-										`(("Content-Type" . "application/json"))))
-				 (json-obj (cl-json:decode-json-from-string response))
-				 (test (shasht:read-json response))
-				 (resp (get-token json-obj)))
-		
-		(format t "aodkqwoeqwe: ~A~%" (shasht:write-json test nil))
-		(setf *jwt-token* resp)
-		(format t "Resposta bruta: ~A~%" response)
-		
-		(let ((json (cl-json:decode-json-from-string response)))
-			(format t "JSON parseado: ~A~%" json))))
+(media-todas-metricas)
 
 
-(multiple-value-bind (body status-code headers uri stream must-close status-text)
-    (drakma:http-request "https://github.com")
-  (format t "Status: ~A ~A~%" status-code status-text)
-  (format t "Response Body: ~A~%" body))
 
-(multiple-value-bind (body status-code headers uri stream must-close status-text)
-    (drakma:http-request "http://localhost:5129/api/identidade/usuarios"
-												 :method :get)
-  (format t "Status: ~A ~A~%" status-code status-text)
-  (format t "Response Body: ~A~%" body)
-	;; (let ((data (json:decode-json-from-string bodyrepo => repo.Criar(It.Is<OrdemServico>(os => os.Status == StatusOrdemServico.Recebida)))))
-	;; 	(assoc :usuarios body))
-	(assoc :email (cadr (assoc :usuarios (cl-json:decode-json-from-string body))))
-	)
+
+;;testes outras apis nao tao importantes
+;;estoque
+(defun get-peca-id ()
+	(let* ((url (concatenate 'string "Estoque/" *peca-id*))
+				 (body (do-get url nil)))
+		body))
+
+(get-peca-id)
+
+(defun create-peca (nome preco quantidade)
+	(let* ((data (cl-json:encode-json-to-string `(("nome" . ,nome) ("preco" . ,preco) ("quantidade" . ,quantidade))))
+				 (body (do-post "Estoque" data)))
+		body))
+
+(create-peca "aeeeeee" 57 280)
+
+(defun update-peca (nome preco quantidade)
+	(let* ((url (concatenate 'string "Estoque/" *peca-id*))
+				 (data (cl-json:encode-json-to-string `(("nome" . ,nome) ("preco" . ,preco) ("quantidade" . ,quantidade))))
+				 (body (do-put url data)))
+		body))
+
+(update-peca "afffffff" 200 357)
+
+
+;;identidade
+(defun get-usuario-by-email (email)
+	(let* ((url (concatenate 'string "identidade/usuarios/" email))
+				 (body (do-get url nil)))
+		body))
+
+(get-usuario-by-email "Admin@gmail.com")
+
+;;cliente
+(defun get-cliente-by-id ()
+	(let* ((url (concatenate 'string "cliente/" *cliente-id*))
+				 (body (do-get url nil)))
+		body))
+
+(get-cliente-by-id)
+
+(defun get-cliente-by-nome (nome)
+	(let* ((url (concatenate 'string "cliente/bynome/" nome))
+				 (body (do-get url nil)))
+		body))
+
+(get-cliente-by-nome "apenasumnome")
+
+(defun update-cliente (nome cpf cnpj tipopessoa)
+	(let* ((data (cl-json:encode-json-to-string `(("nome" . ,nome) ("cpf" . ,cpf) ("cnpj" . ,cnpj) ("tipopessoa" . ,tipopessoa))))
+				 (url (concatenate 'string "cliente/" *cliente-id*))
+				 (body (do-put url data)))
+		body))
+
+(update-cliente "macaco" "917.154.290-60" "" "Fisica")
+
+(defun get-clientes ()
+	(let* ((body (do-get "cliente" nil)))
+		body))
+
+(get-clientes)
+
+(defun print-cliente (cliente i)
+	(let* ((id (cdr (assoc :id cliente)))
+				 (nome (cdr (assoc :nome cliente)))
+				 (cpf (cdr (assoc :cpf cliente)))
+				 (cnpj (cdr (assoc :cnpj cliente)))
+				 (tipopessoa (cdr (assoc :tipo-pessoa cliente))))
+		(format t "~A:  cliente: nome[~A] cpf[~A] cnpj[~A] tipo[~A] id[~A]~%" i nome cpf cnpj tipopessoa id)))
+
+(defun escolher-cliente ()
+	(let* ((body (do-get "cliente" nil))
+				 (json-obj (cl-json:decode-json-from-string body)))
+		(format t "~%~%~%~%~%~%~%~%~% ----- escolha a peca -------~%")
+		(loop for cliente in json-obj
+					for i = 0 then (+ i 1)
+					do (print-cliente cliente i))
+		(format t "~%~%choose one: ")
+		(let* ((user-input (parse-integer (read-line)))
+					 (chosen-cliente (nth user-input json-obj)))
+			(setf *cliente-id* (cdr (assoc :id chosen-cliente)))
+			(setf *cliente-nome* (cdr (assoc :nome chosen-cliente))))))
+
+(escolher-cliente)
+
+(defun delete-cliente ()
+	(let* ((url (concatenate 'string "cliente/" *cliente-id*))
+				 (body (do-delete url nil)))
+		body))
+
+(delete-cliente)

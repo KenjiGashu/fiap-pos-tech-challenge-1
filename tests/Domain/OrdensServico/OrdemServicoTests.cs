@@ -31,6 +31,20 @@ public class OrdemServicoTests
     }
 
     [Fact]
+    public async Task OrdemServico_AdicionaServico_ServicoRepetido_NaoFazNada()
+    {
+        var servicoId = Guid.NewGuid();
+        decimal preco = 12;
+        var nome = "troca oleo";
+
+        os.AdicionarServico(servicoId, preco, nome);
+        os.AdicionarServico(servicoId, preco, nome);
+
+        Assert.Equal(preco, os.Total);
+        Assert.Single(os.OrdemServicoServicos);
+    }
+
+    [Fact]
     public async Task OrdemServico_WhenStateEmDiagnostico_AdicionaServicoShould_DeveAprovarDeNovo_True()
     {
         var servicoId = Guid.NewGuid();
@@ -87,6 +101,28 @@ public class OrdemServicoTests
         Assert.Equal(preco, os.Total);
         Assert.Single(os.OrdemServicoPecas);
     }
+
+    [Fact]
+    public async Task OrdemServicoTest_AdicionaPecaDuasVezes_ShouldUpdateQuantidade()
+    {
+        var pecaId = Guid.NewGuid();
+        decimal preco = 12;
+        int quantidade = 1;
+        var nome = "ipad";
+
+        os.AdicionarPeca(pecaId, preco, quantidade, nome);
+        os.AdicionarPeca(pecaId, preco, quantidade, nome);
+
+        var ordemServicoPeca = os.OrdemServicoPecas.FirstOrDefault(osp => osp.PecaId == pecaId);
+
+        if(null == ordemServicoPeca)
+            throw new Exception("non existent ordem servico peca");
+
+        Assert.Equal(preco*2, os.Total);
+        Assert.Equal(2, ordemServicoPeca.Quantidade);
+        Assert.Single(os.OrdemServicoPecas);
+    }
+
 
     [Fact]
     public async Task OrdemServico_RecalcularTotalShouldProperlyCalculate()

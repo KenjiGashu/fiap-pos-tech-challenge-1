@@ -10,6 +10,7 @@ using global::Application.Estoque.Interfaces;
 using global::Application.Notificacao.Interfaces;
 using global::Application.Notificacao.DTOs;
 using global::Domain.Identidade.Entities;
+using global::Application.Metricas.Interfaces;
 
 public class OrdemServicoServiceTests
 {
@@ -20,6 +21,7 @@ public class OrdemServicoServiceTests
     Mock<INotificacaoService> _mockNotificacaoService;
     Mock<ITokenService> _mockTokenService;
     Mock<IClienteRepository> _mockClienteRepo;
+    Mock<IMetricaOrdemServicoService> _mockMetricaService;
     IOrdemServicoService service;
 
     public OrdemServicoServiceTests()
@@ -31,8 +33,9 @@ public class OrdemServicoServiceTests
         _mockNotificacaoService = new Mock<INotificacaoService>();
         _mockTokenService = new Mock<ITokenService>();
         _mockClienteRepo = new Mock<IClienteRepository>();
+        _mockMetricaService = new Mock<IMetricaOrdemServicoService>();
         service = new OrdemServicoService(_mockOsRepo.Object, _mockEstoqueService.Object,
-             _mockNotificacaoService.Object, _mockTokenService.Object, _mockClienteRepo.Object);
+                                          _mockNotificacaoService.Object, _mockTokenService.Object, _mockClienteRepo.Object, _mockMetricaService.Object);
     }
 
     [Fact]

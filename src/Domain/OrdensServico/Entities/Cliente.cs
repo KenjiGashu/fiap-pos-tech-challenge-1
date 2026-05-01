@@ -1,4 +1,6 @@
 namespace Domain.OrdensServico.Entities;
+
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 using Domain.Identidade.Entities;
@@ -15,6 +17,7 @@ public class Cliente
     public string Nome { get; set; }
     public string Cpf { get; set; }
     public string Cnpj { get; set; }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public TipoPessoa TipoPessoa { get; set; }
 
     public Guid UsuarioId { get; set; }

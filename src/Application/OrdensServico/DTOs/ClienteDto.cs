@@ -1,4 +1,6 @@
 namespace Application.OrdensServico.DTOs;
+
+using System.Text.Json.Serialization;
 using Domain.OrdensServico.Entities;
 
 public class ClienteCreateDto
@@ -7,6 +9,7 @@ public class ClienteCreateDto
     public Guid UsuarioId { get; set; }
     public string Cpf { get; set; }
     public string Cnpj { get; set; }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public TipoPessoa TipoPessoa { get; set; }
 }
 
@@ -18,14 +21,15 @@ public class ClienteResponseDto
     public string Email { get; set; }
     public string Cpf { get; set; }
     public string Cnpj { get; set; }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public TipoPessoa TipoPessoa { get; set; }
 }
 
 public class ClienteUpdateDto
 {
     public string Nome { get; set; }
-    public string Email { get; set; }
     public string Cpf { get; set; }
     public string Cnpj { get; set; }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public TipoPessoa TipoPessoa { get; set; }
 }

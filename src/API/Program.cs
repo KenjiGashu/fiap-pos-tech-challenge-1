@@ -24,12 +24,22 @@ using Domain.Identidade.Interfaces;
 using Domain.Metricas.Interfaces;
 using Infrastructure.Metricas.Repositories;
 using Application.Metricas.Interfaces;
-using Application.Metricas.Services;
+using Application.Metricas.Services;
+using System.Reflection;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlite("Data Source=clientes.db"));
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseInMemoryDatabase("TestDb"));
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite("Data Source=clientes.db"));
+}
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -93,7 +103,22 @@ builder.Services.AddScoped<IMetricaOrdemServicoService, MetricaOrdemServicoServi
 
 builder.Services.AddControllers();
 
+// swagger
+var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+builder.Services.AddSwaggerGen(c =>
+{
+    c.IncludeXmlComments(xmlPath);
+});
+
 var app = builder.Build();
+
+// Ativar Swagger
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 using (var scope = app.Services.CreateScope())
 {
@@ -107,5 +132,27 @@ app.UseAuthorization();
 
 
 app.MapControllers();
+
+// for production, to avoid leaking internal information when exception occurs
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var error = context.Features.Get<IExceptionHandlerFeature>();
+
+        // Aqui você pode logar o erro completo
+        var exception = error?.Error;
+
+        var response = new
+        {
+            Message = "Ocorreu um erro interno."
+        };
+
+        await context.Response.WriteAsJsonAsync(response);
+    });
+});
 
 app.Run();

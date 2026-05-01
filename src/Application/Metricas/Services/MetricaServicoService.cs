@@ -62,4 +62,28 @@ public class MetricaOrdemServicoService : IMetricaOrdemServicoService
 
         return timeSpanStatus.Sum(d => d.TimeSpan.Seconds);
     }
+
+    public async Task<int> TempoMedioAtendimentos()
+    {
+        var atualizacoesOrdemServico = await _repo.ObterTodos();
+        var groupedMetricas = atualizacoesOrdemServico.GroupBy(mos => mos.OrdemServicoId);
+        var media = 0;
+        var numGrupos = groupedMetricas.Count();
+
+        Console.WriteLine($"Tempo medio atendimento:\n numGrupos {numGrupos}");
+
+        foreach(var grupoMetricas in groupedMetricas)
+        {
+						var timeSpanStatus = grupoMetricas.OrderBy(m => m.DateTime)
+            .Zip(grupoMetricas.OrderBy(x => x.DateTime).Skip(1),
+                 (anterior, atual) => new { TimeSpan =  atual.DateTime - anterior.DateTime });;
+
+            var soma = timeSpanStatus.Sum(d => d.TimeSpan.Seconds);
+
+            Console.WriteLine($"OrdemServicoID: {grupoMetricas.Key}  Tempo: {soma}");
+            media += soma;
+        }
+
+        return media / numGrupos;
+    }
 }

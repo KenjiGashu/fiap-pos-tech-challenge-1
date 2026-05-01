@@ -1,4 +1,6 @@
 namespace Application.OrdensServico.DTOs;
+
+using System.Text.Json.Serialization;
 using Application.Estoque.DTOs;
 using Domain.OrdensServico.Entities;
 
@@ -14,6 +16,8 @@ public class OrdemServicoResponseDto
     public Guid ClienteId { get; set; }
     public Guid VeiculoId { get; set; }
     public decimal Total { get; set; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public StatusOrdemServico Status { get; set; }
 
     public List<OrdemServicoServicoDto> Servicos { get; set; }
