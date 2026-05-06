@@ -6,7 +6,7 @@
 
 ;; (require 'sb-posix)
 ;; (sb-posix:setenv "FIAP_POS_PORT" "8080" 1)
-(setf *port* "5129")
+;; (setf *port* "5129")
 
 (defparameter *port* (sb-ext:posix-getenv "FIAP_POS_PORT"))
 (defparameter *jwt-token* "your.jwt.token.here")

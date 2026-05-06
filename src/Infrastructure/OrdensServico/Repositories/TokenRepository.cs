@@ -1,8 +1,8 @@
-namespace Infrastructure.OrdensServico.Repositories;
+namespace Gashu.SistemaMecanica.Infrastructure.OrdensServico.Repositories;
 
-using Infrastructure.Data;
-using Domain.OrdensServico.Interfaces;
-using Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Infrastructure.Data;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public class TokenRepository : ITokenRepository
 {

@@ -1,8 +1,8 @@
-namespace Infrastructure.Identidade.Repositories;
+namespace Gashu.SistemaMecanica.Infrastructure.Identidade.Repositories;
 
-using Domain.Identidade.Entities;
-using Domain.Identidade.Interfaces;
-using Infrastructure.Data;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Domain.Identidade.Interfaces;
+using Gashu.SistemaMecanica.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 public class UsuarioRepository : IUsuarioRepository

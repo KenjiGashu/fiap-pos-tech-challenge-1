@@ -1,4 +1,4 @@
-namespace API.Metricas.Controllers;
+namespace Gashu.SistemaMecanica.API.Metricas.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 using Application.Metricas.DTOs;

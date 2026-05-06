@@ -1,11 +1,11 @@
-namespace Application.Identidade.Services;
+namespace Gashu.SistemaMecanica.Application.Identidade.Services;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Domain.Identidade.Entities;
-using Application.Identidade.Interfaces;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Application.Identidade.Interfaces;
 
 public class JwtService : IJwtService
 {

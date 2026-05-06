@@ -1,4 +1,4 @@
-namespace API.Notificacao.Controllers;
+namespace Gashu.SistemaMecanica.API.Notificacao.Controllers;
 
 using Application.Notificacao.Interfaces;
 using Application.OrdensServico.Interfaces;

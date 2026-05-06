@@ -1,10 +1,10 @@
-namespace Application.Notificacao.Services;
+namespace Gashu.SistemaMecanica.Application.Notificacao.Services;
 
 using System.Threading.Tasks;
-using Application.Notificacao.Interfaces;
-using Domain.Notificacao.Entities;
-using Application.Notificacao.DTOs;
-using Domain.Notificacao.Interfaces;
+using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
+using Gashu.SistemaMecanica.Domain.Notificacao.Entities;
+using Gashu.SistemaMecanica.Application.Notificacao.DTOs;
+using Gashu.SistemaMecanica.Domain.Notificacao.Interfaces;
 
 public class NotificacaoService : INotificacaoService
 {

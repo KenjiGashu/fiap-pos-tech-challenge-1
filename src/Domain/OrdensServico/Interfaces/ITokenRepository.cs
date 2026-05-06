@@ -1,6 +1,6 @@
-namespace Domain.OrdensServico.Interfaces;
+namespace Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
 
-using Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public interface ITokenRepository
 {

@@ -1,4 +1,4 @@
-namespace Application.OrdensServico.DTOs;
+namespace Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 
 public class ServicoCreateDto
 {

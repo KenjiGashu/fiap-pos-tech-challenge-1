@@ -1,9 +1,9 @@
-namespace Application.OrdensServico.Services;
+namespace Gashu.SistemaMecanica.Application.OrdensServico.Services;
 
-using Application.OrdensServico.DTOs;
-using Domain.OrdensServico.Entities;
-using Domain.OrdensServico.Interfaces;
-using Application.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 
 public class ServicoService : IServicoService
 {

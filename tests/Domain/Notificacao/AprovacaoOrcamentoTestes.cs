@@ -1,7 +1,7 @@
-namespace Tests.Domain.Notificacao;
+namespace Gashu.SistemaMecanica.Tests.Domain.Notificacao;
 
-using global::Domain.Notificacao.Entities;
-using global::Domain.OrdensServico.Entities;
+using global::Gashu.SistemaMecanica.Domain.Notificacao.Entities;
+using global::Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public class AprovacaoOrcamentoTestes
 {

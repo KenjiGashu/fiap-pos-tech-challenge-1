@@ -1,4 +1,4 @@
-namespace Domain.Notificacao.Entities;
+namespace Gashu.SistemaMecanica.Domain.Notificacao.Entities;
 
 public enum TipoItemOrcamento
 {

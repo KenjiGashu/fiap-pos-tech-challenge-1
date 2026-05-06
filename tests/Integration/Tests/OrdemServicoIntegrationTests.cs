@@ -1,17 +1,17 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Application.OrdensServico.DTOs;
-using Application.Metricas.DTOs;
-using Domain.Estoque.Entities;
-using Tests.Integration.Fixture;
-using Tests.Integration.Helpers;
-using Domain.OrdensServico.Entities;
-using Application.Estoque.DTOs;
+using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
+using Gashu.SistemaMecanica.Application.Metricas.DTOs;
+using Gashu.SistemaMecanica.Domain.Estoque.Entities;
+using Gashu.SistemaMecanica.Tests.Integration.Fixture;
+using Gashu.SistemaMecanica.Tests.Integration.Helpers;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Application.Estoque.DTOs;
 using Microsoft.Extensions.DependencyInjection;
-using Infrastructure.Data;
+using Gashu.SistemaMecanica.Infrastructure.Data;
 
-namespace Tests.Integration.Tests;
+namespace Gashu.SistemaMecanica.Tests.Integration.Tests;
 
 public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {

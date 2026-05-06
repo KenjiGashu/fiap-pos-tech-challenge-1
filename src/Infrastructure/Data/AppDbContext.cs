@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Domain.OrdensServico.Entities;
-using Domain.Estoque.Entities;
-using Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Domain.Estoque.Entities;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 using System.Security.Cryptography;
-using Application.Identidade.Services;
-using Domain.Metricas.Entities;
+using Gashu.SistemaMecanica.Application.Identidade.Services;
+using Gashu.SistemaMecanica.Domain.Metricas.Entities;
 
-namespace Infrastructure.Data;
+namespace Gashu.SistemaMecanica.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {

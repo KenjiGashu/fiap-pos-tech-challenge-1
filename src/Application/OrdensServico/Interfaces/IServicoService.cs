@@ -1,6 +1,6 @@
-namespace Application.OrdensServico.Interfaces;
+namespace Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 
-using Application.OrdensServico.DTOs;
+using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 
 public interface IServicoService
 {

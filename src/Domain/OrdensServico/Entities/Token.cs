@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Domain.OrdensServico.Entities;
+namespace Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public class Token
 {

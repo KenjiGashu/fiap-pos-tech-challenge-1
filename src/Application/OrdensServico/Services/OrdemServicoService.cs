@@ -1,14 +1,14 @@
-namespace Application.OrdensServico.Services;
+namespace Gashu.SistemaMecanica.Application.OrdensServico.Services;
 
-using Domain.OrdensServico.Interfaces;
-using Application.OrdensServico.DTOs;
-using Application.Notificacao.DTOs;
-using Domain.OrdensServico.Entities;
-using Application.Estoque.Interfaces;
-using Application.Notificacao.Interfaces;
-using Application.OrdensServico.Interfaces;
-using Application.Metricas.Interfaces;
-using Application.Metricas.DTOs;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
+using Gashu.SistemaMecanica.Application.Notificacao.DTOs;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Application.Estoque.Interfaces;
+using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
+using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Application.Metricas.Interfaces;
+using Gashu.SistemaMecanica.Application.Metricas.DTOs;
 
 public class OrdemServicoService : IOrdemServicoService
 {

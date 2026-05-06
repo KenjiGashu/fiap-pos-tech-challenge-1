@@ -1,5 +1,5 @@
-namespace Domain.Estoque.Interfaces;
-using Domain.Estoque.Entities;
+namespace Gashu.SistemaMecanica.Domain.Estoque.Interfaces;
+using Gashu.SistemaMecanica.Domain.Estoque.Entities;
 
 public interface IPecaRepository
 {

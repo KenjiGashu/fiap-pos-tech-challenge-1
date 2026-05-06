@@ -1,4 +1,4 @@
-namespace Domain.Notificacao.Interfaces;
+namespace Gashu.SistemaMecanica.Domain.Notificacao.Interfaces;
 
 public interface ICanalNotificacao
 {

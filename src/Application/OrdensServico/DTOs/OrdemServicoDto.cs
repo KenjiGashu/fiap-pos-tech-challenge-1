@@ -1,8 +1,8 @@
-namespace Application.OrdensServico.DTOs;
+namespace Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 
 using System.Text.Json.Serialization;
-using Application.Estoque.DTOs;
-using Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Application.Estoque.DTOs;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public class OrdemServicoCreateDto
 {

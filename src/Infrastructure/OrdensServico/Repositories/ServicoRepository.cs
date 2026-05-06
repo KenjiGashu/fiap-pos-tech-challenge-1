@@ -1,9 +1,9 @@
-using Domain.OrdensServico.Entities;
-using Domain.OrdensServico.Interfaces;
-using Infrastructure.Data;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.OrdensServico.Repositories;
+namespace Gashu.SistemaMecanica.Infrastructure.OrdensServico.Repositories;
 
 public class ServicoRepository : IServicoRepository
 {

@@ -1,6 +1,6 @@
-namespace Domain.Identidade.Interfaces;
+namespace Gashu.SistemaMecanica.Domain.Identidade.Interfaces;
 
-using Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 
 public interface IUsuarioRepository
 {

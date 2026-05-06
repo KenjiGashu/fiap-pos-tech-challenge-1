@@ -1,6 +1,6 @@
-namespace Tests.Domain.OrdensServico;
+namespace Gashu.SistemaMecanica.Tests.Domain.OrdensServico;
 
-using global::Domain.OrdensServico.Entities;
+using global::Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public class OrdemServicoTests
 {

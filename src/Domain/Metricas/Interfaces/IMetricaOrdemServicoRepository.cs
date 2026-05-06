@@ -1,6 +1,6 @@
-namespace Domain.Metricas.Interfaces;
+namespace Gashu.SistemaMecanica.Domain.Metricas.Interfaces;
 
-using Domain.Metricas.Entities;
+using Gashu.SistemaMecanica.Domain.Metricas.Entities;
 
 public interface IMetricaOrdemServicoRepository
 {

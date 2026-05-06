@@ -1,4 +1,4 @@
-namespace Domain.OrdensServico.Entities;
+namespace Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 using System.Linq;
 using System.Text.Json.Serialization;

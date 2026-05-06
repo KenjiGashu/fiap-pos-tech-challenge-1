@@ -1,4 +1,4 @@
-namespace Domain.OrdensServico.Entities;
+namespace Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public class OrdemServicoServico
 {

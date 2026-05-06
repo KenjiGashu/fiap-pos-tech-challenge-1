@@ -1,4 +1,4 @@
-namespace Domain.Identidade.Interfaces;
+namespace Gashu.SistemaMecanica.Domain.Identidade.Interfaces;
 
 public interface IRoleRepository
 {

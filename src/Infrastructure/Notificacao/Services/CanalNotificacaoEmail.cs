@@ -1,9 +1,9 @@
-namespace Infrastructure.Notificacao.Services;
+namespace Gashu.SistemaMecanica.Infrastructure.Notificacao.Services;
 
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Domain.Notificacao.Interfaces;
+using Gashu.SistemaMecanica.Domain.Notificacao.Interfaces;
 
 public class CanalNotificacaoEmail : ICanalNotificacao
 {

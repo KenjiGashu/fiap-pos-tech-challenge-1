@@ -1,9 +1,9 @@
-using Domain.OrdensServico.Entities;
-using Domain.OrdensServico.Interfaces;
-using Application.OrdensServico.DTOs;
-using Application.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
+using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 
-namespace Application.OrdensServico.Services;
+namespace Gashu.SistemaMecanica.Application.OrdensServico.Services;
 
 public class VeiculoService : IVeiculoService
 {

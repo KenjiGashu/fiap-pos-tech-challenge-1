@@ -1,4 +1,4 @@
-namespace Application.Notificacao.DTOs;
+namespace Gashu.SistemaMecanica.Application.Notificacao.DTOs;
 
 public class ItemOrcamentoDto
 {

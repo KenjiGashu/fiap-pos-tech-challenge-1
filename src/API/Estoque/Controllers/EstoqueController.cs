@@ -1,4 +1,4 @@
-namespace API.Estoque.Controllers;
+namespace Gashu.SistemaMecanica.API.Estoque.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 using Application.Estoque.Services;

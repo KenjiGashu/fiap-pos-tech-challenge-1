@@ -1,9 +1,9 @@
-namespace Application.OrdensServico.Services;
+namespace Gashu.SistemaMecanica.Application.OrdensServico.Services;
 
-using Domain.Notificacao.Entities;
-using Domain.OrdensServico.Interfaces;
-using Domain.OrdensServico.Entities;
-using Application.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Domain.Notificacao.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 
 public class TokenService : ITokenService
 {

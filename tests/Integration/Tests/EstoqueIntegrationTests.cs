@@ -1,12 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Application.Estoque.DTOs;
-using Domain.Estoque.Entities;
-using Tests.Integration.Fixture;
-using Tests.Integration.Helpers;
+using Gashu.SistemaMecanica.Application.Estoque.DTOs;
+using Gashu.SistemaMecanica.Domain.Estoque.Entities;
+using Gashu.SistemaMecanica.Tests.Integration.Fixture;
+using Gashu.SistemaMecanica.Tests.Integration.Helpers;
 
-namespace Tests.Integration.Tests;
+namespace Gashu.SistemaMecanica.Tests.Integration.Tests;
 
 public class EstoqueIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {

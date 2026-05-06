@@ -1,7 +1,7 @@
-namespace Application.OrdensServico.Interfaces;
+namespace Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 
-using Domain.Notificacao.Entities;
-using Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Domain.Notificacao.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public interface ITokenService
 {

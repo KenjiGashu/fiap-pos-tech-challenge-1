@@ -1,7 +1,7 @@
-using Application.Notificacao.DTOs;
-using Application.Notificacao.Interfaces;
+using Gashu.SistemaMecanica.Application.Notificacao.DTOs;
+using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
 
-namespace Tests.Integration.FakeServices;
+namespace Gashu.SistemaMecanica.Tests.Integration.FakeServices;
 
 public class NotificacaoFakeService : INotificacaoService
 {

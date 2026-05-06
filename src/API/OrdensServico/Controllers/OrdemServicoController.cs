@@ -1,8 +1,8 @@
-namespace API.OrdensServico.Controllers;
+namespace Gashu.SistemaMecanica.API.OrdensServico.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using Application.OrdensServico.DTOs;
-using Application.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
+using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
 /// <summary>

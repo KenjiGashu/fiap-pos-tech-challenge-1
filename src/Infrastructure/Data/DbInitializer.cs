@@ -1,8 +1,9 @@
 using System.Security.Cryptography;
-using Domain.Estoque.Entities;
-using Domain.Identidade.Entities;
-using Domain.OrdensServico.Entities;
-using Infrastructure.Data;
+using Gashu.SistemaMecanica.Domain.Estoque.Entities;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
+
+namespace Gashu.SistemaMecanica.Infrastructure.Data;
 
 public static class DbInitializer
 {
@@ -10,7 +11,7 @@ public static class DbInitializer
     {
         // gera senha com hash
         var salt = RandomNumberGenerator.GetBytes(16);
-      
+
         var hash = Rfc2898DeriveBytes.Pbkdf2(
             password,
             salt,
@@ -18,22 +19,22 @@ public static class DbInitializer
             HashAlgorithmName.SHA256,
             32
         );
-                
+
         // junta salt + hash
         var hashBytes = new byte[48];
         Buffer.BlockCopy(salt, 0, hashBytes, 0, 16);
         Buffer.BlockCopy(hash, 0, hashBytes, 16, 32);
-                
-        var hashedPassword =  Convert.ToBase64String(hashBytes);
-        
+
+        var hashedPassword = Convert.ToBase64String(hashBytes);
+
         return hashedPassword;
     }
-    
+
     public static async Task SeedAsync(AppDbContext context)
     {
         // garante que banco existe
         await context.Database.EnsureCreatedAsync();
-        
+
         //Usuario
         if (context.Set<Usuario>().Count() <= 0)
         {
@@ -63,18 +64,18 @@ public static class DbInitializer
 
             await context.SaveChangesAsync();
         }
-            
+
         if (context.Set<Cliente>().Count() <= 0)
         {
             var cliente = new Cliente("maria", "200.766.210-81", "", TipoPessoa.Fisica);
             var cliente2 = new Cliente("jose", "848.288.680-03", "", TipoPessoa.Fisica);
             var cliente3 = new Cliente("itau", "", "60.701.190/0001-04", TipoPessoa.Juridica);
             var clienteSet = context.Set<Cliente>();
-            var usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "maria@gmail.com");
+            var usuario = context.Set<Usuario>().FirstOrDefault(u => u.Email == "maria@gmail.com");
             cliente.UsuarioId = usuario.Id;
-            usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "jose@gmail.com");
+            usuario = context.Set<Usuario>().FirstOrDefault(u => u.Email == "jose@gmail.com");
             cliente2.UsuarioId = usuario.Id;
-            usuario =  context.Set<Usuario>().FirstOrDefault(u => u.Email == "itau@gmail.com");
+            usuario = context.Set<Usuario>().FirstOrDefault(u => u.Email == "itau@gmail.com");
             cliente3.UsuarioId = usuario.Id;
             await clienteSet.AddAsync(cliente);
             await clienteSet.AddAsync(cliente2);
@@ -132,7 +133,7 @@ public static class DbInitializer
             await context.SaveChangesAsync();
         }
 
-            
+
     }
-        
+
 }

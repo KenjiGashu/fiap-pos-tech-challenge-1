@@ -1,4 +1,4 @@
-namespace API.Identidade.Controllers;
+namespace Gashu.SistemaMecanica.API.Identidade.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 using Application.Estoque.Services;

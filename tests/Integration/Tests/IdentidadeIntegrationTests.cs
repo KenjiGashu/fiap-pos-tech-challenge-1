@@ -2,11 +2,11 @@ using Tests.Integration.Fixture;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 using Microsoft.Extensions.DependencyInjection;
-using Infrastructure.Data;
-using Domain.Identidade.Entities;
-using Tests.Integration.Helpers;
+using Gashu.SistemaMecanica.Infrastructure.Data;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Tests.Integration.Helpers;
 
-namespace Tests.Integration.Tests;
+namespace Gashu.SistemaMecanica.Tests.Integration.Tests;
 
 public class IdentidadeIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {

@@ -1,4 +1,4 @@
-namespace Domain.Metricas.Entities;
+namespace Gashu.SistemaMecanica.Domain.Metricas.Entities;
 
 public enum StatusOrdemServico
 {

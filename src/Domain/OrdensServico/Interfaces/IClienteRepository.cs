@@ -1,5 +1,5 @@
-namespace Domain.OrdensServico.Interfaces;
-using Domain.OrdensServico.Entities;
+namespace Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public interface IClienteRepository
 {

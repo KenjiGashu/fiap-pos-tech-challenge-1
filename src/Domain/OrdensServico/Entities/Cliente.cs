@@ -1,9 +1,9 @@
-namespace Domain.OrdensServico.Entities;
+namespace Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
-using Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 
 
 public enum TipoPessoa {

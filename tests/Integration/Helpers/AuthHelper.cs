@@ -1,4 +1,4 @@
-namespace Tests.Integration.Helpers;
+namespace Gashu.SistemaMecanica.Tests.Integration.Helpers;
 
 using System.Net.Http.Headers;
 using System.Net.Http.Json;

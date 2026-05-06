@@ -1,4 +1,4 @@
-namespace Domain.Identidade.Entities;
+namespace Gashu.SistemaMecanica.Domain.Identidade.Entities;
 
 public class Usuario
 {

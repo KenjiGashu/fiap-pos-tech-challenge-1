@@ -1,14 +1,14 @@
-namespace Application.Identidade.Services;
+namespace Gashu.SistemaMecanica.Application.Identidade.Services;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Application.Identidade.Interfaces;
-using Domain.Identidade.Entities;
-using Domain.Identidade.Interfaces;
+using Gashu.SistemaMecanica.Application.Identidade.Interfaces;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Domain.Identidade.Interfaces;
 using System.Linq;
-using Application.Identidade.DTOs;
+using Gashu.SistemaMecanica.Application.Identidade.DTOs;
 using System.Security.Cryptography;
 
 public class IdentidadeService : IIdentidadeService

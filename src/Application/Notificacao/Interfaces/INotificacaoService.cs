@@ -1,6 +1,6 @@
-namespace Application.Notificacao.Interfaces;
+namespace Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
 
-using Application.Notificacao.DTOs;
+using Gashu.SistemaMecanica.Application.Notificacao.DTOs;
 
 public interface INotificacaoService
 {

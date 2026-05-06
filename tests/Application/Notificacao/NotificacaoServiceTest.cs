@@ -1,9 +1,9 @@
-namespace Tests.Application.Notificacao;
+namespace Gashu.SistemaMecanica.Tests.Application.Notificacao;
 
-using global::Application.Notificacao.Interfaces;
-using global::Application.Notificacao.Services;
-using global::Application.Notificacao.DTOs;
-using global::Domain.Notificacao.Interfaces;
+using global::Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
+using global::Gashu.SistemaMecanica.Application.Notificacao.Services;
+using global::Gashu.SistemaMecanica.Application.Notificacao.DTOs;
+using global::Gashu.SistemaMecanica.Domain.Notificacao.Interfaces;
 using Moq;
 
 public class NotificacaoServiceTests

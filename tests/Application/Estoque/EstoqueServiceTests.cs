@@ -1,9 +1,9 @@
-namespace Tests.Application.Etoque;
+namespace Gashu.SistemaMecanica.Tests.Application.Etoque;
 
-using global::Application.Estoque.Interfaces;
-using global::Application.Estoque.Services;
-using global::Domain.Estoque.Entities;
-using global::Domain.Estoque.Interfaces;
+using global::Gashu.SistemaMecanica.Application.Estoque.Interfaces;
+using global::Gashu.SistemaMecanica.Application.Estoque.Services;
+using global::Gashu.SistemaMecanica.Domain.Estoque.Entities;
+using global::Gashu.SistemaMecanica.Domain.Estoque.Interfaces;
 using Moq;
 
 public class EstoqueServiceTests

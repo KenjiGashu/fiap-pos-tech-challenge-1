@@ -1,6 +1,6 @@
-namespace Tests.Domain.Estoque;
+namespace Gashu.SistemaMecanica.Tests.Domain.Estoque;
 
-using global::Domain.Estoque.Entities;
+using global::Gashu.SistemaMecanica.Domain.Estoque.Entities;
 
 public class PecaTests
 {

@@ -1,6 +1,6 @@
-namespace Application.Identidade.Interfaces;
+namespace Gashu.SistemaMecanica.Application.Identidade.Interfaces;
 
-using Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 
 public interface IJwtService
 {

@@ -1,9 +1,9 @@
-namespace Application.Estoque.Services;
+namespace Gashu.SistemaMecanica.Application.Estoque.Services;
 
-using Application.Estoque.DTOs;
-using Application.Estoque.Interfaces;
-using Domain.Estoque.Entities;
-using Domain.Estoque.Interfaces;
+using Gashu.SistemaMecanica.Application.Estoque.DTOs;
+using Gashu.SistemaMecanica.Application.Estoque.Interfaces;
+using Gashu.SistemaMecanica.Domain.Estoque.Entities;
+using Gashu.SistemaMecanica.Domain.Estoque.Interfaces;
 
 public class EstoqueService : IEstoqueService
 {

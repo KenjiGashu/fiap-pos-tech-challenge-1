@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Infrastructure.Data;
-using Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Infrastructure.Data;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 using System.Security.Cryptography;
-using Domain.OrdensServico.Entities;
-using Domain.Estoque.Entities;
-using Domain.Metricas.Entities;
-using Application.Notificacao.Interfaces;
-using Tests.Integration.FakeServices;
-using Application.Estoque.Interfaces;
-using Application.Estoque.Services;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Domain.Estoque.Entities;
+using Gashu.SistemaMecanica.Domain.Metricas.Entities;
+using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
+using Gashu.SistemaMecanica.Tests.Integration.FakeServices;
+using Gashu.SistemaMecanica.Application.Estoque.Interfaces;
+using Gashu.SistemaMecanica.Application.Estoque.Services;
 
-namespace Tests.Integration.Fixture;
+namespace Gashu.SistemaMecanica.Tests.Integration.Fixture;
 
 public class CustomWebApplicationFactory<TProgram>
 : WebApplicationFactory<TProgram> where TProgram : class

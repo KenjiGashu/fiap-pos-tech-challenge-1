@@ -1,7 +1,7 @@
-namespace Application.OrdensServico.Interfaces;
+namespace Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 
-using Application.OrdensServico.DTOs;
-using Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public interface IClienteService
 {

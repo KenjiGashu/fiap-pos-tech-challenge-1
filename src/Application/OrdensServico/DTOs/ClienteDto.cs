@@ -1,7 +1,7 @@
-namespace Application.OrdensServico.DTOs;
+namespace Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 
 using System.Text.Json.Serialization;
-using Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public class ClienteCreateDto
 {

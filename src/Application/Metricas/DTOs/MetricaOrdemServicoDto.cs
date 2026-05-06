@@ -1,7 +1,7 @@
-namespace Application.Metricas.DTOs;
+namespace Gashu.SistemaMecanica.Application.Metricas.DTOs;
 
 using System.Text.Json.Serialization;
-using Domain.Metricas.Entities;
+using Gashu.SistemaMecanica.Domain.Metricas.Entities;
 
 public class SalvarMetricaOrdemServicoDto
 {

@@ -1,7 +1,7 @@
 using System.Text;
-using Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
-namespace Domain.Notificacao.Entities;
+namespace Gashu.SistemaMecanica.Domain.Notificacao.Entities;
 
 public class AprovacaoOrcamento
 {

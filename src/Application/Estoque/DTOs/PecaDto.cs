@@ -1,4 +1,4 @@
-namespace Application.Estoque.DTOs;
+namespace Gashu.SistemaMecanica.Application.Estoque.DTOs;
 
 public class PecaCreateDto
 {

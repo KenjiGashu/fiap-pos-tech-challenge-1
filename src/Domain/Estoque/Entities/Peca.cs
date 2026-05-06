@@ -1,5 +1,5 @@
-namespace Domain.Estoque.Entities;
-using Domain.OrdensServico.Entities;
+namespace Gashu.SistemaMecanica.Domain.Estoque.Entities;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public class Peca
 {

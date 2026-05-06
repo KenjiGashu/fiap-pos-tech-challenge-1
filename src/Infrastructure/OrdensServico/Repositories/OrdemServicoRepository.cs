@@ -1,11 +1,11 @@
-using Domain.OrdensServico.Entities;
-using Domain.Estoque.Entities;
-using Domain.Estoque.Interfaces;
-using Domain.OrdensServico.Interfaces;
-using Infrastructure.Data;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
+using Gashu.SistemaMecanica.Domain.Estoque.Entities;
+using Gashu.SistemaMecanica.Domain.Estoque.Interfaces;
+using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.OrdensServico.Repositories;
+namespace Gashu.SistemaMecanica.Infrastructure.OrdensServico.Repositories;
 
 public class OrdemServicoRepository : IOrdemServicoRepository
 {
