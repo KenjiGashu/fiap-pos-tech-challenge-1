@@ -13,7 +13,7 @@ public class JwtService : IJwtService
 
     public string GenerateToken(Usuario usuario)
     {
-				if(_secret == null)
+        if(_secret == null)
             throw new Exception("secret inexistente");
 
         var key = Encoding.ASCII.GetBytes(_secret);

@@ -32,7 +32,7 @@ public class AprovacaoOrcamento
         NomeCliente = nomeCliente;
         Destinatario = destinatario;
 
-        MontaCorpoMensagem();
+        Mensagem = MontaCorpoMensagem();
         Titulo = $"Orçamento {OrdemServicoId.ToString()}";
     }
 
@@ -86,8 +86,7 @@ public class AprovacaoOrcamento
         sb.Append(GeraLinkRejeicao() + "\n\n");
 
         sb.Append($"Att, uma mecanica qualquer");
-        Mensagem = sb.ToString();
-        return Mensagem;
+        return sb.ToString();
     }
 
     public string GeraLinkAprovacao()

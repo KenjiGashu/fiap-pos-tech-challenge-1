@@ -201,7 +201,7 @@ public class OrdemServicoController : ControllerBase
     /// <param name="dto">Dados da ordem a ser removida</param>
     /// <response code="204">Ordem removida com sucesso</response>
     [Authorize(Roles = "Admin")]
-    [HttpDelete("{id}")]
+    [HttpDelete]
     public async Task<IActionResult> Delete([FromBody] OrdemServicoDeleteDto dto)
     {
         await _service.Deletar(dto);

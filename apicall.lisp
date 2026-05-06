@@ -4,10 +4,15 @@
 
 (setq *print-pretty* t)
 
+;; (require 'sb-posix)
+;; (sb-posix:setenv "FIAP_POS_PORT" "8080" 1)
+(setf *port* "5129")
+
+(defparameter *port* (sb-ext:posix-getenv "FIAP_POS_PORT"))
 (defparameter *jwt-token* "your.jwt.token.here")
 (defparameter *admin-email* "Admin@gmail.com")
 (defparameter *admin-password* "1234")
-(defparameter *api-url* "http://localhost:5129/api/")
+(defparameter *api-url* (concatenate 'string "http://localhost:" *port* "/api/"))
 (defparameter *cliente-id* "")
 (defparameter *ordem-servico-id* "")
 (defparameter *comandos* "")
@@ -73,24 +78,18 @@
 (defun do-login-cliente ()
 	(do-login *usuario-password* *usuario-email*))
 
-(do-login-admin)
-
 (defun get-all-usuarios ()
 	(let* ((body (do-get "identidade/usuarios" nil)))
 		(when body
 			(format t "Response Body: ~A~%" (shasht:write-json (shasht:read-json body) nil)))
 		body))
 
-(get-all-usuarios)
-
 (defun cria-usuario (password email roles)
 	(let* ((data (cl-json:encode-json-to-string `(("password" . ,password) ("email" . ,email) ("roles" . ,roles))))
-				 (body (do-post "identidade/usuarios/criar" data)))
+				 (body (do-post "identidade/usuarios" data)))
 		(format t "response: ~A~%" body)
 		(setf *usuario-email* email)
 		(setf *usuario-password* password)))
-
-(cria-usuario "1234" "umemail@gmail.com" '("cliente" "teste"))
 
 (defun seleciona-usuario ()
 	(let* ((url (concatenate 'string "identidade/usuarios/" *usuario-email*))
@@ -101,30 +100,23 @@
 		(setf *usuario-email* email)
 		(setf *usuario-id* usuario-id)))
 
-(seleciona-usuario)
 
 (defun cria-cliente (nome cpf cnpj tipopessoa)
 	(let* ((data (cl-json:encode-json-to-string `(("Nome" . ,nome) ("UsuarioId" . ,*usuario-id*) ("Cpf" . ,cpf) ("Cnpj" . ,cnpj) ("TipoPessoa" . ,tipopessoa))))
 				 (body (do-post "Cliente" data)))
 		(setf *cliente-nome* nome)))
 
-(cria-cliente "apenasumnome" "433.023.538-20" "" "Fisica")
-
 (defun seleciona-cliente ()
-	(let* ((url (concatenate 'string "cliente/byNome/" *cliente-nome*))
+	(let* ((url (concatenate 'string "cliente/Nome/" *cliente-nome*))
 				 (body (do-get url nil))
 				 (json-obj (cl-json:decode-json-from-string body))
 				 (id (cdr (assoc :id json-obj))))
 		(setf *cliente-id* id)))
 
-(seleciona-cliente)
-
 (defun cria-veiculo (placa marca modelo ano)
 	(let* ((data (cl-json:encode-json-to-string `(("placa" . ,placa) ("marca" . ,marca) ("modelo" . ,modelo) ("ano" . ,ano))))
 				 (body (do-post "veiculo" data)))
 		(setf *veiculo-placa* placa)))
-
-(cria-veiculo "TKJ5A20" "toyota" "yaris" 2000)
 
 (defun seleciona-veiculo ()
 	(let* ((url (concatenate 'string "veiculo/byPlaca/" *veiculo-placa*))
@@ -133,14 +125,10 @@
 				 (id (cdr (assoc :id json-obj))))
 		(setf *veiculo-id* id)))
 
-(seleciona-veiculo)
-
 (defun cria-ordem-servico ()
 	(let* ((data (cl-json:encode-json-to-string `(("ClienteId" . ,*cliente-id*) ("VeiculoId" . ,*veiculo-id*))))
 				 (body (do-post "ordemservico" data)))
 		body))
-
-(cria-ordem-servico)
 
 (defun all-ordem-servico ()
 	(let* ((body (do-get "ordemServico" nil))
@@ -148,16 +136,13 @@
 				 (id (cdr (assoc :id json-obj))))
 		body))
 
-(all-ordem-servico)
-
 (defun seleciona-ordem-servico ()
 	(let* ((url (concatenate 'string "ordemservico/cliente/" *cliente-id*))
 				 (body (do-get url nil))
+
 				 (json-obj (cl-json:decode-json-from-string body))
 				 (id (cdr (assoc :id (first (cdr (assoc :ordem-Servicos json-obj)))))))
 		(setf *ordem-servico-id* id)))
-
-(seleciona-ordem-servico)
 
 (defun print-peca (peca i)
 	(let* ((id (cdr (assoc :id peca)))
@@ -179,14 +164,10 @@
 			(setf *peca-nome* (cdr (assoc :nome chosen-peca)))
 			(setf *peca-preco* (cdr (assoc :preco chosen-peca))))))
 
-(escolher-peca)
-
-(defun adicionar-peca ()
-	(let* ((data (cl-json:encode-json-to-string `(("OrdemServicoId" . ,*ordem-servico-id*) ("Pecas" . ((("nome" . ,*peca-nome*) ("Quantidade" . 1) ("preco" . ,*peca-preco*) ("PecaId" . ,*peca-id*)))))))
+(defun adicionar-peca (quantidade)
+	(let* ((data (cl-json:encode-json-to-string `(("OrdemServicoId" . ,*ordem-servico-id*) ("Pecas" . ((("nome" . ,*peca-nome*) ("Quantidade" . ,quantidade) ("preco" . ,*peca-preco*) ("PecaId" . ,*peca-id*)))))))
 				 (body (do-post "ordemservico/adicionaPeca/" data)))
 		body))
-
-(adicionar-peca)
 
 (defun print-servico (servico i)
 	(let* ((id (cdr (assoc :id servico)))
@@ -208,84 +189,59 @@
 			(setf *servico-nome* (cdr (assoc :nome chosen-servico)))
 			(setf *servico-preco* (cdr (assoc :preco chosen-servico))))))
 
-(escolher-servico)
-
 (defun adiciona-servico ()
 	(let* ((data (cl-json:encode-json-to-string `(("OrdemServicoId" . ,*ordem-servico-id*) ("Servicos" . ((("nome" . ,*servico-nome*) ("preco" . ,*servico-preco*) ("ServicoId" . ,*servico-id*)))))))
 				 (body (do-post "ordemservico/adicionaServico/" data)))
 		body))
-
-(adiciona-servico)
 
 (defun envia-orcamento ()
 	(let* ((data (cl-json:encode-json-to-string `(("OrdemServicoId" . ,*ordem-servico-id*))))
 				 (body (do-post "ordemservico/EnviarOrcamento/" data)))
 		body))
 
-(envia-orcamento)
-(do-login)
-(all-ordem-servico)
-
 (defun iniciar-diagnostico ()
 	(let* ((data (cl-json:encode-json-to-string `(("ordemservicoid" . ,*ordem-servico-id*))))
 				 (body (do-post "ordemservico/iniciardiagnostico/" data)))
 		body))
-
-(iniciar-diagnostico)
 
 (defun finalizar-diagnostico ()
 	(let* ((data (cl-json:encode-json-to-string `(("ordemservicoid" . ,*ordem-servico-id*))))
 				 (body (do-post "ordemservico/finalizarDiagnostico/" data)))
 		body))
 
-(finalizar-diagnostico)
-
 (defun iniciar-execucao ()
 	(let* ((data (cl-json:encode-json-to-string `(("ordemservicoid" . ,*ordem-servico-id*))))
 				 (body (do-post "ordemservico/iniciarExecucao/" data)))
 		body))
-
-(iniciar-execucao)
 
 (defun finalizar-execucao ()
 	(let* ((data (cl-json:encode-json-to-string `(("ordemservicoid" . ,*ordem-servico-id*))))
 				 (body (do-post "ordemservico/finalizarExecucao/" data)))
 		body))
 
-(finalizar-execucao)
-
 (defun entregar-veiculo ()
 	(let* ((data (cl-json:encode-json-to-string `(("ordemservicoid" . ,*ordem-servico-id*))))
 				 (body (do-post "ordemservico/entregarVeiculo/" data)))
 		body))
 
-(entregar-veiculo)
-
 (defun todas-metricas ()
 	(let* ((body (do-get "metricas/" nil)))
 		body))
 
-(todas-metricas)
-
 (defun metrica-tempo-medio-atualizacao ()
-	(let* ((url (concatenate 'string "metricas/tempoMedio/" *ordem-servico-id*))
+	(let* ((url (concatenate 'string "metricas/ordemservico" *ordem-servico-id* "/tempo-medio/" ))
 				 (body (do-get url nil)))
 		body))
-
-(metrica-tempo-medio-atualizacao)
 
 (defun metrica-tempo-total-atualizacao ()
-	(let* ((url (concatenate 'string "metricas/tempoTotal/" *ordem-servico-id*))
+	(let* ((url (concatenate 'string "metricas/ordemservico/" *ordem-servico-id* "/tempo-total/" ))
 				 (body (do-get url nil)))
 		body))
 
-(metrica-tempo-total-atualizacao)
-
 (defun media-todas-metricas ()
-	(let* ((body (do-get "metricas/TempoMedio" nil)))
+	(let* ((body (do-get "metricas/ordemservico/tempo-medio" nil)))
 		body))
 
-(media-todas-metricas)
 
 
 
@@ -297,22 +253,16 @@
 				 (body (do-get url nil)))
 		body))
 
-(get-peca-id)
-
 (defun create-peca (nome preco quantidade)
 	(let* ((data (cl-json:encode-json-to-string `(("nome" . ,nome) ("preco" . ,preco) ("quantidade" . ,quantidade))))
 				 (body (do-post "Estoque" data)))
 		body))
-
-(create-peca "aeeeeee" 57 280)
 
 (defun update-peca (nome preco quantidade)
 	(let* ((url (concatenate 'string "Estoque/" *peca-id*))
 				 (data (cl-json:encode-json-to-string `(("nome" . ,nome) ("preco" . ,preco) ("quantidade" . ,quantidade))))
 				 (body (do-put url data)))
 		body))
-
-(update-peca "afffffff" 200 357)
 
 
 ;;identidade
@@ -321,22 +271,16 @@
 				 (body (do-get url nil)))
 		body))
 
-(get-usuario-by-email "Admin@gmail.com")
-
 ;;cliente
 (defun get-cliente-by-id ()
 	(let* ((url (concatenate 'string "cliente/" *cliente-id*))
 				 (body (do-get url nil)))
 		body))
 
-(get-cliente-by-id)
-
 (defun get-cliente-by-nome (nome)
 	(let* ((url (concatenate 'string "cliente/bynome/" nome))
 				 (body (do-get url nil)))
 		body))
-
-(get-cliente-by-nome "apenasumnome")
 
 (defun update-cliente (nome cpf cnpj tipopessoa)
 	(let* ((data (cl-json:encode-json-to-string `(("nome" . ,nome) ("cpf" . ,cpf) ("cnpj" . ,cnpj) ("tipopessoa" . ,tipopessoa))))
@@ -344,13 +288,9 @@
 				 (body (do-put url data)))
 		body))
 
-(update-cliente "macaco" "917.154.290-60" "" "Fisica")
-
 (defun get-clientes ()
 	(let* ((body (do-get "cliente" nil)))
 		body))
-
-(get-clientes)
 
 (defun print-cliente (cliente i)
 	(let* ((id (cdr (assoc :id cliente)))
@@ -373,11 +313,168 @@
 			(setf *cliente-id* (cdr (assoc :id chosen-cliente)))
 			(setf *cliente-nome* (cdr (assoc :nome chosen-cliente))))))
 
-(escolher-cliente)
-
 (defun delete-cliente ()
 	(let* ((url (concatenate 'string "cliente/" *cliente-id*))
 				 (body (do-delete url nil)))
 		body))
 
-(delete-cliente)
+(defun do-cria-usuario ()
+	(let ((email (pede-input "Email"))
+				(password (pede-input "password"))
+				(roles (pede-varios-inputs "roles" '())))
+		(cria-usuario password email roles)
+		(seleciona-usuario)))
+
+(defun print-usuarios (usuarios)
+	(format t "~%~%~%~%~%~%~%~% --------- Escolha o Usuario ------------~%")
+	(loop for u in usuarios
+				for i = 0 then (+ i 1)
+				do (format t "[~a] email[~a] ~%" i
+									 (cdr (assoc :email u)))))
+
+(defun escolhe-usuario-da-lista (obj)
+	(let* ((usuarios (cdr (assoc :data obj))))
+		(print-usuarios usuarios)
+		(let* ((user-input (parse-integer (read-line)))
+					 (chosen-usuario (nth user-input usuarios)))
+			(format t "chosen: ~a~%" chosen-usuario)
+			(setf *usuario-id* (cdr (assoc :id chosen-usuario)))
+			(setf *usuario-email* (cdr (assoc :email chosen-usuario))))))
+
+(defun do-selecao-usuario ()
+	(let* ((url (concatenate 'string "identidade/usuarios/"))
+				 (body (do-get url nil))
+				 (json-obj (cl-json:decode-json-from-string body)))
+		(escolhe-usuario-da-lista json-obj)))
+
+(defun do-cria-peca ()
+	(let* ((nome (pede-input "Nome da Peça"))
+				 (quantidade (pede-input "Quantidade"))
+				 (preco (pede-input "Preco"))
+				 (data (cl-json:encode-json-to-string `(("Nome" . ,nome) ("Quantidade" . ,quantidade) ("Preco" . ,preco))))
+				 (body (do-post "estoque" data)))
+		body))
+
+(defun do-cria-cliente ()
+	(let* ((nome (pede-input "Nome"))
+				 (cpf (pede-input "CPF"))
+				 (cnpj (pede-input "CNPJ"))
+				 (tipoPessoa (pede-input "TipoPessoa")))
+		(if (string-equal tipoPessoa "Fisica")
+				(cria-cliente nome cpf "" tipopessoa)
+				(cria-cliente nome "" cnpj tipopessoa))
+		(seleciona-cliente)))
+
+(defun do-cria-veiculo ()
+	(let* ((placa (pede-input "Placa"))
+				 (marca (pede-input "Marca"))
+				 (modelo (pede-input "Modelo"))
+				 (ano (parse-integer (pede-input "Ano"))))
+		(cria-veiculo placa marca modelo ano)
+		(seleciona-veiculo)))
+
+(defun do-cria-ordem-servico ()
+	(cria-ordem-servico)
+	(seleciona-ordem-servico))
+
+(defun do-adiciona-peca ()
+	(escolher-peca)
+	(let* ((quantidade (pede-input "Quantidade")))
+		(adicionar-peca quantidade)))
+
+(defun do-adiciona-servico ()
+	(escolher-servico)
+	(adiciona-servico))
+
+(defparameter *identidade-comandos* '("login-admin" "seleciona-usuario" "cria-usuario" "login-usuario" "voltar"))
+(defparameter *estoque-comandos* '("seleciona-peca" "cria-peca" "atualiza-peca" "deleta-peca" "voltar"))
+(defparameter *servico-comandos* '("cria-servico" "seleciona-servico" "atualiza-servico" "delete-servico" "voltar"))
+(defparameter *cliente-comandos* '("cria-cliente" "seleciona-cliente" "atualiza-cliente" "deleta-cliente" "voltar"))
+(defparameter *veiculo-comandos* '("cria-veiculo" "seleciona-veiculo" "atualiza-veiculo" "deleta-veiculo" "voltar"))
+(defparameter *metrica-comandos* '("media-tempo" "tempo-medio-atualizacao" "tempo-total" "voltar"))
+(defparameter *ordem-servico-comandos* '("cria-ordem-servico" "seleciona-ordem-servico"  "adiciona-peca"  "adiciona-servico" "enviar-orcamento" "aprovar-orcamento" "rejeitar-orcamento" "iniciar-diagnostico" "finalizar-diagnostico" "iniciar-execucao" "finalizar-execucao" "entregar-veiculo" "deletar-ordem-servico" "voltar"))
+(defparameter *comandos* '("identidade" "estoque" "servico" "cliente" "veiculo" "ordem servico" "metricas" "sair"))
+
+(defun get-comando (comando)
+	(cond ((string-equal comando "login-admin") #'do-login-admin)
+				((string-equal comando "seleciona-usuario") #'do-selecao-usuario)
+				((string-equal comando "login-usuario") #'login-usuario)
+				((string-equal comando "cria-usuario") #'do-cria-usuario)
+				((string-equal comando "seleciona-peca") #'escolher-peca)
+				((string-equal comando "cria-peca") #'do-cria-peca)
+				((string-equal comando "cria-cliente") #'do-cria-cliente)
+				((string-equal comando "cria-veiculo") #'do-cria-veiculo)
+				((string-equal comando "cria-ordem-servico") #'do-cria-ordem-servico)
+				((string-equal comando "adiciona-peca") #'do-adiciona-peca)
+				((string-equal comando "adiciona-servico") #'do-adiciona-servico)
+				((string-equal comando "enviar-orcamento") #'envia-orcamento)
+				((string-equal comando "iniciar-diagnostico") #'iniciar-diagnostico)
+				((string-equal comando "finalizar-diagnostico") #'finalizar-diagnostico)
+				((string-equal comando "iniciar-execucao") #'iniciar-execucao)
+				((string-equal comando "finalizar-execucao") #'finalizar-execucao)
+				((string-equal comando "entregar-veiculo") #'entregar-veiculo)
+				((string-equal comando "media-tempo") #'media-todas-metricas)
+				((string-equal comando "tempo-total") #'metrica-tempo-total-atualizacao)
+				(t nil)))
+
+
+(defun selecao-tipo-comando ()
+	(format t "~%~%~%~%~%~%~%~%~% ----- escolha o tipo de comando -------~%")
+		(loop for tipo in *comandos* 
+					for i = 0 then (+ i 1)
+					do (format t "[~a] ~a~%" i tipo))
+		(format t "~%~%choose one: ")
+		(let* ((user-input (parse-integer (read-line)))
+					 (chosen-tipo (nth user-input *comandos*)))
+			(setf *chosen-tipo* chosen-tipo)))
+
+(selecao-tipo-comando)
+
+(defun get-comandos-lista (tipo)
+	(cond ((string-equal tipo "identidade") *identidade-comandos*)
+				((string-equal tipo "estoque") *estoque-comandos*)
+				((string-equal tipo "servico") *servico-comandos*)
+				((string-equal tipo "cliente") *cliente-comandos*)
+				((string-equal tipo "veiculo") *veiculo-comandos*)
+				((string-equal tipo "ordem servico") *ordem-servico-comandos*)
+				((string-equal tipo "metricas") *metrica-comandos*)
+				(t *identidade-comandos*)))
+
+(let* ((url (concatenate 'string "cliente"))
+			 (body (do-get url nil)))
+	body)
+
+
+(defun selecao-comando ()
+	(format t "~%~%~%~%~%~%~%~%~% ----- escolha o comando -------~%")
+	(let ((comandos-lista (get-comandos-lista *chosen-tipo*)))
+		(loop for tipo in comandos-lista 
+					for i = 0 then (+ i 1)
+					do (format t "[~a] ~a~%" i tipo))
+		(format t "~%~%choose one: ")
+		(let* ((user-input (parse-integer (read-line)))
+					 (chosen-comando (nth user-input comandos-lista)))
+			(setf *chosen-comando* chosen-comando))))
+
+(defun pede-input (nome-atributo)
+	(format t "digite o ~A~%:" nome-atributo)
+	(read-line))
+
+(defun pede-varios-inputs (nome-atributo result)
+	(format t "current ~a:~a~%addiciona mais um valor a ~A? [Y/n] ~%" nome-atributo result nome-atributo)
+	(let ((resp (read-line)))
+		(if (string-equal "n" resp)
+				result
+				(progn
+					(format t "digite o valor:~%~%")
+					(pede-varios-inputs nome-atributo (cons (read-line) result))))))
+
+(defun main-loop ()
+	(selecao-tipo-comando)
+	(selecao-comando)
+	(let ((comando (get-comando *chosen-comando*)))
+		(if (null comando)
+				nil
+				(funcall comando))))
+
+(main-loop)

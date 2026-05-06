@@ -2,21 +2,21 @@ namespace Application.Identidade.DTOs;
 
 public class LoginDto
 {
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public required string Email { get; set; }
+    public required string Password { get; set; }
 }
 
 public class UsuarioResponseDto
 {
-		public Guid Id { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
-    public List<string> Roles { get; set; }
+    public required Guid Id { get; set; }
+    public required string Email { get; set; }
+    public required string Password { get; set; }
+    public required List<string> Roles { get; set; }
 }
 
 public class CriarUsuarioDto
 {
-    public string Email { get; set; }
-    public string Password { get; set; }
-    public List<string> Roles { get; set; }
+    public required string Email { get; set; }
+    public required string Password { get; set; }
+    public required List<string> Roles { get; set; }
 }

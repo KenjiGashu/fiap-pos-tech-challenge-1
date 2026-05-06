@@ -176,6 +176,11 @@ public class OrdemServicoService : IOrdemServicoService
         var cliente = await _clienteRepo.ObterPorId(ordemServico.ClienteId);
         var token = await _tokenService.GeraToken(ordemServico.Id);
 
+        if(cliente == null || token == null)
+        {
+            throw new Exception("Dados invalidos para envio de orcamento");
+        }
+
         ordemServico.EnviarOrcamento();
 
         // atualiza metricas
@@ -188,8 +193,19 @@ public class OrdemServicoService : IOrdemServicoService
         var aprovacaoOrcamentoDto = new AprovacaoOrcamentoDto
         {
             OrdemServicoId = dto.OrdemServicoId,
-            Servicos = ordemServico.OrdemServicoServicos.Select(oss => new ItemOrcamentoDto(oss.Nome, oss.Preco, 0)),
-            Pecas = ordemServico.OrdemServicoPecas.Select(osp => new ItemOrcamentoDto(osp.Nome, osp.Preco, osp.Quantidade)),
+            Servicos = ordemServico.OrdemServicoServicos.Select(oss => new ItemOrcamentoDto
+            {
+                Nome = oss.Nome,
+                Preco = oss.Preco,
+                Quantidade = 0
+            }),
+            Pecas = ordemServico.OrdemServicoPecas.Select(osp => new ItemOrcamentoDto
+            {
+              Nome = osp.Nome,
+              Preco = osp.Preco,
+              Quantidade = osp.Quantidade
+            }),
+
             Total = ordemServico.Total,
             NomeCliente = cliente.Nome,
             Destinatario = cliente.GetDestinatario(),

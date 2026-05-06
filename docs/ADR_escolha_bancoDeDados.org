@@ -1,0 +1,41 @@
+* Título: Escolha de banco de dados relacional usando SQLite
+
+* Status: Aceito
+
+* Contexto:
+O sistema em desenvolvimento necessita de um mecanismo de persistência de dados simples, confiável e de fácil manutenção. Entre as opções avaliadas estão bancos de dados relacionais e não relacionais, incluindo SQLite e MongoDB.
+Os principais requisitos considerados foram:
+    - Baixa complexidade operacional
+    - Facilidade de setup e uso
+    - Curva de aprendizado da equipe
+    - Necessidade de consistência transacional
+    - Escopo inicial do projeto (baixo volume de dados e baixa concorrência)
+
+* Decisão:
+A escolha foi baseada nos seguintes fatores:
+    - Simplicidade e zero configuração: O SQLite não requer servidor separado, reduzindo a complexidade de infraestrutura.
+    - Adequado ao escopo atual: O projeto não exige alta escalabilidade ou concorrência intensa neste momento.
+    - Consistência transacional: Suporte a ACID garante integridade dos dados.
+    - Rapidez no desenvolvimento: Permite iteração mais ágil.
+    - Experiência da equipe: A equipe já possui familiaridade com bancos relacionais, reduzindo riscos de implementação e manutenção.
+
+Embora soluções como o MongoDB tenham sido consideradas, elas não foram priorizadas neste momento devido a:
+    - Curva de aprendizado adicional
+    - Ausência de necessidade imediata de flexibilidade de schema
+    - Complexidade desnecessária para o estágio atual do projeto
+
+* Consequências:
+Positivas:
+    - Redução da complexidade operacional
+    - Maior produtividade inicial
+    - Facilidade de manutenção
+
+Negativas:
+    - Limitações de escalabilidade horizontal
+    - Concorrência limitada em cenários de alta carga
+    - Possível necessidade de migração futura
+
+Alternativas consideradas
+    MongoDB (NoSQL orientado a documentos)
+    PostgreSQL (relacional mais robusto)
+    MySQL (relacional amplamente utilizado)

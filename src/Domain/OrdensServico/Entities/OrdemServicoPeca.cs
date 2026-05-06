@@ -8,10 +8,10 @@ public class OrdemServicoPeca
 	  public Guid OrdemServicoId { get; set; }
 	  public OrdemServico OrdemServico { get; set; }
 
-    public Guid PecaId { get; set; } 
-    public Peca Peca { get; set; }  
+    public Guid PecaId { get; set; }
+    public Peca Peca { get; set; } = null!;
 
-	  public string Nome { get; set; }
+    public string Nome { get; set; }
     public decimal Preco { get; set; }
     public int Quantidade { get; set; }
 

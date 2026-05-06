@@ -8,7 +8,7 @@ using System.Linq;
 
 public class MetricaOrdemServicoService : IMetricaOrdemServicoService
 {
-    IMetricaOrdemServicoRepository _repo;
+    readonly IMetricaOrdemServicoRepository _repo;
 
     public MetricaOrdemServicoService(IMetricaOrdemServicoRepository repo)
     {
@@ -28,7 +28,9 @@ public class MetricaOrdemServicoService : IMetricaOrdemServicoService
 
     public async Task SalvaMetricaOrdemServico(SalvarMetricaOrdemServicoDto dto)
     {
-        Enum.TryParse<StatusOrdemServico>(dto.Status, out var status);
+        var result = Enum.TryParse<StatusOrdemServico>(dto.Status, out var status);
+        if (!result)
+            throw new FormatException("Invalid Status");
         var metrica = new MetricaOrdemServico(dto.OrdemServicoId, status, DateTime.Now);
         await _repo.Adicionar(metrica);
     }
@@ -58,7 +60,7 @@ public class MetricaOrdemServicoService : IMetricaOrdemServicoService
         var atualizacoesOrdemServico = await _repo.ObterPorOrdemServicoId(dto.OrdemServicoId);
         var timeSpanStatus = atualizacoesOrdemServico.OrderBy(m => m.DateTime)
             .Zip(atualizacoesOrdemServico.OrderBy(x => x.DateTime).Skip(1),
-                 (anterior, atual) => new { TimeSpan =  atual.DateTime - anterior.DateTime });;
+                 (anterior, atual) => new { TimeSpan =  atual.DateTime - anterior.DateTime });
 
         return timeSpanStatus.Sum(d => d.TimeSpan.Seconds);
     }
@@ -76,7 +78,7 @@ public class MetricaOrdemServicoService : IMetricaOrdemServicoService
         {
 						var timeSpanStatus = grupoMetricas.OrderBy(m => m.DateTime)
             .Zip(grupoMetricas.OrderBy(x => x.DateTime).Skip(1),
-                 (anterior, atual) => new { TimeSpan =  atual.DateTime - anterior.DateTime });;
+                 (anterior, atual) => new { TimeSpan =  atual.DateTime - anterior.DateTime });
 
             var soma = timeSpanStatus.Sum(d => d.TimeSpan.Seconds);
 

@@ -2,31 +2,25 @@ namespace Application.Notificacao.DTOs;
 
 public class ItemOrcamentoDto
 {
-	public string Nome { get; set; }
-	public decimal Preco { get; set; }
-	public int Quantidade { get; set; }
+	public required string Nome { get; set; }
+	public required decimal Preco { get; set; }
+	public required int Quantidade { get; set; }
 
-	public ItemOrcamentoDto(string nome, decimal preco, int quantidade)
-	{
-        Nome = nome;
-        Preco = preco;
-        Quantidade = quantidade;
-    }
 }
 
 public class AprovacaoOrcamentoDto
 {
-	  public Guid OrdemServicoId { get; set; }
-	  public string TokenGuid { get; set; }
-	  public IEnumerable<ItemOrcamentoDto> Servicos { get; set; }
-	  public IEnumerable<ItemOrcamentoDto> Pecas { get; set; }
-	  public decimal Total { get; set; }
-	  public string NomeCliente { get; set; }
-	  public string Destinatario { get; set; }
+	  public required Guid OrdemServicoId { get; set; }
+	  public required string TokenGuid { get; set; }
+	  public required IEnumerable<ItemOrcamentoDto> Servicos { get; set; }
+	  public required IEnumerable<ItemOrcamentoDto> Pecas { get; set; }
+	  public required decimal Total { get; set; }
+	  public required string NomeCliente { get; set; }
+	  public required string Destinatario { get; set; }
 
 }
 
 public class AprovarOrcamentoDto
 {
-    public Guid Guid;
+    public required Guid Guid;
 }

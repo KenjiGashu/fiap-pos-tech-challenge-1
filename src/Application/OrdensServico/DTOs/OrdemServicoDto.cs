@@ -6,103 +6,103 @@ using Domain.OrdensServico.Entities;
 
 public class OrdemServicoCreateDto
 {
-    public Guid ClienteId { get; set; }
-    public Guid VeiculoId { get; set; }
+    public required Guid ClienteId { get; set; }
+    public required Guid VeiculoId { get; set; }
 }
 
 public class OrdemServicoResponseDto
 {
-    public Guid Id { get; set; }
-    public Guid ClienteId { get; set; }
-    public Guid VeiculoId { get; set; }
-    public decimal Total { get; set; }
+    public required Guid Id { get; set; }
+    public required Guid ClienteId { get; set; }
+    public required Guid VeiculoId { get; set; }
+    public required decimal Total { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public StatusOrdemServico Status { get; set; }
+    public required StatusOrdemServico Status { get; set; }
 
-    public List<OrdemServicoServicoDto> Servicos { get; set; }
-    public List<OrdemServicoPecaDto> Pecas { get; set; }
+    public required List<OrdemServicoServicoDto> Servicos { get; set; }
+    public required List<OrdemServicoPecaDto> Pecas { get; set; }
 }
 
 public class ListaOrdemServicoResponseDto
 {
-    public List<OrdemServicoResponseDto> OrdemServicos { get; set; }
+    public required List<OrdemServicoResponseDto> OrdemServicos { get; set; }
 }
 
 
 public class OrdemServicoAtualizaStatusDto
 {
-    public Guid OrdemServicoId { get; set; }
+    public required Guid OrdemServicoId { get; set; }
 }
 
 public class OrdemServicoPecaDto
 {
-    public Guid PecaId { get; set; }
-    public decimal Preco { get; set; }
-    public int Quantidade { get; set; }
-    public string Nome { get; set; }
+    public required Guid PecaId { get; set; }
+    public required decimal Preco { get; set; }
+    public required int Quantidade { get; set; }
+    public required string Nome { get; set; }
 }
 
 public class OrdemServicoServicoDto
 {
-    public Guid ServicoId { get; set; }
-    public string Nome { get; set; }
-    public decimal Preco { get; set; }
+    public required Guid ServicoId { get; set; }
+    public required string Nome { get; set; }
+    public required decimal Preco { get; set; }
 }
 
 public class OrdemServicoAdicionaPecaDto
 {
-    public Guid OrdemServicoId { get; set; }
-    public List<OrdemServicoPecaDto> Pecas { get; set; }
+    public required Guid OrdemServicoId { get; set; }
+    public required List<OrdemServicoPecaDto> Pecas { get; set; }
 }
 
 public class OrdemServicoAdicionaServicoDto
 {
-    public Guid OrdemServicoId { get; set; }
-    public List<OrdemServicoServicoDto> Servicos { get; set; }
+    public required Guid OrdemServicoId { get; set; }
+    public required List<OrdemServicoServicoDto> Servicos { get; set; }
 }
 
 public class OrdemServicoEnviarOrcamentoDto
 {
-    public Guid OrdemServicoId { get; set; }
+    public required Guid OrdemServicoId { get; set; }
 }
 
 public class OrdemServicoIniciarDiagnosticoOrcamentoDto
 {
-    public Guid OrdemServicoId { get; set; }
+    public required Guid OrdemServicoId { get; set; }
 }
 
 public class OrdemServicoFinalizarDiagnosticoOrcamentoDto
 {
-    public Guid OrdemServicoId { get; set; }
+    public required Guid OrdemServicoId { get; set; }
 }
 
 public class OrdemServicoIniciarExecucaoOrcamentoDto
 {
-    public Guid OrdemServicoId { get; set; }
+    public required Guid OrdemServicoId { get; set; }
 }
 
 public class OrdemServicoFinalizarExecucaoOrcamentoDto
 {
-    public Guid OrdemServicoId { get; set; }
+    public required Guid OrdemServicoId { get; set; }
 }
 
 public class OrdemServicoEntregarVeiculoDto
 {
-    public Guid OrdemServicoId { get; set; }
+    public required Guid OrdemServicoId { get; set; }
 }
 
 public class OrdemServicoAprovarOrcamentoDto
 {
-    public Guid TokenGuid { get; set; }
+    public required Guid TokenGuid { get; set; }
 }
 
 public class OrdemServicoRejeitarOrcamentoDto
 {
-    public Guid TokenGuid { get; set; }
+    public required Guid TokenGuid { get; set; }
 }
 
 public class OrdemServicoDeleteDto
 {
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 }

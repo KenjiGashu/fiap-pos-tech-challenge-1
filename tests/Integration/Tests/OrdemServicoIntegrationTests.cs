@@ -95,6 +95,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         var response = await _client.PostAsJsonAsync("/api/ordemservico/", dto);
 
         response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
@@ -127,6 +128,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         var response = await _client.PostAsJsonAsync("/api/ordemservico/AdicionaPeca", dto);
 
         response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
@@ -157,6 +159,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         var response = await _client.PostAsJsonAsync("/api/ordemservico/AdicionaServico", dto);
 
         response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
@@ -176,6 +179,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         var response = await _client.PostAsJsonAsync("/api/ordemservico/EnviarOrcamento", dto);
 
         response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
@@ -223,6 +227,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         var response = await _client.PostAsJsonAsync("/api/ordemservico/IniciarDiagnostico", dto);
 
         response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
@@ -243,6 +248,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         var response = await _client.PostAsJsonAsync("/api/ordemservico/FinalizarDiagnostico", dto);
 
         response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
@@ -263,6 +269,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         var response = await _client.PostAsJsonAsync("/api/ordemservico/IniciarExecucao", dto);
 
         response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
@@ -283,6 +290,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         var response = await _client.PostAsJsonAsync("/api/ordemservico/FinalizarExecucao", dto);
 
         response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
@@ -303,5 +311,6 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         var response = await _client.PostAsJsonAsync("/api/ordemservico/EntregarVeiculo", dto);
 
         response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 }

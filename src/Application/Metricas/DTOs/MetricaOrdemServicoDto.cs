@@ -5,25 +5,25 @@ using Domain.Metricas.Entities;
 
 public class SalvarMetricaOrdemServicoDto
 {
-    public Guid OrdemServicoId { get; set; }
-    public string Status { get; set; } = "";
+    public required Guid OrdemServicoId { get; set; }
+    public required string Status { get; set; } = "";
 }
 
 public class TempoMedioOrdemServicoDto
 {
-    public Guid OrdemServicoId { get; set; }
+    public required Guid OrdemServicoId { get; set; }
 }
 
 public class TempoTotalOrdemServicoDto
 {
-    public Guid OrdemServicoId { get; set; }
+    public required Guid OrdemServicoId { get; set; }
 }
 
 public class MetricaOrdemServicoResponseDto
 {
-    public Guid OrdemServicoId { get; set; }
+    public required Guid OrdemServicoId { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public StatusOrdemServico Status { get; set; }
-    public DateTime DateTime { get; set; }
+    public required StatusOrdemServico Status { get; set; }
+    public required DateTime DateTime { get; set; }
 }

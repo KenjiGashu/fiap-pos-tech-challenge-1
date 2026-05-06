@@ -38,7 +38,7 @@ if (builder.Environment.IsEnvironment("Testing"))
 else
 {
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlite("Data Source=clientes.db"));
+        options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 }
 
 builder.Services.AddControllers()
@@ -124,7 +124,7 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    await context.Database.EnsureCreatedAsync();
+    await DbInitializer.SeedAsync(context);
 }
 
 app.UseAuthentication();
@@ -140,11 +140,6 @@ app.UseExceptionHandler(errorApp =>
     {
         context.Response.StatusCode = 500;
         context.Response.ContentType = "application/json";
-
-        var error = context.Features.Get<IExceptionHandlerFeature>();
-
-        // Aqui você pode logar o erro completo
-        var exception = error?.Error;
 
         var response = new
         {

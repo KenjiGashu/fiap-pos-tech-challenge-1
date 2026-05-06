@@ -1,6 +1,19 @@
+version: "3.8"
+
 services:
   api:
-    image: ${DOCKER_REGISTRY-}api
-    build:
-      context: .
-      dockerfile: src/API/Dockerfile
+    image: sistema-mecanica
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - FIAP_POS_EMAIL=kenjigashu@gmail.com
+      - FIAP_POS_APP_PASSWORD=iotjahrsjmogmdyc
+      - FIAP_POS_SALT=pesomorto
+      - FIAP_POS_SECRET=minha_chave_super_secreta_com_32_chars!!
+    volumes:
+      - database:/app/data
+
+volumes:
+  database:

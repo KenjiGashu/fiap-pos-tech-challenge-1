@@ -21,10 +21,20 @@ public class NotificacaoServiceTests
     public async Task AdicionarTest()
     {
         var servicos = new List<ItemOrcamentoDto>();
-        servicos.Add(new ItemOrcamentoDto("troca oleo", 12, 1));
+        servicos.Add(new ItemOrcamentoDto
+        {
+            Nome = "troca oleo",
+            Preco = 12,
+            Quantidade = 1
+        });
 
         var pecas = new List<ItemOrcamentoDto>();
-        pecas.Add(new ItemOrcamentoDto("oleo", 12, 1));
+        pecas.Add(new ItemOrcamentoDto
+        {
+            Nome = "oleo",
+            Preco = 12,
+            Quantidade = 1
+        });
 
         var total = 24;
         var nomeCliente = "maria";

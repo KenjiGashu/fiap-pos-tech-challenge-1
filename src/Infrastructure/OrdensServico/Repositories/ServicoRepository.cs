@@ -20,15 +20,15 @@ public class ServicoRepository : IServicoRepository
     public async Task<Servico?> ObterPorId(Guid id)
         => await _context.Servicos.FindAsync(id);
 
-    public async Task Adicionar(Servico cliente)
+    public async Task Adicionar(Servico servico)
     {
-        await _context.Servicos.AddAsync(cliente);
+        await _context.Servicos.AddAsync(servico);
         await _context.SaveChangesAsync();
     }
 
-    public async Task Atualizar(Servico cliente)
+    public async Task Atualizar(Servico servico)
     {
-        _context.Servicos.Update(cliente);
+        _context.Servicos.Update(servico);
         await _context.SaveChangesAsync();
     }
 

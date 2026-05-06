@@ -18,17 +18,17 @@ public class OrdemServicoRepository : IOrdemServicoRepository
 
     public async Task Criar(OrdemServico os)
     {
-        _context.OrdemServicos.Add(os);
+        await _context.OrdemServicos.AddAsync(os);
 
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     public async Task AdicionarPecas(OrdemServico os)
     {
-        var idsExistentes = _context.OrdemServicoPecas
+        var idsExistentes = await _context.OrdemServicoPecas
             .Where(x => x.OrdemServicoId == os.Id)
             .Select(x => x.PecaId)
-            .ToList();
+            .ToListAsync();
 
         var novos = os.OrdemServicoPecas
             .Where(p => !idsExistentes.Contains(p.PecaId))
@@ -97,10 +97,10 @@ public class OrdemServicoRepository : IOrdemServicoRepository
 
     public async Task AdicionarPecas(Guid id, IEnumerable<OrdemServicoPeca> pecas)
     {
-        var ordemServico = _context.OrdemServicos
+        var ordemServico = await _context.OrdemServicos
             .Include(os => os.OrdemServicoPecas)
             .Include(os => os.OrdemServicoServicos)
-            .FirstOrDefault(os => os.Id == id);
+            .FirstOrDefaultAsync(os => os.Id == id);
 
         if (ordemServico == null)
             throw new Exception("Cliente não encontrado");
@@ -111,15 +111,15 @@ public class OrdemServicoRepository : IOrdemServicoRepository
                 ordemServico.OrdemServicoPecas.Add(p);
             }
             
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     public async Task AdicionarServicos(OrdemServico os)
     {
-        var idsExistentes = _context.OrdemServicoServicos
+        var idsExistentes = await _context.OrdemServicoServicos
             .Where(x => x.OrdemServicoId == os.Id)
             .Select(x => x.ServicoId)
-            .ToList();
+            .ToListAsync();
 
         var novos = os.OrdemServicoServicos
             .Where(s => !idsExistentes.Contains(s.ServicoId))

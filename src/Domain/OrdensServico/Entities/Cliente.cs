@@ -21,7 +21,7 @@ public class Cliente
     public TipoPessoa TipoPessoa { get; set; }
 
     public Guid UsuarioId { get; set; }
-    public Usuario? Usuario { get; set; }
+    public Usuario Usuario { get; set; } = null!;
 
     public Cliente(string nome, string cpf, string cnpj, TipoPessoa tipoPessoa)
     {

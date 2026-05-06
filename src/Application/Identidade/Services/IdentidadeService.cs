@@ -13,8 +13,8 @@ using System.Security.Cryptography;
 
 public class IdentidadeService : IIdentidadeService
 {
-    IUsuarioRepository _usuarioRepo;
-    IJwtService _jwtService;
+    readonly IUsuarioRepository _usuarioRepo;
+    readonly IJwtService _jwtService;
 
     public IdentidadeService(IUsuarioRepository repo, IJwtService jwtService)
     {
@@ -56,8 +56,11 @@ public class IdentidadeService : IIdentidadeService
 
     public async Task<UsuarioResponseDto> ObterPorEmail(string email)
     {
-        Console.WriteLine($"Obter por email::     email {email}");
         var usuario =  await _usuarioRepo.ObterPorEmail(email);
+
+        if(usuario == null)
+            throw new Exception("Usuario Invalido");
+        
         return new UsuarioResponseDto
         {
             Id = usuario.Id,
@@ -87,7 +90,7 @@ public class IdentidadeService : IIdentidadeService
         return Convert.ToBase64String(hashBytes);
     }
 
-    public bool VerificaPassword(string password, string storedHash)
+    public static bool VerificaPassword(string password, string storedHash)
     {
         var hashBytes = Convert.FromBase64String(storedHash);
 

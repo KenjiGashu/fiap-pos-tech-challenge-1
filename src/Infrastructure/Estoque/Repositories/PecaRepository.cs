@@ -19,7 +19,7 @@ public class PecaRepository : IPecaRepository
 
     public async Task<Peca?> ObterPorId(Guid id)
 		{
-        return _context.Pecas.FirstOrDefault(p => p.Id == id);
+        return await _context.Pecas.FirstOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task Adicionar(Peca peca)

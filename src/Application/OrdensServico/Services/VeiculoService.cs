@@ -31,7 +31,8 @@ public class VeiculoService : IVeiculoService
     public async Task<VeiculoResponseDto> GetById(Guid id)
     {
         var v = await _repo.ObterPorId(id);
-        if (v == null) return null;
+        if (v == null)
+            throw new Exception("Veiculo nao encontrado");
 
         return new VeiculoResponseDto
         {
@@ -46,7 +47,8 @@ public class VeiculoService : IVeiculoService
     public async Task<VeiculoResponseDto> GetByPlaca(string placa)
     {
         var v = await _repo.ObterPorPlaca(placa);
-        if (v == null) return null;
+        if (v == null)
+            throw new Exception("Placa de veiculo nao encontrada");
 
         return new VeiculoResponseDto
         {

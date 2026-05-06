@@ -20,26 +20,10 @@ using Microsoft.AspNetCore.Authorization;
 public class ConfirmacaoEmailController : ControllerBase
 {
     private readonly INotificacaoService _notificacaoService;
-    private readonly ITokenService _tokenService;
-    private readonly OrdemServicoService _osService;
-    private readonly ClienteService _clienteService;
-    private readonly IOrdemServicoRepository _osrepo;
-    private readonly IClienteRepository _clienterepo;
 
-    public ConfirmacaoEmailController(
-        INotificacaoService notificacaoService,
-        OrdemServicoService osService,
-        ClienteService clienteService,
-        IOrdemServicoRepository osrepo,
-        IClienteRepository clienterepo,
-        ITokenService tokenService)
+    public ConfirmacaoEmailController(INotificacaoService notificacaoService)
     {
         _notificacaoService = notificacaoService;
-        _osService = osService;
-        _clienteService = clienteService;
-        _osrepo = osrepo;
-        _clienterepo = clienterepo;
-        _tokenService = tokenService;
     }
 
     /// <summary>
