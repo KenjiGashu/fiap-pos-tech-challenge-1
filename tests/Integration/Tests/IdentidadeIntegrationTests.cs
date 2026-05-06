@@ -1,4 +1,4 @@
-using Tests.Integration.Fixture;
+using Gashu.SistemaMecanica.Tests.Integration.Fixture;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 using Microsoft.Extensions.DependencyInjection;

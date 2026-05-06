@@ -148,28 +148,28 @@ public class CustomWebApplicationFactory<TProgram>
         {
             var id = Guid.NewGuid();
             var date = DateTime.Now;
-            var recebida = new MetricaOrdemServico(id, global::Domain.Metricas.Entities.StatusOrdemServico.Recebida, date);
+            var recebida = new MetricaOrdemServico(id, global::Gashu.SistemaMecanica.Domain.Metricas.Entities.StatusOrdemServico.Recebida, date);
             context.Set<MetricaOrdemServico>().Add(recebida);
             var date2 = date.AddSeconds(15);
-            var aguardando = new MetricaOrdemServico(id, global::Domain.Metricas.Entities.StatusOrdemServico.AguardandoAprovacao, date2);
+            var aguardando = new MetricaOrdemServico(id, global::Gashu.SistemaMecanica.Domain.Metricas.Entities.StatusOrdemServico.AguardandoAprovacao, date2);
             var date3 = date2.AddSeconds(15);
             context.Set<MetricaOrdemServico>().Add(aguardando);
-            var aprovado = new MetricaOrdemServico(id, global::Domain.Metricas.Entities.StatusOrdemServico.OrcamentoAprovado, date3);
+            var aprovado = new MetricaOrdemServico(id, global::Gashu.SistemaMecanica.Domain.Metricas.Entities.StatusOrdemServico.OrcamentoAprovado, date3);
             var date4 = date3.AddSeconds(15);
             context.Set<MetricaOrdemServico>().Add(aprovado);
-            var emDiagnostico = new MetricaOrdemServico(id, global::Domain.Metricas.Entities.StatusOrdemServico.EmDiagnostico, date4);
+            var emDiagnostico = new MetricaOrdemServico(id, global::Gashu.SistemaMecanica.Domain.Metricas.Entities.StatusOrdemServico.EmDiagnostico, date4);
             var date5 = date4.AddSeconds(15);
             context.Set<MetricaOrdemServico>().Add(emDiagnostico);
-            var aguardandoMecanico = new MetricaOrdemServico(id, global::Domain.Metricas.Entities.StatusOrdemServico.AguardandoMecanico, date5);
+            var aguardandoMecanico = new MetricaOrdemServico(id, global::Gashu.SistemaMecanica.Domain.Metricas.Entities.StatusOrdemServico.AguardandoMecanico, date5);
             var date6 = date5.AddSeconds(15);
             context.Set<MetricaOrdemServico>().Add(aguardandoMecanico);
-            var emExecucao = new MetricaOrdemServico(id, global::Domain.Metricas.Entities.StatusOrdemServico.EmExecucao, date6);
+            var emExecucao = new MetricaOrdemServico(id, global::Gashu.SistemaMecanica.Domain.Metricas.Entities.StatusOrdemServico.EmExecucao, date6);
             var date7 = date6.AddSeconds(15);
             context.Set<MetricaOrdemServico>().Add(emExecucao);
-            var finalizado = new MetricaOrdemServico(id, global::Domain.Metricas.Entities.StatusOrdemServico.Finalizada, date7);
+            var finalizado = new MetricaOrdemServico(id, global::Gashu.SistemaMecanica.Domain.Metricas.Entities.StatusOrdemServico.Finalizada, date7);
             var date8 = date7.AddSeconds(15);
             context.Set<MetricaOrdemServico>().Add(finalizado);
-            var entregue = new MetricaOrdemServico(id, global::Domain.Metricas.Entities.StatusOrdemServico.Entregue, date8.AddSeconds(15));
+            var entregue = new MetricaOrdemServico(id, global::Gashu.SistemaMecanica.Domain.Metricas.Entities.StatusOrdemServico.Entregue, date8.AddSeconds(15));
             context.Set<MetricaOrdemServico>().Add(entregue);
             context.SaveChanges();
         }

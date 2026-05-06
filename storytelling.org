@@ -59,25 +59,6 @@
 - cliente ve status da ordem serviço
 
 
-* dicionario ubiquo
-- Identidade (Identity): Dominio de Identidade, responsavel pela autenticação / gerenciamento de usuario
-- cliente
-- veiculo
-- servico
-- peca (peças, componentes e insumos utilizados no serviço)
-- ordem servico: Agregado utilizado para Ordem de Serviço
-- jwt: Autenticação JWT
-- orçamento
-- mecanico
-- estoque
-- Status:
-  -Recebida
-  -Em Diagnostico
-  -Aguardando Aprovacao
-  -Em Execucao
-  -Finalizada
-  -Entregue
-
 
 * event storming:
 
@@ -116,8 +97,4 @@ dotnet ef migrations add InitialCreate \
 --project Infrastructure \
 --startup-project API
 
-dotnet run --project API/
-
-
-"1d45ba5b-1325-4a49-93bb-b3888b4533e6"
-
+dotnet run --project src/API/

@@ -1,0 +1,18 @@
+* dicionario ubiquo
+- Identidade (Identity): Dominio de Identidade, responsavel pela autenticação / gerenciamento de usuario
+- cliente
+- veiculo
+- servico
+- peca (peças, componentes e insumos utilizados no serviço)
+- ordem servico: Agregado utilizado para Ordem de Serviço
+- jwt: Autenticação JWT
+- orçamento
+- mecanico
+- estoque
+- Status:
+  -Recebida
+  -Em Diagnostico
+  -Aguardando Aprovacao
+  -Em Execucao
+  -Finalizada
+  -Entregue
