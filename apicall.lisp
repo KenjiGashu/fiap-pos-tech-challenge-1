@@ -6,7 +6,7 @@
 
 ;; (require 'sb-posix)
 ;; (sb-posix:setenv "FIAP_POS_PORT" "8080" 1)
-;; (setf *port* "5129")
+(setf *port* "5129")
 
 (defparameter *port* (sb-ext:posix-getenv "FIAP_POS_PORT"))
 (defparameter *jwt-token* "your.jwt.token.here")
@@ -264,12 +264,60 @@
 				 (body (do-put url data)))
 		body))
 
+(defun do-atualiza-peca ()
+	(escolher-peca)
+	(let* ((nome (pede-input "Nome"))
+				 (preco (pede-input "Preco"))
+				 (quantidade (pede-input "Quantidade")))
+		(update-peca nome preco quantidade)))
+
+(defun do-deleta-peca ()
+	(escolher-peca)
+	(let* ((url (concatenate 'string "Estoque/" *peca-id*))
+				 (body (do-delete url nil)))
+		body))
+
+
+
+
+;;servico
+(defun do-cria-servico ()
+	(let* ((nome (pede-input "Nome"))
+				 (preco (pede-input "Preco"))
+				 (data (cl-json:encode-json-to-string `(("nome" . ,nome) ("preco" . ,preco))))
+				 (body (do-post "Servico" data)))
+		body))
+
+(defun do-atualiza-servico ()
+	(escolher-servico)
+	(let* ((nome (pede-input "Nome"))
+				 (preco (pede-input "Preco")))
+		(let* ((url (concatenate 'string "Servico/" *servico-id*))
+				 (data (cl-json:encode-json-to-string `(("nome" . ,nome) ("preco" . ,preco))))
+				 (body (do-put url data)))
+		body)))
+
+(defun do-deleta-servico ()
+	(escolher-servico)
+	(let* ((url (concatenate 'string "Servico/" *servico-id*))
+				 (body (do-delete url nil)))
+		body))
+
+
+
 
 ;;identidade
 (defun get-usuario-by-email (email)
 	(let* ((url (concatenate 'string "identidade/usuarios/" email))
 				 (body (do-get url nil)))
 		body))
+
+(defun login-usuario ()
+	(do-selecao-usuario)
+	(do-login-cliente))
+
+
+
 
 ;;cliente
 (defun get-cliente-by-id ()
@@ -282,8 +330,13 @@
 				 (body (do-get url nil)))
 		body))
 
-(defun update-cliente (nome cpf cnpj tipopessoa)
-	(let* ((data (cl-json:encode-json-to-string `(("nome" . ,nome) ("cpf" . ,cpf) ("cnpj" . ,cnpj) ("tipopessoa" . ,tipopessoa))))
+(defun do-atualiza-cliente ()
+	(escolher-cliente)
+	(let* ((nome (pede-input "Nome"))
+				 (cpf (pede-input "CPF"))
+				 (cnpj (pede-input "CNPJ"))
+				 (tipopessoa (pede-input "Tipo Pessoa"))
+				 (data (cl-json:encode-json-to-string `(("nome" . ,nome) ("cpf" . ,cpf) ("cnpj" . ,cnpj) ("tipopessoa" . ,tipopessoa))))
 				 (url (concatenate 'string "cliente/" *cliente-id*))
 				 (body (do-put url data)))
 		body))
@@ -303,7 +356,7 @@
 (defun escolher-cliente ()
 	(let* ((body (do-get "cliente" nil))
 				 (json-obj (cl-json:decode-json-from-string body)))
-		(format t "~%~%~%~%~%~%~%~%~% ----- escolha a peca -------~%")
+		(format t "~%~%~%~%~%~%~%~%~% ----- escolha o cliente -------~%")
 		(loop for cliente in json-obj
 					for i = 0 then (+ i 1)
 					do (print-cliente cliente i))
@@ -313,11 +366,70 @@
 			(setf *cliente-id* (cdr (assoc :id chosen-cliente)))
 			(setf *cliente-nome* (cdr (assoc :nome chosen-cliente))))))
 
-(defun delete-cliente ()
+(defun do-deleta-cliente ()
+	(escolher-cliente)
 	(let* ((url (concatenate 'string "cliente/" *cliente-id*))
 				 (body (do-delete url nil)))
 		body))
 
+
+
+
+
+
+;; veiculo
+(defun do-cria-veiculo ()
+	(let* ((placa (pede-input "Placa"))
+				 (marca (pede-input "Marca"))
+				 (modelo (pede-input "Modelo"))
+				 (ano (parse-integer (pede-input "Ano"))))
+		(cria-veiculo placa marca modelo ano)
+		(seleciona-veiculo)))
+
+(defun print-veiculo (veiculo i)
+	(let* ((id (cdr (assoc :id veiculo)))
+				 (placa (cdr (assoc :placa veiculo)))
+				 (marca (cdr (assoc :marca veiculo)))
+				 (modelo (cdr (assoc :modelo veiculo)))
+				 (ano (cdr (assoc :ano veiculo))))
+		(format t "[~A]  Veiculo: placa[~A] marca[~A] modelo[~A] ano[~A] id[~A]~%" i placa marca modelo ano id)))
+
+(defun escolher-veiculo ()
+	(let* ((body (do-get "veiculo" nil))
+				 (json-obj (cl-json:decode-json-from-string body)))
+		(format t "~%~%~%~%~%~%~%~%~% ----- escolha o veiculo -------~%")
+		(loop for veiculo in json-obj
+					for i = 0 then (+ i 1)
+					do (print-veiculo veiculo i))
+		(format t "~%~%choose one: ")
+		(let* ((user-input (parse-integer (read-line)))
+					 (chosen-veiculo (nth user-input json-obj)))
+			(setf *veiculo-id* (cdr (assoc :id chosen-veiculo)))
+			(setf *veiculo-placa* (cdr (assoc :placa chosen-veiculo))))))
+
+(defun do-atualiza-veiculo ()
+	(escolher-veiculo)
+	(let* ((placa (pede-input "Placa"))
+				 (marca (pede-input "Marca"))
+				 (modelo (pede-input "Modelo"))
+				 (ano (parse-integer (pede-input "Ano")))
+				 (data (cl-json:encode-json-to-string `(("placa" . ,placa) ("marca" . ,marca) ("Modelo" . ,modelo) ("ano" . ,ano))))
+				 (url (concatenate 'string "veiculo/" *veiculo-id*))
+				 (body (do-put url data)))
+		body))
+
+(defun do-deleta-veiculo ()
+	(escolher-veiculo)
+	(let* ((url (concatenate 'string "veiculo/" *veiculo-id*))
+				 (body (do-delete url nil)))
+		body))
+
+
+
+
+
+
+;;usuario 
 (defun do-cria-usuario ()
 	(let ((email (pede-input "Email"))
 				(password (pede-input "password"))
@@ -365,13 +477,7 @@
 				(cria-cliente nome "" cnpj tipopessoa))
 		(seleciona-cliente)))
 
-(defun do-cria-veiculo ()
-	(let* ((placa (pede-input "Placa"))
-				 (marca (pede-input "Marca"))
-				 (modelo (pede-input "Modelo"))
-				 (ano (parse-integer (pede-input "Ano"))))
-		(cria-veiculo placa marca modelo ano)
-		(seleciona-veiculo)))
+
 
 (defun do-cria-ordem-servico ()
 	(cria-ordem-servico)
@@ -388,7 +494,7 @@
 
 (defparameter *identidade-comandos* '("login-admin" "seleciona-usuario" "cria-usuario" "login-usuario" "voltar"))
 (defparameter *estoque-comandos* '("seleciona-peca" "cria-peca" "atualiza-peca" "deleta-peca" "voltar"))
-(defparameter *servico-comandos* '("cria-servico" "seleciona-servico" "atualiza-servico" "delete-servico" "voltar"))
+(defparameter *servico-comandos* '("cria-servico" "seleciona-servico" "atualiza-servico" "deleta-servico" "voltar"))
 (defparameter *cliente-comandos* '("cria-cliente" "seleciona-cliente" "atualiza-cliente" "deleta-cliente" "voltar"))
 (defparameter *veiculo-comandos* '("cria-veiculo" "seleciona-veiculo" "atualiza-veiculo" "deleta-veiculo" "voltar"))
 (defparameter *metrica-comandos* '("media-tempo" "tempo-medio-atualizacao" "tempo-total" "voltar"))
@@ -402,8 +508,20 @@
 				((string-equal comando "cria-usuario") #'do-cria-usuario)
 				((string-equal comando "seleciona-peca") #'escolher-peca)
 				((string-equal comando "cria-peca") #'do-cria-peca)
+				((string-equal comando "atualiza-peca") #'do-atualiza-peca)
+				((string-equal comando "deleta-peca") #'do-deleta-peca)
+				((string-equal comando "seleciona-servico") #'escolher-servico)
+				((string-equal comando "cria-servico") #'do-cria-servico)
+				((string-equal comando "atualiza-servico") #'do-atualiza-servico)
+				((string-equal comando "deleta-servico") #'do-deleta-servico)
 				((string-equal comando "cria-cliente") #'do-cria-cliente)
+				((string-equal comando "seleciona-cliente") #'escolher-cliente)
+				((string-equal comando "atualiza-cliente") #'do-atualiza-cliente)
+				((string-equal comando "deleta-cliente") #'do-deleta-cliente)
 				((string-equal comando "cria-veiculo") #'do-cria-veiculo)
+				((string-equal comando "seleciona-veiculo") #'escolher-veiculo)
+				((string-equal comando "atualiza-veiculo") #'do-atualiza-veiculo)
+				((string-equal comando "deleta-veiculo") #'do-deleta-veiculo)
 				((string-equal comando "cria-ordem-servico") #'do-cria-ordem-servico)
 				((string-equal comando "adiciona-peca") #'do-adiciona-peca)
 				((string-equal comando "adiciona-servico") #'do-adiciona-servico)
@@ -428,8 +546,6 @@
 					 (chosen-tipo (nth user-input *comandos*)))
 			(setf *chosen-tipo* chosen-tipo)))
 
-(selecao-tipo-comando)
-
 (defun get-comandos-lista (tipo)
 	(cond ((string-equal tipo "identidade") *identidade-comandos*)
 				((string-equal tipo "estoque") *estoque-comandos*)
@@ -438,12 +554,7 @@
 				((string-equal tipo "veiculo") *veiculo-comandos*)
 				((string-equal tipo "ordem servico") *ordem-servico-comandos*)
 				((string-equal tipo "metricas") *metrica-comandos*)
-				(t *identidade-comandos*)))
-
-(let* ((url (concatenate 'string "cliente"))
-			 (body (do-get url nil)))
-	body)
-
+				(t nil)))
 
 (defun selecao-comando ()
 	(format t "~%~%~%~%~%~%~%~%~% ----- escolha o comando -------~%")
@@ -470,11 +581,11 @@
 					(pede-varios-inputs nome-atributo (cons (read-line) result))))))
 
 (defun main-loop ()
-	(selecao-tipo-comando)
-	(selecao-comando)
-	(let ((comando (get-comando *chosen-comando*)))
-		(if (null comando)
-				nil
-				(funcall comando))))
+	(loop for
+				tipo = (selecao-tipo-comando)
+				until (string= tipo "sair")
+				do (let* ((comando (selecao-comando)))
+						 (when (not (string= comando "voltar"))
+							 (funcall (get-comando comando))))))
 
 (main-loop)
