@@ -91,11 +91,13 @@ public class AprovacaoOrcamento
 
     public string GeraLinkAprovacao()
     {
-        return "http://localhost:5129/api/ordemServico/aprovarOrcamento/" + TokenGuid;
+        var port = Environment.GetEnvironmentVariable("FIAP_POS_PORT");
+        return "http://localhost:" + port + "/api/ordemServico/aprovarOrcamento/" + TokenGuid;
     }
 
     private string GeraLinkRejeicao()
     {
-        return "http://localhost:5129/api/ordemServico/rejeitarOrcamento/" + TokenGuid;
+        var port = Environment.GetEnvironmentVariable("FIAP_POS_PORT");
+        return "http://localhost:" + port + "/api/ordemServico/rejeitarOrcamento/" + TokenGuid;
     }
 }
