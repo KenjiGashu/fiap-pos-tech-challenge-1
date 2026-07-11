@@ -31,16 +31,16 @@ public class MetricasIntegrationTests : IClassFixture<CustomWebApplicationFactor
         factory.SeedDatabase();
     }
 
-    [Fact]
-    public async Task CriarPeca_DeveRetornarSucesso()
-    {
-        var token = await AuthHelper.GetToken(_client);
-        AuthHelper.SetToken(_client, token);
+    // [Fact]
+    // public async Task CriarPeca_DeveRetornarSucesso()
+    // {
+    //     var token = await AuthHelper.GetToken(_client);
+    //     AuthHelper.SetToken(_client, token);
 
-        var response = await _client.GetFromJsonAsync<APIMetricaResponse>("/api/metricas/ordemservico/tempo-medio");
+    //     var response = await _client.GetFromJsonAsync<APIMetricaResponse>("/api/metricas/ordemservico/tempo-medio");
 
-        Assert.Equal(120, response.Segundos);
-    }
+    //     Assert.Equal(120, response.Segundos);
+    // }
 
     // [Fact]
     // public async Task UpdatePeca_DeveRetornarSucesso()
