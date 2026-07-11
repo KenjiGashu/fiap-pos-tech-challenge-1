@@ -15,6 +15,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      FIAP_POS_SECRET: ${{ secrets.FIAP_POS_SECRET }}
+      FIAP_POS_SALT: ${{ secrets.FIAP_POS_SALT }}
+      FIAP_POS_EMAIL: ${{ secrets.FIAP_POS_EMAIL }}
+      FIAP_POS_APP_PASSWORD: ${{ secrets.FIAP_POS_APP_PASSWORD }}
+
     services:
 
       postgres:
