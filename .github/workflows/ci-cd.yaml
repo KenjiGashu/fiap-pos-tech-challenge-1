@@ -1,0 +1,101 @@
+name: CI/CD - Sistema Mecânica
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  build-test:
+
+    runs-on: self-hosted
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run Tests
+        run: dotnet test --configuration Release --no-build
+
+  # docker:
+
+  #   needs: build-test
+
+  #   runs-on: self-hosted
+
+  #   steps:
+
+  #     - uses: actions/checkout@v4
+
+  #     - name: Build Docker Image
+  #       run: |
+  #         docker build \
+  #           -t sistema-mecanica:1.0.0 .
+
+  #     - name: Load image into Minikube
+  #       run: |
+  #         minikube image load sistema-mecanica:1.0.0
+
+  # deploy:
+
+  #   needs: docker
+
+  #   runs-on: self-hosted
+
+  #   steps:
+
+  #     - uses: actions/checkout@v4
+
+  #     - name: Terraform Init
+  #       working-directory: terraform
+  #       run: terraform init
+
+  #     - name: Terraform Validate
+  #       working-directory: terraform
+  #       run: terraform validate
+
+  #     - name: Terraform Plan
+  #       working-directory: terraform
+  #       run: terraform plan
+
+  #     - name: Terraform Apply
+  #       working-directory: terraform
+  #       run: terraform apply -auto-approve
+
+  #     - name: Apply Kubernetes Manifests
+  #       run: kubectl apply -k k8s/
+
+  #     - name: Wait Deployment
+  #       run: |
+  #         kubectl rollout status deployment/sistema-mecanica \
+  #           -n gashu-app \
+  #           --timeout=120s
+
+  #     - name: Show Resources
+  #       run: |
+  #         kubectl get all -n gashu-app
+
+  #     - name: Show Pods
+  #       run: |
+  #         kubectl get pods -n gashu-app
+
+  #     - name: Show Services
+  #       run: |
+  #         kubectl get svc -n gashu-app
