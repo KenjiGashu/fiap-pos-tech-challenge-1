@@ -14,21 +14,21 @@ public class EstoqueService : IEstoqueService
         _repo = repo;
     }
 
-    public async Task<IEnumerable<PecaResponseDto>> GetAll()
+    public async Task<IEnumerable<Peca>> GetAll()
     {
         var lista = await _repo.ObterTodos();
-
-        return lista.Select(p => new PecaResponseDto
-        {
-            Id = p.Id,
-            Nome = p.Nome,
-            Preco = p.Preco,
-            Quantidade = p.Quantidade
-        });
+        return lista;
     }
 
     public async Task<Peca?> GetById(Guid id)
-        => await _repo.ObterPorId(id);
+    {
+        var peca = await _repo.ObterPorId(id);
+
+        if (peca == null) return null;
+
+        return peca;
+    }
+    
 
     public async Task Create(PecaCreateDto dto)
     {

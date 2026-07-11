@@ -128,7 +128,6 @@ public class AppDbContext : DbContext
 
         //Autenticacao
         modelBuilder.Entity<Usuario>()
-            .HasMany(u => u.Roles)
-            .WithMany(r => r.Usuarios);
+            .HasMany(u => u.Roles);
     }
 }

@@ -15,7 +15,7 @@ public class TokenRepository : ITokenRepository
 
     public async Task SalvaToken(string token, Guid ordemServicoId)
     {
-        _context.Tokens.Add(new Token(token, DateTime.Now.AddDays(2), ordemServicoId));
+        _context.Tokens.Add(new Token(token, DateTime.UtcNow.AddDays(2), ordemServicoId));
         await _context.SaveChangesAsync();
     }
 

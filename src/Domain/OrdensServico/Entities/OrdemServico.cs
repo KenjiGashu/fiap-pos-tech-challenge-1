@@ -38,7 +38,7 @@ public class OrdemServico
     {
         ClienteId = clienteId;
         VeiculoId = veiculoId;
-        Data = DateTime.Now;
+        Data = DateTime.UtcNow;
 
         OrdemServicoServicos = new List<OrdemServicoServico>();
         OrdemServicoPecas = new List<OrdemServicoPeca>();

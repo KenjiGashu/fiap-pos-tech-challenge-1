@@ -1,109 +1,64 @@
 namespace Gashu.SistemaMecanica.API.Estoque.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using Application.Estoque.Services;
 using Application.Estoque.DTOs;
 using Application.Estoque.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using Gashu.SistemaMecanica.API.Estoque.Presenters;
 
-/// <summary>
-/// Controller responsável pelo gerenciamento de estoque
-/// </summary>
-/// <remarks>
-/// Este contexto é responsável pelo controle de peças disponíveis em estoque,
-/// incluindo cadastro, consulta, atualização e remoção.
-/// Todos os endpoints requerem perfil Admin.
-/// </remarks>
-[ApiController]
-[Route("api/[controller]")]
-public class EstoqueController : ControllerBase
+/// <inheritdoc/>
+public class EstoqueController : IEstoqueController
 {
     private readonly IEstoqueService _service;
+    private readonly IEstoquePresenter _presenter;
 
-    public EstoqueController(IEstoqueService service)
+    /// <summary>
+    /// construtor de EstoqueController
+    /// </summary>
+    public EstoqueController(IEstoqueService service, IEstoquePresenter presenter)
     {
         _service = service;
+        _presenter = presenter;
     }
 
-    /// <summary>
-    /// Lista todas as peças disponíveis no estoque
-    /// </summary>
-    /// <response code="200">Lista de peças retornada com sucesso</response>
-    /// <response code="401">Usuário não autorizado</response>
-    [Authorize(Roles = "Admin")]
-    [HttpGet]
-    public async Task<IActionResult> Get()
-        => Ok(await _service.GetAll());
-
-    /// <summary>
-    /// Obtém uma peça do estoque pelo ID
-    /// </summary>
-    /// <param name="id">Identificador da peça</param>
-    /// <response code="200">Peça encontrada</response>
-    /// <response code="404">Peça não encontrada</response>
-    [Authorize(Roles = "Admin")]
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get(Guid id)
+    /// <inheritdoc/>
+    public async Task<OutputEstoqueList> Get()
     {
-        Console.WriteLine($"[Get] --------------- {id} --------------");
+        var pecas = await _service.GetAll();
+        return _presenter.Present("Pecas encontradas com sucesso", pecas);
+    }
 
+    /// <inheritdoc/>
+    public async Task<OutputEstoque> GetById(Guid id)
+    {
         var peca = await _service.GetById(id);
 
         if (peca == null)
-            return NotFound();
+            return _presenter.Present("Peca nao encontrada");
 
-        return Ok(peca);
+        return _presenter.Present("Peca encontrada", peca);
     }
 
-    /// <summary>
-    /// Cadastra uma nova peça no estoque
-    /// </summary>
-    /// <param name="dto">Dados da peça a ser cadastrada</param>
-    /// <response code="200">Peça cadastrada com sucesso</response>
-    /// <response code="400">Dados inválidos</response>
-    [Authorize(Roles = "Admin")]
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody] PecaCreateDto dto)
+    /// <inheritdoc/>
+    public async Task<OutputEstoque> Create(PecaCreateDto dto)
     {
         await _service.Create(dto);
 
-        return Ok(new
-        {
-            Message = "Peça cadastrada com sucesso!"
-        });
+        return _presenter.Present("Peça cadastrada com sucesso!");
     }
 
-    /// <summary>
-    /// Atualiza uma peça existente no estoque
-    /// </summary>
-    /// <param name="id">Identificador da peça</param>
-    /// <param name="dto">Dados atualizados da peça</param>
-    /// <response code="200">Peça atualizada com sucesso</response>
-    /// <response code="404">Peça não encontrada</response>
-    [Authorize(Roles = "Admin")]
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] PecaUpdateDto dto)
+    /// <inheritdoc/>
+    public async Task<OutputEstoque> Update(Guid id, PecaUpdateDto dto)
     {
         await _service.Update(id, dto);
 
-        return Ok(new
-        {
-            Message = "Peça atualizada com sucesso!"
-        });
+        return _presenter.Present("Peça atualizada com sucesso!");
     }
 
-    /// <summary>
-    /// Remove uma peça do estoque
-    /// </summary>
-    /// <param name="id">Identificador da peça</param>
-    /// <response code="204">Peça removida com sucesso</response>
-    /// <response code="404">Peça não encontrada</response>
-    [Authorize(Roles = "Admin")]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    /// <inheritdoc/>
+    public async Task<OutputEstoque> Delete(Guid id)
     {
         await _service.Delete(id);
 
-        return NoContent();
+        return _presenter.Present("Peça deletada com sucesso!");
     }
 }

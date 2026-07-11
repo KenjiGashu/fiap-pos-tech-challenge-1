@@ -25,7 +25,7 @@ public class EstoqueIntegrationTests : IClassFixture<CustomWebApplicationFactory
 
         var dto = new
         {
-            nome = "Filtro de óleo",
+            nome = "Filtro de oleo",
             preco = 50,
             quantidade = 10
         };
@@ -40,7 +40,7 @@ public class EstoqueIntegrationTests : IClassFixture<CustomWebApplicationFactory
 
         var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Filtro de óleo", content);
+        Assert.Contains("Filtro de oleo", content);
     }
 
     [Fact]

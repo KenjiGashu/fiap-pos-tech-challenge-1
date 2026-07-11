@@ -27,18 +27,28 @@ using Gashu.SistemaMecanica.Application.Metricas.Interfaces;
 using Gashu.SistemaMecanica.Application.Metricas.Services;
 using System.Reflection;
 using Microsoft.AspNetCore.Diagnostics;
+using Gashu.SistemaMecanica.API.Estoque.Controllers;
+using Gashu.SistemaMecanica.API.Estoque.Presenters;
+using Gashu.SistemaMecanica.API.Identidade.Controllers;
+using Gashu.SistemaMecanica.API.Identidade.Presenters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsEnvironment("Testing"))
-{
+{ 
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseInMemoryDatabase("TestDb"));
 }
 else
 {
+    // builder.Services.AddDbContext<AppDbContext>(options =>
+    //     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+    Console.WriteLine(
+    Environment.GetEnvironmentVariable("ConnectionStrings__Default"));
+    Console.WriteLine(
+    builder.Configuration.GetConnectionString("Default"));
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 }
 
 builder.Services.AddControllers()
@@ -59,7 +69,7 @@ builder.Services
             ValidateIssuerSigningKey = true,
 
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.ASCII.GetBytes("minha_chave_super_secreta_com_32_chars!!")
+                Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("FIAP_POS_SECRET"))
             )
         };
     });
@@ -71,8 +81,12 @@ builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IServicoRepository, ServicoRepository>();
 builder.Services.AddScoped<IPecaRepository, PecaRepository>();
 
-//pecas, clientes e veiculos 
+//estoque
 builder.Services.AddScoped<IEstoqueService, EstoqueService>();
+builder.Services.AddScoped<IEstoqueController, EstoqueController>();
+builder.Services.AddScoped<IEstoquePresenter, EstoquePresenterDAO>();
+
+//clientes e veiculos 
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IVeiculoService, VeiculoService>();
 
@@ -95,6 +109,8 @@ builder.Services.AddScoped<ICanalNotificacao, CanalNotificacaoEmail>();
 //autenticacao
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IIdentidadeService, IdentidadeService>();
+builder.Services.AddScoped<IIdentidadeController, IdentidadeController>();
+builder.Services.AddScoped<IIdentidadePresenter, IdentidadePresenterDAO>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
 //metricas
@@ -102,6 +118,10 @@ builder.Services.AddScoped<IMetricaOrdemServicoRepository, MetricaOrdemServicoRe
 builder.Services.AddScoped<IMetricaOrdemServicoService, MetricaOrdemServicoService>();
 
 builder.Services.AddControllers();
+
+
+//health check do kubernetes
+builder.Services.AddHealthChecks();
 
 // swagger
 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -112,6 +132,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+// ativar healthcheck do kubernetes
+app.MapHealthChecks("/health");
 
 // Ativar Swagger
 if (app.Environment.IsDevelopment())

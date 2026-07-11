@@ -31,7 +31,7 @@ public class MetricaOrdemServicoService : IMetricaOrdemServicoService
         var result = Enum.TryParse<StatusOrdemServico>(dto.Status, out var status);
         if (!result)
             throw new FormatException("Invalid Status");
-        var metrica = new MetricaOrdemServico(dto.OrdemServicoId, status, DateTime.Now);
+        var metrica = new MetricaOrdemServico(dto.OrdemServicoId, status, DateTime.UtcNow);
         await _repo.Adicionar(metrica);
     }
 

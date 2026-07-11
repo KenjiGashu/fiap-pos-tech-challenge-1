@@ -40,10 +40,11 @@ public class IdentidadeService : IIdentidadeService
         await _usuarioRepo.Adicionar(usuario);
     }
 
-    public async Task<IEnumerable<UsuarioResponseDto>> ObterTodos()
+    public async Task<IEnumerable<Usuario>> ObterTodos()
     {
         var usuarios =  await _usuarioRepo.ObterTodos();
-        var responseDto = usuarios.Select(u => new UsuarioResponseDto
+        
+        var usuariosResponse = usuarios.Select(u => new UsuarioResponseDto
         {
             Id = u.Id,
             Email = u.Email,
@@ -51,23 +52,28 @@ public class IdentidadeService : IIdentidadeService
             Roles = u.Roles.Select(r => r.Nome).ToList()
         });
 
-        return responseDto;
+        //return usuariosResponse;
+
+        return usuarios;
     }
 
-    public async Task<UsuarioResponseDto> ObterPorEmail(string email)
+    public async Task<Usuario> ObterPorEmail(string email)
     {
         var usuario =  await _usuarioRepo.ObterPorEmail(email);
 
         if(usuario == null)
             throw new Exception("Usuario Invalido");
-        
-        return new UsuarioResponseDto
+
+        var usuarioResponse = new UsuarioResponseDto
         {
             Id = usuario.Id,
             Email = usuario.Email,
             Password = usuario.PasswordHash,
             Roles = usuario.Roles.Select(r => r.Nome).ToList()
         };
+
+        //return usuarioResponse;
+        return usuario;
     }
 
     public string HashPassword(string password)

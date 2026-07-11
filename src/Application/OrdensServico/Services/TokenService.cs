@@ -18,7 +18,7 @@ public class TokenService : ITokenService
 	{
 		string tokenStr = Guid.NewGuid().ToString("n");
 
-		Token token = new Token(tokenStr, DateTime.Now.AddDays(2), ordemServicoId);
+		Token token = new Token(tokenStr, DateTime.UtcNow.AddDays(2), ordemServicoId);
 
 		await _repo.SalvaToken(token.GuidToken, ordemServicoId);
 		return token;

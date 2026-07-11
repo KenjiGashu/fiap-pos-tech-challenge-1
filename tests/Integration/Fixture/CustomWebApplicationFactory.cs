@@ -13,6 +13,7 @@ using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
 using Gashu.SistemaMecanica.Tests.Integration.FakeServices;
 using Gashu.SistemaMecanica.Application.Estoque.Interfaces;
 using Gashu.SistemaMecanica.Application.Estoque.Services;
+using Microsoft.Data.Sqlite;
 
 namespace Gashu.SistemaMecanica.Tests.Integration.Fixture;
 
@@ -187,7 +188,10 @@ public class CustomWebApplicationFactory<TProgram>
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("Testing"); // 🔥 importante
+        // builder.UseEnvironment("Testing"); 
+
+        var _connection = new SqliteConnection("DataSource=:memory:");
+        _connection.Open();
 
         builder.ConfigureServices(services =>
         {
@@ -201,7 +205,8 @@ public class CustomWebApplicationFactory<TProgram>
             // adiciona InMemory FIXO (mesmo banco pra todos)
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseInMemoryDatabase("TestDb");
+                options.UseSqlite(_connection);
+                //// options.UseInMemoryDatabase("TestDb");
             });
 
             services.AddScoped<INotificacaoService, NotificacaoFakeService>();

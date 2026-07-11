@@ -5,7 +5,7 @@ using Gashu.SistemaMecanica.Domain.Estoque.Entities;
 
 public interface IEstoqueService
 {
-    public Task<IEnumerable<PecaResponseDto>> GetAll();
+    public Task<IEnumerable<Peca>> GetAll();
 
     public Task<Peca?> GetById(Guid id);
 
