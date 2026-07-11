@@ -15,6 +15,7 @@ public class EstoqueIntegrationTests : IClassFixture<CustomWebApplicationFactory
     public EstoqueIntegrationTests(CustomWebApplicationFactory<Program> factory)
     {
         _client = factory.CreateClient();
+        factory.SeedDatabase();
     }
 
     [Fact]

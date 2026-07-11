@@ -39,6 +39,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
     {
         _client = factory.CreateClient();
         _factory = factory;
+        factory.SeedDatabase();
     }
 
     [Fact]

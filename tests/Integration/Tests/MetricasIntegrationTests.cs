@@ -28,6 +28,7 @@ public class MetricasIntegrationTests : IClassFixture<CustomWebApplicationFactor
     public MetricasIntegrationTests(CustomWebApplicationFactory<Program> factory)
     {
         _client = factory.CreateClient();
+        factory.SeedDatabase();
     }
 
     [Fact]
@@ -37,6 +38,27 @@ public class MetricasIntegrationTests : IClassFixture<CustomWebApplicationFactor
         AuthHelper.SetToken(_client, token);
 
         var response = await _client.GetFromJsonAsync<APIMetricaResponse>("/api/metricas/ordemservico/tempo-medio");
+
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine(response.Segundos);
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+        Console.WriteLine("==============================================================");
+
 
         Assert.Equal(120, response.Segundos);
     }
