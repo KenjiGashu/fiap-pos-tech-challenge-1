@@ -17,6 +17,7 @@ public class IdentidadeIntegrationTests : IClassFixture<CustomWebApplicationFact
     {
         _factory = factory;
         _client = factory.CreateClient();
+        _factory.SeedDatabase();
     }
 
     [Fact]

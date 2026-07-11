@@ -41,6 +41,10 @@ public class CustomWebApplicationFactory<TProgram>
 
     public CustomWebApplicationFactory()
     {
+    }
+
+    public void SeedDatabase()
+    {
         using var scope = Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         
@@ -184,31 +188,18 @@ public class CustomWebApplicationFactory<TProgram>
         }
 
         context.SaveChanges();
+
     }
-    
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        // builder.UseEnvironment("Testing"); 
+        builder.UseEnvironment("Testing"); 
 
         var _connection = new SqliteConnection("DataSource=:memory:");
         _connection.Open();
 
         builder.ConfigureServices(services =>
         {
-            // remove o DbContext original
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
-
-            if (descriptor != null)
-                services.Remove(descriptor);
-
-            // adiciona InMemory FIXO (mesmo banco pra todos)
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlite(_connection);
-                //// options.UseInMemoryDatabase("TestDb");
-            });
-
             services.AddScoped<INotificacaoService, NotificacaoFakeService>();
             services.AddScoped<IEstoqueService, EstoqueService>();
         });
