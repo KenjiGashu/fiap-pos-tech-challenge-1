@@ -41,15 +41,13 @@ if (builder.Environment.IsEnvironment("Testing"))
 }
 else
 {
-    // builder.Services.AddDbContext<AppDbContext>(options =>
-    //     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
-    Console.WriteLine(
-    Environment.GetEnvironmentVariable("ConnectionStrings__Default"));
-    Console.WriteLine(
-    builder.Configuration.GetConnectionString("Default"));
     builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 }
+
+var jwtSecret = Environment.GetEnvironmentVariable("FIAP_POS_SECRET")
+    ?? throw new InvalidOperationException(
+        "Environment variable FIAP_POS_SECRET was not configured.");
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
