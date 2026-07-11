@@ -59,24 +59,23 @@ jobs:
       - name: Run Tests
         run: dotnet test --configuration Release --no-build
 
-  # docker:
+  docker:
 
-  #   needs: build-test
+    needs: build-test
 
-  #   runs-on: self-hosted
+    runs-on: ubuntu-latest
 
-  #   steps:
+    steps:
 
-  #     - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-  #     - name: Build Docker Image
-  #       run: |
-  #         docker build \
-  #           -t sistema-mecanica:1.0.0 .
+      - name: Build Docker Image
+        run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/sistema-mecanica:1.0.0 .
 
-  #     - name: Load image into Minikube
-  #       run: |
-  #         minikube image load sistema-mecanica:1.0.0
+      - name: Push Docker Image
+        run: |
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/sistema-mecanica:1.0.0
 
   # deploy:
 
