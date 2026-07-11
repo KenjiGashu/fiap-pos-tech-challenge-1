@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sistema-mecanica-config
+  namespace: gashu-app
+
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  FIAP_POS_PORT: "8080"
+  FIAP_POS_EMAIL: "kenjigashu@gmail.com"
+  ASPNETCORE_URLS: "http://+:8080"
