@@ -1,19 +1,10 @@
 namespace = "gashu-app"
-
 app_name = "sistema-mecanica"
-
 postgres_host = "db"
-
 postgres_port = 5432
-
 postgres_database = "mydb"
-
 postgres_user = "myuser"
-
 postgres_password = "mypassword"
-
 jwt_secret = "minha_chave_super_secreta_com_32_chars!!"
-
 password_salt = "pesomorto"
-
 email_password = "iotjahrsjmogmdyc"
