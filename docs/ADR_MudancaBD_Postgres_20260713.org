@@ -1,0 +1,26 @@
+* Título: Mudança de banco de dados de SQLite para PostgreSQL 
+
+* Status: Aceito
+
+* Contexto:
+Foi identificado que banco SQLite nao consegue ter varios aplicativos acessando ele com leitura.
+
+* Decisão:
+Decidimos entao trocar para um banco de dados que conseguimos escalar de maneira simples.
+A opção escolhida foi o banco PostgreSQL. A decisao ainda mantem das seguintes motivacoes do ADR_escolha_bancoDeDados.org
+    - Rapidez no desenvolvimento: Permite iteração mais ágil.
+    - Experiência da equipe: A equipe já possui familiaridade com bancos relacionais, reduzindo riscos de implementação e manutenção.
+
+* Consequências:
+Positivas:
+    - Redução da complexidade operacional
+    - Maior produtividade inicial
+    - Facilidade de manutenção
+    - a aplicacao pode escalar sem ter problemas de acesso
+    
+Negativas:
+    - Ainda há Limitações de escalabilidade horizontal (no momento, pois nao escalamos o postgresql apenas a aplicacao)
+    - Possível necessidade de migração futura
+
+Alternativas consideradas
+    PostgreSQL 
