@@ -5,9 +5,11 @@ using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 public interface IOrdemServicoService
 {
     public Task<IEnumerable<OrdemServicoResponseDto>> GetAll();
+    public Task<IEnumerable<OrdemServicoResponseDto>> ListaOrdensServicos();
     public Task<OrdemServicoResponseDto> ObterPorId(Guid id);
     public Task<ListaOrdemServicoResponseDto> ObterPorIdCliente(Guid clienteId);
     public Task Criar(OrdemServicoCreateDto dto);
+    public Task CriarComTodosOsDados(OrdemServicoCreateDtoTodosDados dto);
     public Task Deletar(OrdemServicoDeleteDto dto);
     public Task AdicionarPecas(OrdemServicoAdicionaPecaDto dto);
     public Task AdicionarServicos(OrdemServicoAdicionaServicoDto dto);

@@ -16,29 +16,34 @@ public class OrdemServicoService : IOrdemServicoService
     private readonly IEstoqueService _estoqueService;
     private readonly INotificacaoService _notificacaoService;
     private readonly ITokenService _tokenService;
-    private readonly IClienteRepository _clienteRepo;
     private readonly IMetricaOrdemServicoService _metricaService;
+    private readonly IVeiculoService _veiculoService;
+    private readonly IClienteService _clienteService;
+    private readonly IClienteRepository _clienteRepo;
 
     public OrdemServicoService(
         IOrdemServicoRepository repo,
         IEstoqueService estoqueService,
         INotificacaoService notificacaoService,
         ITokenService tokenService,
-        IClienteRepository clienteRepo,
-        IMetricaOrdemServicoService metricaService)
+        IMetricaOrdemServicoService metricaService,
+        IVeiculoService veiculoService,
+        IClienteService clienteService,
+        IClienteRepository clienteRepository)
     {
         _repo = repo;
         _estoqueService = estoqueService;
         _notificacaoService = notificacaoService;
         _tokenService = tokenService;
-        _clienteRepo = clienteRepo;
         _metricaService = metricaService;
+        _veiculoService = veiculoService;
+        _clienteService = clienteService;
+        _clienteRepo = clienteRepository;
     }
 
     public async Task<IEnumerable<OrdemServicoResponseDto>> GetAll()
     {
         var ordemServicos = await _repo.ObterTodos();
-
         return ordemServicos.Select(os => new OrdemServicoResponseDto
         {
             Id = os.Id,
@@ -62,6 +67,51 @@ public class OrdemServicoService : IOrdemServicoService
             }).ToList() ?? new List<OrdemServicoPecaDto>()
         });
     }
+
+    public async Task<IEnumerable<OrdemServicoResponseDto>> ListaOrdensServicos()
+    {
+        var ordemServicos = await _repo.ObterTodos();
+        
+        return ordemServicos
+            .OrderBy(os => os.Status switch
+            {
+                StatusOrdemServico.EmExecucao => 1,
+                StatusOrdemServico.AguardandoAprovacao => 2,
+                StatusOrdemServico.EmDiagnostico => 3,
+                StatusOrdemServico.Recebida => 4,
+                StatusOrdemServico.Entregue => 5,
+                StatusOrdemServico.Finalizada => 6,
+                StatusOrdemServico.AguardandoMecanico => 7,
+                StatusOrdemServico.AguardandoAprovacaoRevisao => 8,
+                StatusOrdemServico.OrcamentoAprovado => 9,
+                StatusOrdemServico.OrcamentoRejeitado => 10,
+            })
+            .ThenBy(os => os.Data)
+            .Where(os => os.Status != StatusOrdemServico.Entregue && os.Status != StatusOrdemServico.Finalizada)
+            .Select(os => new OrdemServicoResponseDto
+        {
+            Id = os.Id,
+            ClienteId = os.ClienteId,
+            VeiculoId = os.VeiculoId,
+            Total = os.Total,
+            Status = os.Status,
+            Servicos = os.OrdemServicoServicos?.Select(s => new OrdemServicoServicoDto
+            {
+                ServicoId = s.ServicoId,
+                Preco = s.Preco,
+                Nome = s.Servico?.Nome
+            }).ToList() ?? new List<OrdemServicoServicoDto>(),
+                        
+            Pecas = os.OrdemServicoPecas?.Select(p => new OrdemServicoPecaDto
+            {
+                PecaId = p.PecaId,
+                Preco = p.Preco,
+                Quantidade = p.Quantidade,
+                Nome = p.Peca.Nome
+            }).ToList() ?? new List<OrdemServicoPecaDto>()
+        });
+    }
+
 
     public async Task<OrdemServicoResponseDto> ObterPorId(Guid id)
     {
@@ -142,6 +192,77 @@ public class OrdemServicoService : IOrdemServicoService
         };
         await _metricaService.SalvaMetricaOrdemServico(metricaDto);
     }
+
+    public async Task CriarComTodosOsDados(OrdemServicoCreateDtoTodosDados dto)
+    {
+        // criar cliente quando ele nao existe
+        ClienteResponseDto clienteDto;
+        if (dto.Cliente.TipoPessoa == TipoPessoa.Fisica)
+            clienteDto = await _clienteService.GetByCpf(dto.Cliente.Cpf);
+        else
+            clienteDto = await _clienteService.GetByCnpj(dto.Cliente.Cnpj);
+
+        if (clienteDto == null)
+        {
+            ClienteCreateDto createDto = new ClienteCreateDto
+            {
+                Nome = dto.Cliente.Nome,
+                Cpf = dto.Cliente.Cpf,
+                Cnpj = dto.Cliente.Cnpj,
+                TipoPessoa = dto.Cliente.TipoPessoa
+            };
+            await _clienteService.Create(createDto);
+        }
+
+        VeiculoResponseDto veiculoDto;
+        // inserir ou obter veiculo
+        try {
+             veiculoDto = await _veiculoService.GetByPlaca(dto.Veiculo.Placa);
+        } catch (Exception ex) {
+            //veiculo nao encontrado
+            VeiculoCreateDto veiculoCreateDto = new VeiculoCreateDto
+            {
+                Ano = dto.Veiculo.Ano,
+                Marca = dto.Veiculo.Marca,
+                Modelo = dto.Veiculo.Modelo,
+                Placa = dto.Veiculo.Placa
+            };
+            await _veiculoService.Create(veiculoCreateDto);
+        }
+
+        // pegar id do cliente e id do veiculo
+        if (dto.Cliente.TipoPessoa == TipoPessoa.Fisica)
+            clienteDto = await _clienteService.GetByCpf(dto.Cliente.Cpf);
+        else
+            clienteDto = await _clienteService.GetByCnpj(dto.Cliente.Cnpj);
+        veiculoDto = await _veiculoService.GetByPlaca(dto.Veiculo.Placa);
+
+        // criar ordem servico
+        var ordemServico = new OrdemServico(clienteDto.Id, veiculoDto.Id);
+        ordemServico.Status = StatusOrdemServico.Recebida;
+        await _repo.Criar(ordemServico);
+
+        // adicionar pecas e servicos
+        foreach (var servico in dto.Servicos)
+        {
+            ordemServico.AdicionarServico(servico.ServicoId, servico.Preco, servico.Nome);
+        }
+        foreach (var peca in dto.Pecas)
+        {
+            ordemServico.AdicionarPeca(peca.PecaId, peca.Preco, peca.Quantidade, peca.Nome);
+        }
+
+        await _repo.SaveChangesAsync();
+
+        // atualiza metricas
+        SalvarMetricaOrdemServicoDto metricaDto = new SalvarMetricaOrdemServicoDto()
+        {
+            OrdemServicoId = ordemServico.Id,
+            Status = ordemServico.Status.ToString()
+        };
+        await _metricaService.SalvaMetricaOrdemServico(metricaDto);
+    }
+
 
     public async Task Deletar(OrdemServicoDeleteDto dto)
     {
@@ -264,6 +385,11 @@ public class OrdemServicoService : IOrdemServicoService
     public async Task IniciarDiagnostico(OrdemServicoIniciarDiagnosticoOrcamentoDto dto)
     {
         var os = await _repo.ObterPorId(dto.OrdemServicoId);
+        var cliente = await _clienteRepo.ObterPorId(os.ClienteId);
+
+        if(cliente == null)
+            throw new Exception("Cliente nao encontrado, nao podemos prosseguir com inicializacao de diagnostico");
+
         os.IniciarDiagnostico();
 
         // atualiza metricas
@@ -274,12 +400,20 @@ public class OrdemServicoService : IOrdemServicoService
         };
         await _metricaService.SalvaMetricaOrdemServico(metricaDto);
 
+        var mensagem = $"Status da ordem de servico atualizada para {StatusOrdemServico.EmDiagnostico.ToString()}";
+        var titulo = $"Atualizacao Status Ordem Servico {os.Id}";
+        await _notificacaoService.EnviarMensagem(cliente.GetDestinatario(), titulo, mensagem);
+
         await _repo.SaveChangesAsync();
     }
 
     public async Task FinalizarDiagnostico(OrdemServicoFinalizarDiagnosticoOrcamentoDto dto)
     {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
+        var cliente = await _clienteRepo.ObterPorId(ordemServico.ClienteId);
+
+        if(cliente == null)
+            throw new Exception("Cliente nao encontrado, nao podemos prosseguir com finalizacao de diagnostico");
 
         ordemServico.FinalizarDiagnostico();
 
@@ -299,12 +433,17 @@ public class OrdemServicoService : IOrdemServicoService
         };
         await _metricaService.SalvaMetricaOrdemServico(metricaDto);
 
+        var mensagem = $"Status da ordem de servico atualizada para {StatusOrdemServico.AguardandoMecanico.ToString()}";
+        var titulo = $"Atualizacao Status Ordem Servico {ordemServico.Id}";
+        await _notificacaoService.EnviarMensagem(cliente.GetDestinatario(), titulo, mensagem);
+        
         await _repo.SaveChangesAsync();
     }
     
     public async Task IniciarExecucao(OrdemServicoIniciarExecucaoOrcamentoDto dto)
     {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
+        var cliente = await _clienteRepo.ObterPorId(ordemServico.ClienteId);
 
         foreach (var peca in ordemServico.OrdemServicoPecas)
         {
@@ -321,12 +460,17 @@ public class OrdemServicoService : IOrdemServicoService
         };
         await _metricaService.SalvaMetricaOrdemServico(metricaDto);
 
+        var mensagem = $"Status da ordem de servico atualizada para {StatusOrdemServico.EmExecucao.ToString()}";
+        var titulo = $"Atualizacao Status Ordem Servico {ordemServico.Id}";
+        await _notificacaoService.EnviarMensagem(cliente.GetDestinatario(), titulo, mensagem);
+
         await _repo.SaveChangesAsync();
     }
 
     public async Task FinalizarExecucao(OrdemServicoFinalizarExecucaoOrcamentoDto dto)
     {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
+        var cliente = await _clienteRepo.ObterPorId(ordemServico.ClienteId);
 
         ordemServico.FinalizarExecucao();
 
@@ -337,6 +481,10 @@ public class OrdemServicoService : IOrdemServicoService
             Status = ordemServico.Status.ToString()
         };
         await _metricaService.SalvaMetricaOrdemServico(metricaDto);
+       
+        var mensagem = $"Status da ordem de servico atualizada para {StatusOrdemServico.Finalizada.ToString()}";
+        var titulo = $"Atualizacao Status Ordem Servico {ordemServico.Id}";
+        await _notificacaoService.EnviarMensagem(cliente.GetDestinatario(), titulo, mensagem);
 
         await _repo.SaveChangesAsync();
     }
@@ -344,6 +492,7 @@ public class OrdemServicoService : IOrdemServicoService
     public async Task EntregarVeiculo(OrdemServicoEntregarVeiculoDto dto)
     {
         var ordemServico = await _repo.ObterPorId(dto.OrdemServicoId);
+        var cliente = await _clienteRepo.ObterPorId(ordemServico.ClienteId);
 
         ordemServico.EntregarVeiculo();
 
@@ -354,6 +503,10 @@ public class OrdemServicoService : IOrdemServicoService
             Status = ordemServico.Status.ToString()
         };
         await _metricaService.SalvaMetricaOrdemServico(metricaDto);
+        
+        var mensagem = $"Status da ordem de servico atualizada para {StatusOrdemServico.Entregue.ToString()}";
+        var titulo = $"Atualizacao Status Ordem Servico {ordemServico.Id}";
+        await _notificacaoService.EnviarMensagem(cliente.GetDestinatario(), titulo, mensagem);
 
         await _repo.SaveChangesAsync();
     }

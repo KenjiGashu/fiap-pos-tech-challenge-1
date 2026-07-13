@@ -10,6 +10,14 @@ public class OrdemServicoCreateDto
     public required Guid VeiculoId { get; set; }
 }
 
+public class OrdemServicoCreateDtoTodosDados
+{
+    public required ClienteCreateDto Cliente  { get; set; }
+    public required VeiculoCreateDto Veiculo { get; set; }
+    public required List<OrdemServicoPecaDto> Pecas { get; set; }
+    public required List<OrdemServicoServicoDto> Servicos { get; set; }
+}
+
 public class OrdemServicoResponseDto
 {
     public required Guid Id { get; set; }

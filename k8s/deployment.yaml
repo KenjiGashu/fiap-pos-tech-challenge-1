@@ -22,7 +22,7 @@ spec:
         - name: sistema-mecanica
 
           #image: meu-registry/sistema-mecanica:1.0.0
-          image: sistema-mecanica:1.0.0
+          image: kenjigashu/sistema-mecanica:main
 
           imagePullPolicy: IfNotPresent
 

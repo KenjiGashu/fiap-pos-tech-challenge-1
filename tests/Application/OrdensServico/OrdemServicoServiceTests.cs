@@ -21,6 +21,8 @@ public class OrdemServicoServiceTests
     Mock<INotificacaoService> _mockNotificacaoService;
     Mock<ITokenService> _mockTokenService;
     Mock<IClienteRepository> _mockClienteRepo;
+    Mock<IClienteService> _mockClienteService;
+    Mock<IVeiculoService> _mockVeiculoService;
     Mock<IMetricaOrdemServicoService> _mockMetricaService;
     IOrdemServicoService service;
 
@@ -34,8 +36,12 @@ public class OrdemServicoServiceTests
         _mockTokenService = new Mock<ITokenService>();
         _mockClienteRepo = new Mock<IClienteRepository>();
         _mockMetricaService = new Mock<IMetricaOrdemServicoService>();
+        _mockClienteService = new Mock<IClienteService>();
+        _mockVeiculoService = new Mock<IVeiculoService>();
         service = new OrdemServicoService(_mockOsRepo.Object, _mockEstoqueService.Object,
-                                          _mockNotificacaoService.Object, _mockTokenService.Object, _mockClienteRepo.Object, _mockMetricaService.Object);
+            _mockNotificacaoService.Object, _mockTokenService.Object,
+            _mockMetricaService.Object, _mockVeiculoService.Object,
+            _mockClienteService.Object, _mockClienteRepo.Object);
     }
 
     [Fact]
@@ -267,6 +273,11 @@ public class OrdemServicoServiceTests
                         repo.ObterPorId(It.Is<Guid>(guid => guid == ordemServico.Id)))
             .ReturnsAsync(ordemServico);
 
+        var usuarioMock = new Usuario("email@gmail.com", "1234");
+        var clienteMock = new Cliente( "nome", "433.023.538-20", "", TipoPessoa.Fisica);
+        clienteMock.Usuario = usuarioMock;
+        _mockClienteRepo.Setup(repo => repo.ObterPorId(ordemServico.ClienteId)).ReturnsAsync(clienteMock);
+
         var ordemServicoIniciarDiagnosticoOrcamentoDto = new OrdemServicoIniciarDiagnosticoOrcamentoDto
         {
             OrdemServicoId = ordemServico.Id
@@ -292,6 +303,11 @@ public class OrdemServicoServiceTests
         _mockOsRepo.Setup(repo =>
                         repo.ObterPorId(It.Is<Guid>(guid => guid == ordemServico.Id)))
             .ReturnsAsync(ordemServico);
+
+        var usuarioMock = new Usuario("email@gmail.com", "1234");
+        var clienteMock = new Cliente( "nome", "433.023.538-20", "", TipoPessoa.Fisica);
+        clienteMock.Usuario = usuarioMock;
+        _mockClienteRepo.Setup(repo => repo.ObterPorId(ordemServico.ClienteId)).ReturnsAsync(clienteMock);
 
         var ordemServicoFinalizarDiagnosticoOrcamentoDto = new OrdemServicoFinalizarDiagnosticoOrcamentoDto
         {
@@ -395,6 +411,12 @@ public class OrdemServicoServiceTests
                         repo.ObterPorId(It.Is<Guid>(guid => guid == ordemServico.Id)))
             .ReturnsAsync(ordemServico);
 
+        // prepara mock cliente para enviar notificacao
+        var usuarioMock = new Usuario("email@gmail.com", "1234");
+        var clienteMock = new Cliente( "nome", "433.023.538-20", "", TipoPessoa.Fisica);
+        clienteMock.Usuario = usuarioMock;
+        _mockClienteRepo.Setup(repo => repo.ObterPorId(ordemServico.ClienteId)).ReturnsAsync(clienteMock);
+
         //estoque
         var pecaId = Guid.NewGuid();
         var nomePeca = "pneu";
@@ -441,6 +463,11 @@ public class OrdemServicoServiceTests
                         repo.ObterPorId(It.Is<Guid>(guid => guid == ordemServico.Id)))
             .ReturnsAsync(ordemServico);
 
+        var usuarioMock = new Usuario("email@gmail.com", "1234");
+        var clienteMock = new Cliente( "nome", "433.023.538-20", "", TipoPessoa.Fisica);
+        clienteMock.Usuario = usuarioMock;
+        _mockClienteRepo.Setup(repo => repo.ObterPorId(ordemServico.ClienteId)).ReturnsAsync(clienteMock);
+
         var ordemServicoFinalizarExecucaoOrcamentoDto = new OrdemServicoFinalizarExecucaoOrcamentoDto
         {
             OrdemServicoId = ordemServico.Id
@@ -465,6 +492,11 @@ public class OrdemServicoServiceTests
         _mockOsRepo.Setup(repo =>
                         repo.ObterPorId(It.Is<Guid>(guid => guid == ordemServico.Id)))
             .ReturnsAsync(ordemServico);
+
+        var usuarioMock = new Usuario("email@gmail.com", "1234");
+        var clienteMock = new Cliente( "nome", "433.023.538-20", "", TipoPessoa.Fisica);
+        clienteMock.Usuario = usuarioMock;
+        _mockClienteRepo.Setup(repo => repo.ObterPorId(ordemServico.ClienteId)).ReturnsAsync(clienteMock);
 
         var ordemServicoEntregarVeiculoDto = new OrdemServicoEntregarVeiculoDto
         {

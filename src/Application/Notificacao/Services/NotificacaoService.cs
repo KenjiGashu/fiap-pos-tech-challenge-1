@@ -23,4 +23,9 @@ public class NotificacaoService : INotificacaoService
 
         await _canalNotificacao.EnviarMensagem(aprocavaoOrcamento.Destinatario, aprocavaoOrcamento.Titulo, aprocavaoOrcamento.Mensagem);
     }
+
+    public async Task EnviarMensagem(string destinatario, string titulo, string mensagem)
+    {
+        await _canalNotificacao.EnviarMensagem(destinatario, titulo, mensagem);
+    }
 }

@@ -64,6 +64,40 @@ public class ClienteService : IClienteService
         };
     }
 
+    public async Task<ClienteResponseDto> GetByCpf(string cpf)
+    {
+        var cliente = await _repository.ObterPorCpf(cpf);
+        if(cliente == null)
+            throw new Exception("Cliente nao encontrado");
+
+        return new ClienteResponseDto
+        {
+            Id = cliente.Id,
+            Nome = cliente.Nome,
+            Email = cliente.Usuario.Email,
+            Cpf = cliente.Cpf,
+            Cnpj = cliente.Cnpj,
+            TipoPessoa = cliente.TipoPessoa
+        };
+    }
+
+    public async Task<ClienteResponseDto> GetByCnpj(string cnpj)
+    {
+        var cliente = await _repository.ObterPorCnpj(cnpj);
+        if(cliente == null)
+            throw new Exception("Cliente nao encontrado");
+
+        return new ClienteResponseDto
+        {
+            Id = cliente.Id,
+            Nome = cliente.Nome,
+            Email = cliente.Usuario.Email,
+            Cpf = cliente.Cpf,
+            Cnpj = cliente.Cnpj,
+            TipoPessoa = cliente.TipoPessoa
+        };
+    }
+
     public async Task Create(ClienteCreateDto dto)
     {
         var cliente = new Cliente(dto.Nome, dto.Cpf, dto.Cnpj, dto.TipoPessoa);

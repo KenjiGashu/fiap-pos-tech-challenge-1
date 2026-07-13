@@ -23,6 +23,12 @@ public class ClienteRepository : IClienteRepository
     public async Task<Cliente?> ObterPorNome(string nome)
         => await _context.Clientes.Include(c => c.Usuario).FirstOrDefaultAsync(c => c.Nome == nome);
 
+    public async Task<Cliente?> ObterPorCpf(string cpf)
+        => await _context.Clientes.Include(c => c.Usuario).FirstOrDefaultAsync(c => c.Cpf == cpf);
+
+    public async Task<Cliente?> ObterPorCnpj(string cnpj)
+        => await _context.Clientes.Include(c => c.Usuario).FirstOrDefaultAsync(c => c.Cnpj == cnpj);
+
     public async Task Adicionar(Cliente cliente)
     {
         await _context.Clientes.AddAsync(cliente);

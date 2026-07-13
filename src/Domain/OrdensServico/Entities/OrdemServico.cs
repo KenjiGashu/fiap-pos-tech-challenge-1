@@ -5,16 +5,16 @@ using System.Text.Json.Serialization;
 
 public enum StatusOrdemServico
 {
-    Recebida,
+    Entregue,
+    Finalizada,
+    EmExecucao,
+    AguardandoMecanico,
+    AguardandoAprovacaoRevisao,
     OrcamentoAprovado,
     OrcamentoRejeitado,
-    EmDiagnostico,
     AguardandoAprovacao,
-    AguardandoAprovacaoRevisao,
-    AguardandoMecanico,
-    EmExecucao,
-    Finalizada,
-    Entregue
+    EmDiagnostico,
+    Recebida
 }
 
 public class OrdemServico

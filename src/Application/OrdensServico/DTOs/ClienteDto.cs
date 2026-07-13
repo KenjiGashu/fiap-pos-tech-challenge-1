@@ -6,7 +6,7 @@ using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 public class ClienteCreateDto
 {
     public required string Nome { get; set; }
-    public required Guid UsuarioId { get; set; }
+    public Guid UsuarioId { get; set; }
     public required string Cpf { get; set; }
     public required string Cnpj { get; set; }
     [JsonConverter(typeof(JsonStringEnumConverter))]

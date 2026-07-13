@@ -9,4 +9,10 @@ public class NotificacaoFakeService : INotificacaoService
     {
         Console.WriteLine($"Email enviado!");
     }
+
+    public async Task EnviarMensagem(string destinatario, string titulo, string mensagem)
+    {
+        Console.WriteLine($"Mensagem enviada!");
+    }
+
 }

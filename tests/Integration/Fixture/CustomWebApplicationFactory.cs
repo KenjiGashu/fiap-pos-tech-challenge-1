@@ -146,13 +146,24 @@ public class CustomWebApplicationFactory<TProgram>
             ordemServico.AdicionarPeca(peca.Id, peca.Preco, 1, peca.Nome);
             ordemServico.AdicionarServico(servico.Id, servico.Preco, servico.Nome);
             context.Set<OrdemServico>().Add(ordemServico);
+
+            var cliente2 = context.Set<Cliente>().ElementAt(1);
+            var veiculo2 = context.Set<Veiculo>().ElementAt(1);
+            var ordemServico2 = new OrdemServico(cliente2.Id, veiculo2.Id);
+            var peca2 = context.Set<Peca>().ElementAt(1);
+            var servico2 = context.Set<Servico>().ElementAt(1);
+
+            ordemServico.AdicionarPeca(peca2.Id, peca2.Preco, 1, peca2.Nome);
+            ordemServico.AdicionarServico(servico2.Id, servico2.Preco, servico2.Nome);
+            context.Set<OrdemServico>().Add(ordemServico2);
+            
             context.SaveChanges();
         }
 
         if (context.Set<MetricaOrdemServico>().Count() <= 0)
         {
             var id = Guid.NewGuid();
-            var date = DateTime.Now;
+            var date = DateTime.UtcNow;
             var recebida = new MetricaOrdemServico(id, global::Gashu.SistemaMecanica.Domain.Metricas.Entities.StatusOrdemServico.Recebida, date);
             context.Set<MetricaOrdemServico>().Add(recebida);
             var date2 = date.AddSeconds(15);

@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   api:
-    image: sistema-mecanica:1.0.0
+    image: kenjigashu/sistema-mecanica:main
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -10,10 +10,9 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - FIAP_POS_PORT=8080
       - FIAP_POS_EMAIL=kenjigashu@gmail.com
-      - FIAP_POS_APP_PASSWORD=iotjahrsjmogmdyc
+      - FIAP_POS_APP_PASSWORD=izvbemsvglzooife
       - FIAP_POS_SALT=pesomorto
       - FIAP_POS_SECRET=minha_chave_super_secreta_com_32_chars!!
-      #- DATABASE_URL=postgres://myuser:mypassword@db:5432/mydb
       - ConnectionStrings__Default=Host=db;Port=5432;Database=mydb;Username=myuser;Password=mypassword
     depends_on:
       db:

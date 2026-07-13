@@ -49,7 +49,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         AuthHelper.SetToken(_client, token);
 
         var ordemServicosList = await _client.GetFromJsonAsync<List<OrdemServicoResponseDto>>("/api/ordemservico/");
-
+        
         var os = ordemServicosList?.First();
 
         var response = await _client.GetFromJsonAsync<OrdemServicoResponseDto>($"/api/ordemservico/{os.Id}");
@@ -314,4 +314,45 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         response.EnsureSuccessStatusCode();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
+
+    [Fact]
+    public async Task OrdemServico_ListaOrdensServicos_DeveRetornarSucesso()
+    {
+        //Arrange
+        var token = await AuthHelper.GetToken(_client);
+        AuthHelper.SetToken(_client, token);
+
+        var ordemServicosList = await _client.GetFromJsonAsync<List<OrdemServicoResponseDto>>("/api/ordemservico/");
+        var os = ordemServicosList?.First();
+        
+        var dto = new OrdemServicoEntregarVeiculoDto
+        {
+            OrdemServicoId = os.Id,
+        };
+
+        // para o assert de count no final
+        ordemServicosList.Remove(os);
+
+        var response = await _client.PostAsJsonAsync("/api/ordemservico/EntregarVeiculo", dto);
+
+        // Act
+        var ordemServicosList2 = await _client.GetFromJsonAsync<List<OrdemServicoResponseDto>>("/api/ordemservico/ListaOrdensServicos");
+        
+
+        // Assert
+        foreach (var ordemServico in ordemServicosList2)
+        {
+            Console.WriteLine($"[after] ordem servico id: {ordemServico.Id}, status: {ordemServico.Status}");
+            Assert.NotEqual(ordemServico.Status, StatusOrdemServico.Entregue);
+            Assert.NotEqual(ordemServico.Status, StatusOrdemServico.Finalizada);
+            Assert.NotEqual(ordemServico.Id, os.Id);
+        }
+
+        Assert.Equal(ordemServicosList.Count(os =>
+        os.Status != StatusOrdemServico.Entregue && os.Status != StatusOrdemServico.Finalizada),
+            ordemServicosList2.Count());
+        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);    
+    }
+
 }
