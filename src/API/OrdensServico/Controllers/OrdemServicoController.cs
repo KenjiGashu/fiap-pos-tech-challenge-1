@@ -36,6 +36,23 @@ public class OrdemServicoController : ControllerBase
     }
 
     /// <summary>
+    /// Mostra lista ordens de serviço filtradas e ordenadas
+    /// </summary>
+    /// <remarks>
+    /// Retorna todas as ordens cadastradas no sistema.
+    /// Requer perfil Admin.
+    /// </remarks>
+    /// <response code="200">Lista de ordens retornada com sucesso</response>
+    /// <response code="401">Usuário não autorizado</response>
+    [Authorize(Roles = "Admin")]
+    [HttpGet("ListaOrdensServicos")]
+    public async Task<IActionResult> ListaOrdensServicos()
+    {
+        return Ok(await _service.ListaOrdensServicos());
+    }
+
+
+    /// <summary>
     /// Obtém uma ordem de serviço por ID
     /// </summary>
     /// <param name="id">Identificador da ordem de serviço</param>
@@ -69,6 +86,20 @@ public class OrdemServicoController : ControllerBase
     public async Task<IActionResult> Post([FromBody] OrdemServicoCreateDto dto)
     {
         await _service.Criar(dto);
+        return Ok(new { Message = "Serviço criado com sucesso!" });
+    }
+
+    /// <summary>
+    /// Cria uma nova ordem de serviço
+    /// </summary>
+    /// <param name="dto">Dados da ordem (cliente e veículo)</param>
+    /// <response code="200">Ordem criada com sucesso</response>
+    /// <response code="400">Dados inválidos</response>
+    [Authorize(Roles = "Admin")]
+    [HttpPost("criarOrdemServico")]
+    public async Task<IActionResult> Post([FromBody] OrdemServicoCreateDtoTodosDados dto)
+    {
+        await _service.CriarComTodosOsDados(dto);
         return Ok(new { Message = "Serviço criado com sucesso!" });
     }
 
