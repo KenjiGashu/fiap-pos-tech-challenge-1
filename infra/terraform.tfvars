@@ -1,5 +1,5 @@
 namespace = "gashu-app"
-api_image = "kenjigashu/sistema-mecanica:main"
+api_image = "kenjigashu/sistema-mecanica"
 app_name = "sistema-mecanica"
 app_port = "8080"
 app_exposed_port = "30080"

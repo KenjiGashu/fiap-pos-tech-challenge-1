@@ -11,7 +11,7 @@ variable "app_name" {
 }
 
 variable "api_image" {
-  default = "kenjigashu/sistema-mecanica:main"
+  default = "kenjigashu/sistema-mecanica"
 }
 
 variable "aspnet_environment" {
