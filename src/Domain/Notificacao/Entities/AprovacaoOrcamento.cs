@@ -100,6 +100,6 @@ public class AprovacaoOrcamento
     {
         var port = Environment.GetEnvironmentVariable("FIAP_POS_PORT");
         var ip = Environment.GetEnvironmentVariable("FIAP_POS_IP");
-        return "http://" + ip + ":" + port + "/api/ordemServico/rejeitarOrcamento/" + TokenGuid;
+        return "http://" + ip + "=============:" + port + "/api/ordemServico/rejeitarOrcamento/" + TokenGuid;
     }
 }
