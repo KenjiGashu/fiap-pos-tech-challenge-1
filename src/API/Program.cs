@@ -135,11 +135,11 @@ var app = builder.Build();
 app.MapHealthChecks("/health");
 
 // Ativar Swagger
-if (app.Environment.IsDevelopment())
-{
+// if (app.Environment.IsDevelopment())
+// {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 using (var scope = app.Services.CreateScope())
 {
