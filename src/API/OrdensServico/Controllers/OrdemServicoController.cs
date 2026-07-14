@@ -97,7 +97,7 @@ public class OrdemServicoController : ControllerBase
     /// <response code="400">Dados inválidos</response>
     [Authorize(Roles = "Admin")]
     [HttpPost("criarOrdemServico")]
-    public async Task<IActionResult> Post([FromBody] OrdemServicoCreateDtoTodosDados dto)
+    public async Task<IActionResult> CriarComTodosOsDados([FromBody] OrdemServicoCreateDtoTodosDados dto)
     {
         await _service.CriarComTodosOsDados(dto);
         return Ok(new { Message = "Serviço criado com sucesso!" });
