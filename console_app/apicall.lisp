@@ -7,8 +7,12 @@
 ;; (require 'sb-posix)
 ;; (sb-posix:setenv "FIAP_POS_PORT" "8080" 1)
 (setf *port* "5129")
+(setf *port* "8080")
+
+(defparameter *ip* "127.0.0.1")
 
 (defparameter *port* (sb-ext:posix-getenv "FIAP_POS_PORT"))
+(defparameter *ip* (sb-ext:posix-getenv "FIAP_POS_IP"))
 (defparameter *jwt-token* "your.jwt.token.here")
 (defparameter *admin-email* "Admin@gmail.com")
 (defparameter *admin-password* "1234")
@@ -20,6 +24,10 @@
 (defparameter *usuario-id* "")
 (defparameter *cliente-id* "")
 (defparameter *veiculo-id* "")
+
+(format t "port: ~a~%" *port*)
+(format t "ip: ~a~%" *ip*)
+(format t "api-url: ~a~%" *api-url*)
 
 (push '("application" . "json") drakma:*text-content-types*)
 
@@ -631,6 +639,9 @@
 					(pede-varios-inputs nome-atributo (cons (read-line) result))))))
 
 (defun main-loop ()
+	(format t "port: ~a~%" *port*)
+	(format t "ip: ~a~%" *ip*)
+	(format t "api-url: ~a~%" *api-url*)
 	(loop for
 				tipo = (selecao-tipo-comando)
 				until (string= tipo "sair")

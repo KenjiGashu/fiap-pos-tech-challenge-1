@@ -2,6 +2,7 @@ namespace Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 
 using System.Text.Json.Serialization;
 using Gashu.SistemaMecanica.Application.Estoque.DTOs;
+using Gashu.SistemaMecanica.Application.Identidade.DTOs;
 using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 
 public class OrdemServicoCreateDto
@@ -12,6 +13,7 @@ public class OrdemServicoCreateDto
 
 public class OrdemServicoCreateDtoTodosDados
 {
+    public required CriarUsuarioDto Usuario  { get; set; }
     public required ClienteCreateDto Cliente  { get; set; }
     public required VeiculoCreateDto Veiculo { get; set; }
     public required List<OrdemServicoPecaDto> Pecas { get; set; }

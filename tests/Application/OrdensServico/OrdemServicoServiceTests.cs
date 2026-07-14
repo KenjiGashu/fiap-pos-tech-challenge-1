@@ -11,6 +11,7 @@ using global::Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
 using global::Gashu.SistemaMecanica.Application.Notificacao.DTOs;
 using global::Gashu.SistemaMecanica.Domain.Identidade.Entities;
 using global::Gashu.SistemaMecanica.Application.Metricas.Interfaces;
+using Gashu.SistemaMecanica.Application.Identidade.Interfaces;
 
 public class OrdemServicoServiceTests
 {
@@ -24,6 +25,7 @@ public class OrdemServicoServiceTests
     Mock<IClienteService> _mockClienteService;
     Mock<IVeiculoService> _mockVeiculoService;
     Mock<IMetricaOrdemServicoService> _mockMetricaService;
+    Mock<IIdentidadeService> _mockIdentidadeService;
     IOrdemServicoService service;
 
     public OrdemServicoServiceTests()
@@ -38,10 +40,12 @@ public class OrdemServicoServiceTests
         _mockMetricaService = new Mock<IMetricaOrdemServicoService>();
         _mockClienteService = new Mock<IClienteService>();
         _mockVeiculoService = new Mock<IVeiculoService>();
+        _mockIdentidadeService = new Mock<IIdentidadeService>();
         service = new OrdemServicoService(_mockOsRepo.Object, _mockEstoqueService.Object,
             _mockNotificacaoService.Object, _mockTokenService.Object,
             _mockMetricaService.Object, _mockVeiculoService.Object,
-            _mockClienteService.Object, _mockClienteRepo.Object);
+            _mockClienteService.Object, _mockClienteRepo.Object,
+            _mockIdentidadeService.Object);
     }
 
     [Fact]

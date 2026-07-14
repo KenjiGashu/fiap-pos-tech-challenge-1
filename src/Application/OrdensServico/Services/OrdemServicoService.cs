@@ -9,17 +9,22 @@ using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
 using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 using Gashu.SistemaMecanica.Application.Metricas.Interfaces;
 using Gashu.SistemaMecanica.Application.Metricas.DTOs;
+using Gashu.SistemaMecanica.Application.Identidade.DTOs;
+using Gashu.SistemaMecanica.Application.Identidade.Interfaces;
+using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 
 public class OrdemServicoService : IOrdemServicoService
 {
     private readonly IOrdemServicoRepository _repo;
     private readonly IEstoqueService _estoqueService;
+    private readonly IServicoService _servicoService;
     private readonly INotificacaoService _notificacaoService;
     private readonly ITokenService _tokenService;
     private readonly IMetricaOrdemServicoService _metricaService;
     private readonly IVeiculoService _veiculoService;
     private readonly IClienteService _clienteService;
     private readonly IClienteRepository _clienteRepo;
+    private readonly IIdentidadeService _identidadeService;
 
     public OrdemServicoService(
         IOrdemServicoRepository repo,
@@ -29,7 +34,8 @@ public class OrdemServicoService : IOrdemServicoService
         IMetricaOrdemServicoService metricaService,
         IVeiculoService veiculoService,
         IClienteService clienteService,
-        IClienteRepository clienteRepository)
+        IClienteRepository clienteRepository,
+        IIdentidadeService identidadeService)
     {
         _repo = repo;
         _estoqueService = estoqueService;
@@ -39,6 +45,7 @@ public class OrdemServicoService : IOrdemServicoService
         _veiculoService = veiculoService;
         _clienteService = clienteService;
         _clienteRepo = clienteRepository;
+        _identidadeService =identidadeService;
     }
 
     public async Task<IEnumerable<OrdemServicoResponseDto>> GetAll()
@@ -195,17 +202,31 @@ public class OrdemServicoService : IOrdemServicoService
 
     public async Task CriarComTodosOsDados(OrdemServicoCreateDtoTodosDados dto)
     {
-        // criar cliente quando ele nao existe
-        ClienteResponseDto clienteDto;
-        if (dto.Cliente.TipoPessoa == TipoPessoa.Fisica)
-            clienteDto = await _clienteService.GetByCpf(dto.Cliente.Cpf);
-        else
-            clienteDto = await _clienteService.GetByCnpj(dto.Cliente.Cnpj);
-
-        if (clienteDto == null)
+        Usuario usuario;
+        try
         {
+            usuario = await _identidadeService.ObterPorEmail(dto.Usuario.Email);
+        } catch (Exception ex)
+        {
+            // criar cliente quando ele nao existe
+            await _identidadeService.CriaUsuario(dto.Usuario.Email, dto.Usuario.Password, dto.Usuario.Roles);
+        }
+
+        usuario = await _identidadeService.ObterPorEmail(dto.Usuario.Email);
+
+        ClienteResponseDto clienteDto;
+        try
+        {
+            if (dto.Cliente.TipoPessoa == TipoPessoa.Fisica)
+                clienteDto = await _clienteService.GetByCpf(dto.Cliente.Cpf);
+            else
+                clienteDto = await _clienteService.GetByCnpj(dto.Cliente.Cnpj);
+        } catch (Exception ex)
+        {
+            // criar cliente quando ele nao existe
             ClienteCreateDto createDto = new ClienteCreateDto
             {
+                UsuarioId = usuario.Id,
                 Nome = dto.Cliente.Nome,
                 Cpf = dto.Cliente.Cpf,
                 Cnpj = dto.Cliente.Cnpj,
@@ -245,6 +266,7 @@ public class OrdemServicoService : IOrdemServicoService
         // adicionar pecas e servicos
         foreach (var servico in dto.Servicos)
         {
+
             ordemServico.AdicionarServico(servico.ServicoId, servico.Preco, servico.Nome);
         }
         foreach (var peca in dto.Pecas)
