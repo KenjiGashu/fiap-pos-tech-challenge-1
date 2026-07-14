@@ -12,7 +12,7 @@
 (defparameter *jwt-token* "your.jwt.token.here")
 (defparameter *admin-email* "Admin@gmail.com")
 (defparameter *admin-password* "1234")
-(defparameter *api-url* (concatenate 'string "http://localhost:" *port* "/api/"))
+(defparameter *api-url* (concatenate 'string "http://" *ip* ":" *port* "/api/"))
 (defparameter *cliente-id* "")
 (defparameter *ordem-servico-id* "")
 (defparameter *comandos* "")
@@ -631,8 +631,6 @@
 					(pede-varios-inputs nome-atributo (cons (read-line) result))))))
 
 (defun main-loop ()
-	(defparameter *port* (sb-ext:posix-getenv "FIAP_POS_PORT"))
-	(defparameter *api-url* (concatenate 'string "http://localhost:" *port* "/api/"))
 	(loop for
 				tipo = (selecao-tipo-comando)
 				until (string= tipo "sair")
