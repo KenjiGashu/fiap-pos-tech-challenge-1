@@ -27,22 +27,22 @@ output da camada de Use Case para o output definido na interface de controller.
   via terraform apply
 
 - k8s
--- configmap.yaml            - variaveis de ambiente
--- deployment.yaml           - deployment da aplicacao
--- hpa.yaml                  - auto scaling
--- kustomization.yaml        - lista dos yaml que tem que rodar
--- namespace.yaml            - namespace para todos os yaml
--- postgres-deployment.yaml  - deployment do postgres
--- postgres-pvc.yaml         - pvc para postgres
--- postgres-service.yaml     - porta interna postgres 
--- secret.yaml               - variaveis secrets
--- service-externo.yaml      - nodeports para acessar de fora
--- service-interno.yaml      - porta interna da aplicacao
+-- configmap.yaml (variaveis de ambiente)
+-- deployment.yaml  (deployment da aplicacao)
+-- hpa.yaml (auto scaling)
+-- kustomization.yaml (lista dos yaml que tem que rodar)
+-- namespace.yaml (namespace para todos os yaml)
+-- postgres-deployment.yaml (deployment do postgres)
+-- postgres-pvc.yaml (pvc para postgres)
+-- postgres-service.yaml (porta interna postgres )
+-- secret.yaml (variaveis secrets)
+-- service-externo.yaml (nodeports para acessar de fora)
+-- service-interno.yaml (porta interna da aplicacao)
 
 
 - terraform:
 README.md
--- api.tf           - contem deployment, services (clusterip e nodeports), health check
+-- api.tf            contem deployment, services (clusterip e nodeports), health check
 -- configmap.tf     - variaveis de ambiente
 -- hpa.tf           - auto scaling com maxreplica 3
 -- namespace.tf     - namespace de tudo (gashu-app)
