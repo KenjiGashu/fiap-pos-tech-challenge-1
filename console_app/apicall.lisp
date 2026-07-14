@@ -639,6 +639,9 @@
 					(pede-varios-inputs nome-atributo (cons (read-line) result))))))
 
 (defun main-loop ()
+	(defparameter *port* (sb-ext:posix-getenv "FIAP_POS_PORT"))
+	(defparameter *ip* (sb-ext:posix-getenv "FIAP_POS_IP"))
+	(defparameter *api-url* (concatenate 'string "http://" *ip* ":" *port* "/api/"))
 	(format t "port: ~a~%" *port*)
 	(format t "ip: ~a~%" *ip*)
 	(format t "api-url: ~a~%" *api-url*)

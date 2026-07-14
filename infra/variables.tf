@@ -21,7 +21,12 @@ variable "aspnet_environment" {
 
 variable "app_port" {
   type    = number
-  default = 8080
+  default = 30080
+}
+
+variable "app_ip" {
+  type    = string
+  default = "192.168.49.2"
 }
 
 variable "email" {

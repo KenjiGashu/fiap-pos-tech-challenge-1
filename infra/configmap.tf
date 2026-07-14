@@ -9,6 +9,7 @@ resource "kubernetes_config_map" "sistema_mecanica" {
     ASPNETCORE_ENVIRONMENT = var.aspnet_environment
 
     FIAP_POS_PORT  = tostring(var.app_port)
+    FIAP_POS_IP    = var.app_ip
     FIAP_POS_EMAIL = var.email
   }
 }

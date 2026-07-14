@@ -56,6 +56,7 @@ public class AprovacaoOrcamentoTestes
 	  public async Task MontaCorpoMensagemTeste()
 	  {
         var port = Environment.GetEnvironmentVariable("FIAP_POS_PORT");
+        var ip = Environment.GetEnvironmentVariable("FIAP_POS_IP");
         var expected = $"Ola, nome do cliente\n" +
 				 $"Aqui está o orçamento do pedido {ordemServicoId}\n\n" +
 					$"Serviços:\n" +
@@ -64,9 +65,9 @@ public class AprovacaoOrcamentoTestes
 					$"pneu                                  x1 R$10\n\n\n" +
 					$"Total: R$22\n\n" +
 					$"Para aprovar Orçamento clique no link abaixo:\n" + 
-					$"http://localhost:{port}/api/ordemServico/aprovarOrcamento/{tokenGuid}\n\n" +
+					$"http://{ip}:{port}/api/ordemServico/aprovarOrcamento/{tokenGuid}\n\n" +
 					$"Para rejeitar Orçamento clique no link abaixo:\n" +
-					$"http://localhost:{port}/api/ordemServico/rejeitarOrcamento/{tokenGuid}\n\n" +
+					$"http://{ip}:{port}/api/ordemServico/rejeitarOrcamento/{tokenGuid}\n\n" +
 					$"Att, uma mecanica qualquer";
 
         var result = ao.MontaCorpoMensagem();
