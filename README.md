@@ -14,6 +14,8 @@ definidos na camada de entidade. A implementação dos repositories na camada de
 da aplicacao, mas na minha opiniao, nao ha ganho nenhum em fazer isso, pois nao acho que ha possibilidades
 de mudar do asp net para outra coisa.
 
+![Clean Architecture components](docs/Clean_Arch.jpg)
+
 -- Caso houvesse um motivo forte para refatorar os controllers, seria feito assim:
 O controller teria uma interface que a camada de Framework iria utilizar. A Interface teria definido o output e o input,
 esse é o contract que a camada externa iria utilizar. A implementacao de controller possui um Presenter que converte o
@@ -55,6 +57,8 @@ output da camada de Use Case para o output definido na interface de controller.
 - github actions
 No momento, o workflow executa o build toda vez que tem push no repositorio,
 ele builda, executa os testes, depois gera uma imagem e sobe essa imagem para o dockerhub
+
+![Deployment](docs/Deploy.jpg)
 
 ## execucao local
 - cd sistema-mecanica
