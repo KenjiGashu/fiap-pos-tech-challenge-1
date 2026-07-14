@@ -34,6 +34,11 @@ variable "app_ip" {
   default = "192.168.49.2"
 }
 
+variable "image_tag" {
+  type    = string
+	default = "main"
+}
+
 variable "email" {
   type    = string
   default = "kenjigashu@gmail.com"

@@ -25,7 +25,7 @@ resource "kubernetes_deployment" "sistema_mecanica" {
       spec {
         container {
           name  = var.app_name
-          image = var.api_image
+          image = "${var.api_image}:${var.image_tag}"
 
           image_pull_policy = "IfNotPresent"
 
