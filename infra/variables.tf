@@ -21,6 +21,11 @@ variable "aspnet_environment" {
 
 variable "app_port" {
   type    = number
+  default = 8080
+}
+
+variable "app_exposed_port" {
+  type    = number
   default = 30080
 }
 

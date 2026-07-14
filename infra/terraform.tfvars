@@ -1,5 +1,9 @@
 namespace = "gashu-app"
+api_image = "kenjigashu/sistema-mecanica:main"
 app_name = "sistema-mecanica"
+app_port = "8080"
+app_exposed_port = "30080"
+app_ip = "192.168.49.2"
 postgres_host = "db"
 postgres_port = 5432
 postgres_database = "mydb"

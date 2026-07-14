@@ -6,6 +6,7 @@ metadata:
 
 data:
   ASPNETCORE_ENVIRONMENT: "Production"
-  FIAP_POS_PORT: "8080"
+  FIAP_POS_PORT: "30080"
+  FIAP_POS_IP: "192.168.49.2"
   FIAP_POS_EMAIL: "kenjigashu@gmail.com"
   ASPNETCORE_URLS: "http://+:8080"

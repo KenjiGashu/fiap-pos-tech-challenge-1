@@ -21,10 +21,9 @@ spec:
       containers:
         - name: sistema-mecanica
 
-          #image: meu-registry/sistema-mecanica:1.0.0
           image: kenjigashu/sistema-mecanica:main
 
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 8080

@@ -8,7 +8,7 @@ resource "kubernetes_config_map" "sistema_mecanica" {
     ASPNETCORE_URLS        = "http://+:${var.app_port}"
     ASPNETCORE_ENVIRONMENT = var.aspnet_environment
 
-    FIAP_POS_PORT  = tostring(var.app_port)
+    FIAP_POS_PORT  = tostring(var.app_exposed_port)
     FIAP_POS_IP    = var.app_ip
     FIAP_POS_EMAIL = var.email
   }
