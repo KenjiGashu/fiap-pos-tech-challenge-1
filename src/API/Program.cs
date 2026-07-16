@@ -88,11 +88,15 @@ builder.Services.AddScoped<IEstoqueService, EstoqueService>();
 builder.Services.AddScoped<IEstoqueController, EstoqueController>();
 builder.Services.AddScoped<IEstoquePresenter, EstoquePresenterDAO>();
 
-//clientes e veiculos 
+//clientes 
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IClienteController, ClienteController>();
 builder.Services.AddScoped<IClientePresenter, ClientePresenter>();
+
+// veiculos
 builder.Services.AddScoped<IVeiculoService, VeiculoService>();
+builder.Services.AddScoped<IVeiculoController, VeiculoController>();
+builder.Services.AddScoped<IVeiculoPresenter, VeiculoPresenter>();
 
 //servico
 builder.Services.AddScoped<IServicoService, ServicoService>();
