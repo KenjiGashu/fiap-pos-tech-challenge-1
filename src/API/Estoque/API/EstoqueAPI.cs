@@ -68,8 +68,6 @@ public class EstoqueAPI : ControllerBase
         {
             return StatusCode(500);
         }
-
-
     }
 
     /// <summary>

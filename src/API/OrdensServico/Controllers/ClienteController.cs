@@ -3,113 +3,59 @@ using Gashu.SistemaMecanica.Application.OrdensServico.Services;
 using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Gashu.SistemaMecanica.API.OrdensServico.Presenters;
 
 namespace Gashu.SistemaMecanica.API.OrdensServico.Controllers;
 
-/// <summary>
-/// Controller responsável pelo gerenciamento de clientes
-/// </summary>
-/// <remarks>
-/// Permite cadastrar, consultar, atualizar e remover clientes do sistema.
-/// Todos os endpoints requerem perfil Admin.
-/// </remarks>
-[ApiController]
-[Route("api/[controller]")]
-public class ClienteController : ControllerBase
+public class ClienteController : IClienteController
 {
     private readonly IClienteService _service;
+    private readonly IClientePresenter _presenter;
 
-    public ClienteController(IClienteService service)
+    public ClienteController(IClienteService service, IClientePresenter presenter)
     {
         _service = service;
+        _presenter = presenter;
     }
 
-    /// <summary>
-    /// Lista todos os clientes cadastrados
-    /// </summary>
-    /// <response code="200">Lista de clientes retornada com sucesso</response>
-    /// <response code="401">Usuário não autorizado</response>
-    [Authorize(Roles = "Admin")]
-    [HttpGet]
-    public async Task<IActionResult> Get()
-        => Ok(await _service.GetAll());
+    public async Task<OutputClientes> Get()
+    => _presenter.Present("Obteve clientes com sucesso", await _service.GetAll());
 
-    /// <summary>
-    /// Obtém um cliente pelo ID
-    /// </summary>
-    /// <param name="id">Identificador do cliente</param>
-    /// <response code="200">Cliente encontrado</response>
-    /// <response code="404">Cliente não encontrado</response>
-    [Authorize(Roles = "Admin")]
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<OutputCliente> Get(Guid id)
     {
         var cliente = await _service.GetById(id);
 
-        if (cliente == null)
-            return NotFound();
+        if(cliente == null)
+            return _presenter.Present("Cliente nao encontrado", cliente);
 
-        return Ok(cliente);
+        return _presenter.Present("obteve cliente com sucesso", cliente);
     }
 
-    /// <summary>
-    /// Busca clientes pelo nome
-    /// </summary>
-    /// <param name="nome">Nome ou parte do nome do cliente</param>
-    /// <response code="200">Clientes encontrados</response>
-    /// <response code="404">Nenhum cliente encontrado</response>
-    [Authorize(Roles = "Admin")]
-    [HttpGet("nome/{nome}")]
-    public async Task<IActionResult> GetByNome(string nome)
+    public async Task<OutputCliente> GetByNome(string nome)
     {
         var cliente = await _service.GetByNome(nome);
 
         if (cliente == null)
-            return NotFound();
+            return _presenter.Present("Cliente nao encontrado", cliente);
 
-        return Ok(cliente);
+        return _presenter.Present("Cliente encontrado", cliente);
     }
 
-    /// <summary>
-    /// Cria um novo cliente
-    /// </summary>
-    /// <param name="dto">Dados do cliente a ser criado</param>
-    /// <response code="200">Cliente criado com sucesso</response>
-    /// <response code="400">Dados inválidos</response>
-    [Authorize(Roles = "Admin")]
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody] ClienteCreateDto dto)
+    public async Task<OutputMessage> CriaCliente(ClienteCreateDto dto)
     {
         await _service.Create(dto);
-        return Ok(new { Message = "Cliente criado com sucesso!" });
+        return _presenter.Present( "Cliente criado com sucesso!" );
     }
 
-    /// <summary>
-    /// Atualiza um cliente existente
-    /// </summary>
-    /// <param name="id">Identificador do cliente</param>
-    /// <param name="dto">Dados atualizados do cliente</param>
-    /// <response code="200">Cliente atualizado com sucesso</response>
-    /// <response code="404">Cliente não encontrado</response>
-    [Authorize(Roles = "Admin")]
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] ClienteUpdateDto dto)
+    public async Task<OutputMessage> AtualizaCliente(Guid id, ClienteUpdateDto dto)
     {
         await _service.Update(id, dto);
-        return Ok(new { Message = "Cliente atualizado com sucesso!" });
+        return _presenter.Present("Cliente atualizado com sucesso!" );
     }
 
-    /// <summary>
-    /// Remove um cliente
-    /// </summary>
-    /// <param name="id">Identificador do cliente</param>
-    /// <response code="204">Cliente removido com sucesso</response>
-    /// <response code="404">Cliente não encontrado</response>
-    [Authorize(Roles = "Admin")]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<OutputMessage> DeletaCliente(Guid id)
     {
         await _service.Delete(id);
-        return NoContent();
+        return _presenter.Present("Cliente deletado com sucesso");
     }
 }

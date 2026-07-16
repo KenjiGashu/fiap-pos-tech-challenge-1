@@ -20,13 +20,15 @@ using Gashu.SistemaMecanica.API.Identidade.Controllers;
 public class IdentidadeAPI : ControllerBase
 {
     private readonly IIdentidadeService _service;
+    private readonly IIdentidadeController _controller;
 
     /// <summary>
     /// Construtor do controller
     /// </summary>
-    public IdentidadeAPI(IIdentidadeService service)
+    public IdentidadeAPI(IIdentidadeService service, IIdentidadeController controller)
     {
         _service = service;
+        _controller = controller;
     }
 
     /// <summary>
@@ -41,11 +43,9 @@ public class IdentidadeAPI : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
-        //var token = await _service.Login(dto);
-        
-        var token = await _service.Login(dto.Email, dto.Password);
+        var output = await _controller.Login(dto);
 
-        if (token == null)
+        if (output.Token == null)
         {
             return Unauthorized(new { Message = "Credenciais inválidas" });
         }
@@ -53,7 +53,7 @@ public class IdentidadeAPI : ControllerBase
         return Ok(new
         {
             Message = "Login realizado com sucesso",
-            Token = token
+            Token = output.Token
         });
     }
 
@@ -70,13 +70,18 @@ public class IdentidadeAPI : ControllerBase
     [HttpGet("usuarios")]
     public async Task<IActionResult> ObterTodosOsUsuarios()
     {
-        var usuarios = await _service.ObterTodos();
-
-        return Ok(new
+        try {
+            var output = await _controller.ObterTodosOsUsuarios();
+            return Ok(new
+            {
+                Message = "Usuários obtidos com sucesso",
+                Data = output.Usuarios.ToList()
+            });
+        }
+        catch (Exception ex)
         {
-            Message = "Usuários obtidos com sucesso",
-            Data = usuarios.ToList()
-        });
+            return StatusCode(500);
+        }
     }
 
     /// <summary>
@@ -89,16 +94,22 @@ public class IdentidadeAPI : ControllerBase
     [HttpGet("usuarios/{email}")]
     public async Task<IActionResult> ObterPorEmail(string email)
     {
-        var usuario = await _service.ObterPorEmail(email);
+        try {
+            var output = await _controller.ObterPorEmail(email);
 
-        if (usuario == null)
-            return NotFound();
-
-        return Ok(new
+            if (output.Usuario == null)
+                return NotFound();
+            
+            return Ok(new
+            {
+                Message = "Usuario encontrado",
+                Data = output.Usuario
+            });
+        }
+        catch (Exception ex)
         {
-            Message = "Usuário encontrado",
-            Data = usuario
-        });
+            return StatusCode(500);
+        }
     }
 
     /// <summary>
@@ -116,11 +127,17 @@ public class IdentidadeAPI : ControllerBase
     [HttpPost("usuarios")]
     public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDto dto)
     {
-        await _service.CriaUsuario(dto.Email, dto.Password, dto.Roles);
+        try {
+            var output = await _controller.CriarUsuario(dto);
 
-        return Ok(new
+            return Ok(new
+            {
+                Message = "Usuario criado com sucesso",
+            });
+        }
+        catch (Exception ex)
         {
-            Message = "Usuário criado com sucesso"
-        });
+            return StatusCode(500);
+        }
     }
 }

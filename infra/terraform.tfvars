@@ -1,6 +1,7 @@
 namespace = "gashu-app"
 api_image = "kenjigashu/sistema-mecanica"
 app_name = "sistema-mecanica"
+image_tag = "main"
 app_port = "8080"
 app_exposed_port = "30080"
 app_ip = "192.168.49.2"

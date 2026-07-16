@@ -31,6 +31,10 @@ using Gashu.SistemaMecanica.API.Estoque.Controllers;
 using Gashu.SistemaMecanica.API.Estoque.Presenters;
 using Gashu.SistemaMecanica.API.Identidade.Controllers;
 using Gashu.SistemaMecanica.API.Identidade.Presenters;
+using Gashu.SistemaMecanica.API.Metricas.Controllers;
+using Gashu.SistemaMecanica.API.Metricas.Presenters;
+using Gashu.SistemaMecanica.API.OrdensServico.Controllers;
+using Gashu.SistemaMecanica.API.OrdensServico.Presenters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +90,8 @@ builder.Services.AddScoped<IEstoquePresenter, EstoquePresenterDAO>();
 
 //clientes e veiculos 
 builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IClienteController, ClienteController>();
+builder.Services.AddScoped<IClientePresenter, ClientePresenter>();
 builder.Services.AddScoped<IVeiculoService, VeiculoService>();
 
 //servico
@@ -114,6 +120,8 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 //metricas
 builder.Services.AddScoped<IMetricaOrdemServicoRepository, MetricaOrdemServicoRepository>();
 builder.Services.AddScoped<IMetricaOrdemServicoService, MetricaOrdemServicoService>();
+builder.Services.AddScoped<IMetricasController, MetricasController>();
+builder.Services.AddScoped<IMetricasPresenter, MetricasPresenter>();
 
 builder.Services.AddControllers();
 
