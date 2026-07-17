@@ -13,12 +13,12 @@ using Gashu.SistemaMecanica.API.Notificacao.Controllers;
 /// para aprovação ou rejeição de orçamento de uma ordem de serviço.
 /// </remarks>
 [ApiController]
-[Route("api/[controller]")]
-public class ConfirmacaoEmailController : ControllerBase
+[Route("api/ConfirmacaoEmail")]
+public class ConfirmacaoEmailAPI : ControllerBase
 {
     private readonly IConfirmacaoEmailController _controller;
 
-    public ConfirmacaoEmailController(IConfirmacaoEmailController controller)
+    public ConfirmacaoEmailAPI(IConfirmacaoEmailController controller)
     {
         _controller = controller;
     }

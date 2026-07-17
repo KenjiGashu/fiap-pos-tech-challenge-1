@@ -13,9 +13,10 @@ public class MetricasController : IMetricasController
     private readonly IMetricaOrdemServicoService _service;
     private readonly IMetricasPresenter _presenter;
 
-    public MetricasController(IMetricaOrdemServicoService service)
+    public MetricasController(IMetricaOrdemServicoService service, IMetricasPresenter presenter)
     {
         _service = service;
+        _presenter = presenter;
     }
 
     /// <inheritdoc/>
@@ -34,6 +35,7 @@ public class MetricasController : IMetricasController
         };
 
         var segundos = await _service.TempoMedioOrdemServico(dto);
+        Console.WriteLine($"[TempoMedio] {segundos}");
         return _presenter.Present("Tempo medio calculado com sucesso", segundos);
     }
 

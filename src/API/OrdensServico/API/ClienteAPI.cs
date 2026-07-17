@@ -13,12 +13,12 @@ namespace Gashu.SistemaMecanica.API.OrdensServico.API;
 /// Todos os endpoints requerem perfil Admin.
 /// </remarks>
 [ApiController]
-[Route("api/[controller]")]
-public class ClienteController : ControllerBase
+[Route("api/cliente")]
+public class ClienteAPI : ControllerBase
 {
     private readonly IClienteController _controller;
 
-    public ClienteController(IClienteController controller)
+    public ClienteAPI(IClienteController controller)
     {
         _controller = controller;
     }

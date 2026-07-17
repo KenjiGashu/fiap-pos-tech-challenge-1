@@ -1,7 +1,6 @@
 namespace Gashu.SistemaMecanica.API.Metricas.API;
 
 using Microsoft.AspNetCore.Mvc;
-using Application.Metricas.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Gashu.SistemaMecanica.API.Metricas.Controllers;
 
@@ -13,12 +12,12 @@ using Gashu.SistemaMecanica.API.Metricas.Controllers;
 /// tempo total de execução e métricas agregadas das ordens de serviço.
 /// </remarks>
 [ApiController]
-[Route("api/[controller]")]
-public class MetricasController : ControllerBase
+[Route("api/metricas")]
+public class MetricasAPI : ControllerBase
 {
     private readonly IMetricasController _controller;
 
-    public MetricasController(IMetricasController controller)
+    public MetricasAPI(IMetricasController controller)
     {
         _controller = controller;
     }
@@ -34,11 +33,11 @@ public class MetricasController : ControllerBase
     {
         try
         {
-            var metricas = await _controller.GetAll();
+            var output = await _controller.GetAll();
             return Ok(new
             {
-                Message = "Métricas obtidas com sucesso",
-                Data = metricas
+                Message = output.Message,
+                Data = output.Metricas
             });
         }
         catch (Exception ex)
@@ -60,12 +59,12 @@ public class MetricasController : ControllerBase
     {
         try
         {
-            var segundos = await _controller.TempoMedio(id);
+            var output = await _controller.TempoMedio(id);
 
             return Ok(new
             {
-                Message = "Tempo medio calculado com sucesso",
-                Segundos = segundos
+                Message = output.Message,
+                Segundos = output.Tempo
             });
         }
         catch (Exception ex)
@@ -87,17 +86,17 @@ public class MetricasController : ControllerBase
     {
         try
         {
-            var segundos = await _controller.TempoTotal(id);
+            var output = await _controller.TempoTotal(id);
 
             return Ok(new
             {
-                Message = "Tempo total calculado com sucesso",
-                Segundos = segundos
+                Message = output.Message,
+                Segundos = output.Tempo
             });
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[TempoTotal] Erro interno");
+            Console.WriteLine($"[TempoTotal] Erro interno {ex.Message}");
             return StatusCode(500);
         }
     }
@@ -112,17 +111,17 @@ public class MetricasController : ControllerBase
     {
         try
         {
-            var segundos = await _controller.TempoMedioAtendimentos();
+            var output = await _controller.TempoMedioAtendimentos();
 
             return Ok(new
             {
-                Message = "Tempo medio geral calculado com sucesso",
-                Segundos = segundos
+                Message = output.Message,
+                Segundos = output.Tempo
             });
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[TempoMedioAtendimentos] Erro interno");
+            Console.WriteLine($"[TempoMedioAtendimentos] Erro interno {ex.Message}");
             return StatusCode(500);
         }
     }

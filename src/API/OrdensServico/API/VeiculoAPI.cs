@@ -13,12 +13,12 @@ namespace Gashu.SistemaMecanica.API.OrdensServico.API;
 /// vinculados às ordens de serviço.
 /// </remarks>
 [ApiController]
-[Route("api/[controller]")]
-public class VeiculoController : ControllerBase
+[Route("api/veiculo")]
+public class VeiculoAPI : ControllerBase
 {
     private readonly IVeiculoController _controller;
 
-    public VeiculoController(IVeiculoController controller)
+    public VeiculoAPI(IVeiculoController controller)
     {
         _controller = controller;
     }

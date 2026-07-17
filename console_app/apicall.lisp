@@ -238,7 +238,7 @@
 		body))
 
 (defun metrica-tempo-medio-atualizacao ()
-	(let* ((url (concatenate 'string "metricas/ordemservico" *ordem-servico-id* "/tempo-medio/" ))
+	(let* ((url (concatenate 'string "metricas/ordemservico/" *ordem-servico-id* "/tempo-medio/" ))
 				 (body (do-get url nil)))
 		body))
 
@@ -591,6 +591,7 @@
 				((string-equal comando "entregar-veiculo") #'entregar-veiculo)
 				((string-equal comando "media-tempo") #'media-todas-metricas)
 				((string-equal comando "tempo-total") #'metrica-tempo-total-atualizacao)
+				((string-equal comando "tempo-medio-atualizacao") #'metrica-tempo-medio-atualizacao)
 				(t nil)))
 
 
@@ -652,7 +653,10 @@
 						 (when (not (string= comando "voltar"))
 							 (funcall (get-comando comando))))))
 
-;;;(main-loop)
+;; (dotimes (n 10000000)
+;; 	(do-login-admin))
+
+;;;;(main-loop)
 
 (sb-ext:save-lisp-and-die "apicall" 
                          :toplevel #'main-loop 
