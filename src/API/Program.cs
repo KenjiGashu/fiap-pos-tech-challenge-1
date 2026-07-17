@@ -78,17 +78,14 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
-//repository
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<IServicoRepository, ServicoRepository>();
-builder.Services.AddScoped<IPecaRepository, PecaRepository>();
-
 //estoque
 builder.Services.AddScoped<IEstoqueService, EstoqueService>();
 builder.Services.AddScoped<IEstoqueController, EstoqueController>();
 builder.Services.AddScoped<IEstoquePresenter, EstoquePresenterDAO>();
+builder.Services.AddScoped<IPecaRepository, PecaRepository>();
 
 //clientes 
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IClienteController, ClienteController>();
 builder.Services.AddScoped<IClientePresenter, ClientePresenter>();
@@ -97,14 +94,19 @@ builder.Services.AddScoped<IClientePresenter, ClientePresenter>();
 builder.Services.AddScoped<IVeiculoService, VeiculoService>();
 builder.Services.AddScoped<IVeiculoController, VeiculoController>();
 builder.Services.AddScoped<IVeiculoPresenter, VeiculoPresenter>();
+builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
 
 //servico
 builder.Services.AddScoped<IServicoService, ServicoService>();
-builder.Services.AddScoped<IVeiculoRepository, VeiculoRepository>();
+builder.Services.AddScoped<IServicoRepository, ServicoRepository>();
+builder.Services.AddScoped<IServicoController, ServicoController>();
+builder.Services.AddScoped<IServicoPresenter, ServicoPresenter>();
 
 //ordem servico
 builder.Services.AddScoped<IOrdemServicoService, OrdemServicoService>();
 builder.Services.AddScoped<IOrdemServicoRepository, OrdemServicoRepository>();
+builder.Services.AddScoped<IOrdemServicoPresenter, OrdemServicoPresenter>();
+builder.Services.AddScoped<IOrdemServicoController, OrdemServicoController>();
 
 // token
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();

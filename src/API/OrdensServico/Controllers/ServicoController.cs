@@ -5,97 +5,46 @@ using Gashu.SistemaMecanica.Application.OrdensServico.Services;
 using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Gashu.SistemaMecanica.API.OrdensServico.Presenters;
 
-/// <summary>
-/// Controller responsável pelo gerenciamento de serviços
-/// </summary>
-/// <remarks>
-/// Permite cadastrar, consultar, atualizar e remover serviços disponíveis
-/// para execução em ordens de serviço.
-/// </remarks>
-[ApiController]
-[Route("api/[controller]")]
-public class ServicoController : ControllerBase
+public class ServicoController : IServicoController
 {
     private readonly IServicoService _service;
+    private readonly IServicoPresenter _presenter;
 
-    public ServicoController(IServicoService service)
+    public ServicoController(IServicoService service, IServicoPresenter presenter)
     {
         _service = service;
+        _presenter = presenter;
     }
 
-    /// <summary>
-    /// Lista todos os serviços cadastrados
-    /// </summary>
-    /// <remarks>
-    /// Retorna todos os serviços disponíveis no sistema.
-    /// Requer perfil Admin.
-    /// </remarks>
-    /// <response code="200">Lista de serviços retornada com sucesso</response>
-    /// <response code="401">Usuário não autorizado</response>
-    [Authorize(Roles = "Admin")]
-    [HttpGet]
-    public async Task<IActionResult> Get()
-        => Ok(await _service.GetAll());
+    public async Task<OutputServicos> GetAll()
+    {
+        var output = await _service.GetAll();
+        return _presenter.Present("Servicos encontrados com sucesso.", output);
+    }
 
-    /// <summary>
-    /// Obtém um serviço pelo ID
-    /// </summary>
-    /// <param name="id">Identificador do serviço</param>
-    /// <response code="200">Serviço encontrado</response>
-    /// <response code="404">Serviço não encontrado</response>
-    [Authorize(Roles = "Admin")]
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<OutputServico> GetById(Guid id)
     {
         var servico = await _service.GetById(id);
-
-        if (servico == null)
-            return NotFound();
-
-        return Ok(servico);
+        return _presenter.Present("Servico Obtido com sucesso.", servico);
     }
 
-    /// <summary>
-    /// Cria um novo serviço
-    /// </summary>
-    /// <param name="dto">Dados do serviço a ser criado</param>
-    /// <response code="200">Serviço criado com sucesso</response>
-    /// <response code="400">Dados inválidos</response>
-    [Authorize(Roles = "Admin")]
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody] ServicoCreateDto dto)
+    public async Task<OutputMessageServico> Create(ServicoCreateDto dto)
     {
         await _service.Create(dto);
-        return Ok(new { Message = "Serviço criado com sucesso!" });
+        return _presenter.Present("Serviço criado com sucesso!");
     }
 
-    /// <summary>
-    /// Atualiza um serviço existente
-    /// </summary>
-    /// <param name="id">Identificador do serviço</param>
-    /// <param name="dto">Dados atualizados do serviço</param>
-    /// <response code="200">Serviço atualizado com sucesso</response>
-    /// <response code="404">Serviço não encontrado</response>
-    [Authorize(Roles = "Admin")]
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] ServicoUpdateDto dto)
+    public async Task<OutputMessageServico> Update(Guid id, ServicoUpdateDto dto)
     {
         await _service.Update(id, dto);
-        return Ok(new { Message = "Serviço atualizado com sucesso!" });
+        return _presenter.Present("Serviço atualizado com sucesso!");
     }
 
-    /// <summary>
-    /// Remove um serviço
-    /// </summary>
-    /// <param name="id">Identificador do serviço</param>
-    /// <response code="204">Serviço removido com sucesso</response>
-    /// <response code="404">Serviço não encontrado</response>
-    [Authorize(Roles = "Admin")]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<OutputMessageServico> Delete(Guid id)
     {
         await _service.Delete(id);
-        return NoContent();
+        return _presenter.Present("Servico deletado com sucesso!");
     }
 }

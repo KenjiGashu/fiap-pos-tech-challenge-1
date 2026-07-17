@@ -10,6 +10,7 @@ using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 using Gashu.SistemaMecanica.Application.Estoque.DTOs;
 using Microsoft.Extensions.DependencyInjection;
 using Gashu.SistemaMecanica.Infrastructure.Data;
+using Gashu.SistemaMecanica.API.OrdensServico.Presenters;
 
 namespace Gashu.SistemaMecanica.Tests.Integration.Tests;
 
@@ -67,12 +68,12 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
 
         var os = ordemServicosList?.First();
 
-        var response = await _client.GetFromJsonAsync<ListaOrdemServicoResponseDto>($"/api/ordemservico/cliente/{os.ClienteId}");
+        var response = await _client.GetFromJsonAsync<List<OrdemServicoResponseDto>>($"/api/ordemservico/cliente/{os.ClienteId}");
 
         var response3 = await _client.GetAsync($"/api/ordemservico/cliente/{os.ClienteId}");
         var content = await response3.Content.ReadAsStringAsync();
 
-        Assert.Equal(os.ClienteId, response.OrdemServicos.First().ClienteId);
+        Assert.Equal(os.ClienteId, response.First().ClienteId);
     }
 
     [Fact]
@@ -207,7 +208,7 @@ public class OrdemServicoIntegrationTests : IClassFixture<CustomWebApplicationFa
         var response = await _client.GetFromJsonAsync<APIMensagemResponse>($"/api/ordemservico/AprovarOrcamento/{newToken.ToString("n")}");
 
         //Assert
-        Assert.Contains("aprovado com sucesso", response.Message);
+        Assert.Contains($"aprovado com sucesso", response.Message);
     }
 
     [Fact]
