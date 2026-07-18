@@ -1,7 +1,7 @@
 namespace Gashu.SistemaMecanica.Infrastructure.Identidade.Repositories;
 
 using Gashu.SistemaMecanica.Domain.Identidade.Entities;
-using Gashu.SistemaMecanica.Domain.Identidade.Interfaces;
+using Gashu.SistemaMecanica.Application.Repositories;
 using Gashu.SistemaMecanica.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 

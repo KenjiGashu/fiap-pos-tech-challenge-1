@@ -1,4 +1,4 @@
-namespace Gashu.SistemaMecanica.Domain.Estoque.Interfaces;
+namespace Gashu.SistemaMecanica.Application.Repositories;
 using Gashu.SistemaMecanica.Domain.Estoque.Entities;
 
 public interface IPecaRepository

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Gashu.SistemaMecanica.Domain.Metricas.Entities;
-using Gashu.SistemaMecanica.Domain.Metricas.Interfaces;
+using Gashu.SistemaMecanica.Application.Repositories;
 using Gashu.SistemaMecanica.Infrastructure.Data;
 
 public class MetricaOrdemServicoRepository : IMetricaOrdemServicoRepository

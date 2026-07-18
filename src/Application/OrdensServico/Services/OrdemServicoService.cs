@@ -1,13 +1,13 @@
 namespace Gashu.SistemaMecanica.Application.OrdensServico.Services;
 
-using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Application.Repositories;
 using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
-using Gashu.SistemaMecanica.Application.Notificacao.DTOs;
+using Gashu.SistemaMecanica.Application.Notificacao.Services;
 using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 using Gashu.SistemaMecanica.Application.Estoque.Services;
-using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
+using Gashu.SistemaMecanica.Application.Notificacao.Services;
 using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
-using Gashu.SistemaMecanica.Application.Metricas.Interfaces;
+using Gashu.SistemaMecanica.Application.Metricas.Services;
 using Gashu.SistemaMecanica.Application.Metricas.Services;
 using Gashu.SistemaMecanica.Application.Identidade.Services;
 using Gashu.SistemaMecanica.Application.Identidade.Services;

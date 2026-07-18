@@ -1,6 +1,5 @@
 namespace Gashu.SistemaMecanica.API.Metricas.Controllers;
 
-using Application.Metricas.Interfaces;
 using Gashu.SistemaMecanica.API.Metricas.Presenters;
 using Gashu.SistemaMecanica.Application.Metricas.Services;
 

@@ -1,9 +1,9 @@
 namespace Gashu.SistemaMecanica.Application.Metricas.Services;
 
 using Gashu.SistemaMecanica.Application.Metricas.Services;
-using Gashu.SistemaMecanica.Application.Metricas.Interfaces;
+using Gashu.SistemaMecanica.Application.Metricas.Services;
 using Gashu.SistemaMecanica.Domain.Metricas.Entities;
-using Gashu.SistemaMecanica.Domain.Metricas.Interfaces;
+using Gashu.SistemaMecanica.Application.Repositories;
 using System.Linq;
 
 public class MetricaOrdemServicoService : IMetricaOrdemServicoService

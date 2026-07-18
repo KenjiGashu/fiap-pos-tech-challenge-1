@@ -1,9 +1,7 @@
 namespace Gashu.SistemaMecanica.Application.Estoque.Services;
 
-using Gashu.SistemaMecanica.Application.Estoque.Services;
-using Gashu.SistemaMecanica.Application.Estoque.Services;
 using Gashu.SistemaMecanica.Domain.Estoque.Entities;
-using Gashu.SistemaMecanica.Domain.Estoque.Interfaces;
+using Gashu.SistemaMecanica.Application.Repositories;
 
 public class EstoqueService : IEstoqueService
 {

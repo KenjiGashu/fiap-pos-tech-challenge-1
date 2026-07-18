@@ -1,4 +1,4 @@
-namespace Gashu.SistemaMecanica.Application.Metricas.Interfaces;
+namespace Gashu.SistemaMecanica.Application.Metricas.Services;
 
 using Gashu.SistemaMecanica.Application.Metricas.Services;
 

@@ -1,9 +1,9 @@
 namespace Gashu.SistemaMecanica.API.Notificacao.API;
 
 using Microsoft.AspNetCore.Mvc;
-using Application.Notificacao.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Gashu.SistemaMecanica.API.Notificacao.Controllers;
+using Gashu.SistemaMecanica.Application.Notificacao.Services;
 
 /// <summary>
 /// Controller responsável pelo envio de solicitações de confirmação de orçamento por e-mail

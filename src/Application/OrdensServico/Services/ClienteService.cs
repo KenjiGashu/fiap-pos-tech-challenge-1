@@ -1,5 +1,5 @@
 using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
-using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
+using Gashu.SistemaMecanica.Application.Repositories;
 using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 

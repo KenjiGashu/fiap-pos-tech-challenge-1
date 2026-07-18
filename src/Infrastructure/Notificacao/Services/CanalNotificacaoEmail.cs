@@ -3,7 +3,7 @@ namespace Gashu.SistemaMecanica.Infrastructure.Notificacao.Services;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Gashu.SistemaMecanica.Domain.Notificacao.Interfaces;
+using Gashu.SistemaMecanica.Application.Gateway;
 
 public class CanalNotificacaoEmail : ICanalNotificacao
 {

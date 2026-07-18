@@ -1,5 +1,5 @@
-using Gashu.SistemaMecanica.Application.Notificacao.DTOs;
-using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
+using Gashu.SistemaMecanica.Application.Notificacao.Services;
+using Gashu.SistemaMecanica.Application.Notificacao.Services;
 
 namespace Gashu.SistemaMecanica.Tests.Integration.FakeServices;
 

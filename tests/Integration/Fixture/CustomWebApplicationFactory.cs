@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 using Gashu.SistemaMecanica.Domain.Estoque.Entities;
 using Gashu.SistemaMecanica.Domain.Metricas.Entities;
-using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
+using Gashu.SistemaMecanica.Application.Notificacao.Services;
 using Gashu.SistemaMecanica.Tests.Integration.FakeServices;
 using Gashu.SistemaMecanica.Application.Estoque.Services;
 using Gashu.SistemaMecanica.Application.Estoque.Services;

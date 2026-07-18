@@ -1,5 +1,5 @@
 using Gashu.SistemaMecanica.API.Notificacao.Presenters;
-using Gashu.SistemaMecanica.Application.Notificacao.DTOs;
+using Gashu.SistemaMecanica.Application.Notificacao.Services;
 
 namespace Gashu.SistemaMecanica.API.Notificacao.Controllers;
 

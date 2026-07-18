@@ -1,13 +1,7 @@
 namespace Gashu.SistemaMecanica.API.Notificacao.Controllers;
 
-using Application.Notificacao.Interfaces;
-using Application.OrdensServico.Interfaces;
-using Application.OrdensServico.Services;
-using Domain.OrdensServico.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using Application.Notificacao.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Gashu.SistemaMecanica.API.Notificacao.Presenters;
+using Gashu.SistemaMecanica.Application.Notificacao.Services;
 
 public class ConfirmacaoEmailController : IConfirmacaoEmailController
 {
@@ -19,7 +13,7 @@ public class ConfirmacaoEmailController : IConfirmacaoEmailController
         _notificacaoService = notificacaoService;
     }
 
-    public async Task<OutputConfirmacaoEmail> EnviarConfirmacaoEmail([FromBody] AprovacaoOrcamentoDto dto)
+    public async Task<OutputConfirmacaoEmail> EnviarConfirmacaoEmail(AprovacaoOrcamentoDto dto)
     {
         await _notificacaoService.EnviarOrcamento(dto);
 

@@ -1,4 +1,4 @@
-namespace Gashu.SistemaMecanica.Domain.Identidade.Interfaces;
+namespace Gashu.SistemaMecanica.Application.Repositories;
 
 using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 
