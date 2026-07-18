@@ -9,7 +9,7 @@ using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
 using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 using Gashu.SistemaMecanica.Application.Metricas.Interfaces;
 using Gashu.SistemaMecanica.Application.Metricas.DTOs;
-using Gashu.SistemaMecanica.Application.Identidade.DTOs;
+using Gashu.SistemaMecanica.Application.Identidade.Services;
 using Gashu.SistemaMecanica.Application.Identidade.Interfaces;
 using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 

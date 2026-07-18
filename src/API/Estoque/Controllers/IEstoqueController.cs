@@ -1,10 +1,8 @@
 namespace Gashu.SistemaMecanica.API.Estoque.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using Application.Estoque.Services;
-using Application.Estoque.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Gashu.SistemaMecanica.API.Estoque.Presenters;
+using Gashu.SistemaMecanica.Application.Estoque.Services;
 
 /// <summary>
 /// Controller responsável pelo gerenciamento de estoque

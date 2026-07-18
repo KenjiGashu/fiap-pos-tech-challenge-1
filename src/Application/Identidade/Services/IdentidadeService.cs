@@ -8,7 +8,7 @@ using Gashu.SistemaMecanica.Application.Identidade.Interfaces;
 using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 using Gashu.SistemaMecanica.Domain.Identidade.Interfaces;
 using System.Linq;
-using Gashu.SistemaMecanica.Application.Identidade.DTOs;
+using Gashu.SistemaMecanica.Application.Identidade.Services;
 using System.Security.Cryptography;
 
 public class IdentidadeService : IIdentidadeService

@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Gashu.SistemaMecanica.Application.Estoque.DTOs;
+using Gashu.SistemaMecanica.Application.Estoque.Services;
 using Gashu.SistemaMecanica.Application.Metricas.DTOs;
 using Gashu.SistemaMecanica.Domain.Estoque.Entities;
 using Gashu.SistemaMecanica.Tests.Integration.Fixture;

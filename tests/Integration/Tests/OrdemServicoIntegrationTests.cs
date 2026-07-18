@@ -7,7 +7,7 @@ using Gashu.SistemaMecanica.Domain.Estoque.Entities;
 using Gashu.SistemaMecanica.Tests.Integration.Fixture;
 using Gashu.SistemaMecanica.Tests.Integration.Helpers;
 using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
-using Gashu.SistemaMecanica.Application.Estoque.DTOs;
+using Gashu.SistemaMecanica.Application.Estoque.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Gashu.SistemaMecanica.Infrastructure.Data;
 using Gashu.SistemaMecanica.API.OrdensServico.Presenters;

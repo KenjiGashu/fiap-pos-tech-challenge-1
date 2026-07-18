@@ -1,4 +1,4 @@
-namespace Gashu.SistemaMecanica.Application.Identidade.DTOs;
+namespace Gashu.SistemaMecanica.Application.Identidade.Services;
 
 public class LoginDto
 {

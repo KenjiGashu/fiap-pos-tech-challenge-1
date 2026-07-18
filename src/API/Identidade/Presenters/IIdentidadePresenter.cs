@@ -1,12 +1,8 @@
 namespace Gashu.SistemaMecanica.API.Identidade.Presenters;
 
 using Microsoft.AspNetCore.Mvc;
-using Application.Estoque.Services;
-using Application.Estoque.DTOs;
-using Application.Identidade.Interfaces;
-using Application.Identidade.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Gashu.SistemaMecanica.Domain.Identidade.Entities;
+using Gashu.SistemaMecanica.Application.Identidade.Services;
 
 /// <summary>
 /// Objeto de retorno do presenter

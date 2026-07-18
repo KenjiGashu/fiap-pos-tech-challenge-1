@@ -1,7 +1,7 @@
 namespace Gashu.SistemaMecanica.Application.Identidade.Interfaces;
 
 using Gashu.SistemaMecanica.Domain.Identidade.Entities;
-using Gashu.SistemaMecanica.Application.Identidade.DTOs;
+using Gashu.SistemaMecanica.Application.Identidade.Services;
 
 public interface IIdentidadeService
 {
