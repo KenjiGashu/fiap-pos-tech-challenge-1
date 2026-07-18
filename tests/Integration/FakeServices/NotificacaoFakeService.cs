@@ -1,5 +1,4 @@
 using Gashu.SistemaMecanica.Application.Notificacao.Services;
-using Gashu.SistemaMecanica.Application.Notificacao.Services;
 
 namespace Gashu.SistemaMecanica.Tests.Integration.FakeServices;
 

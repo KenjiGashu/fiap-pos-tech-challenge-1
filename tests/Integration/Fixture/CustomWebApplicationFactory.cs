@@ -12,7 +12,6 @@ using Gashu.SistemaMecanica.Domain.Metricas.Entities;
 using Gashu.SistemaMecanica.Application.Notificacao.Services;
 using Gashu.SistemaMecanica.Tests.Integration.FakeServices;
 using Gashu.SistemaMecanica.Application.Estoque.Services;
-using Gashu.SistemaMecanica.Application.Estoque.Services;
 using Microsoft.Data.Sqlite;
 
 namespace Gashu.SistemaMecanica.Tests.Integration.Fixture;

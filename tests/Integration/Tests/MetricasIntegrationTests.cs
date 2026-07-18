@@ -1,11 +1,5 @@
 using System.Net;
-using System.Net.Http.Json;
-using System.Text.Json;
-using Gashu.SistemaMecanica.Application.Estoque.Services;
-using Gashu.SistemaMecanica.Application.Metricas.Services;
-using Gashu.SistemaMecanica.Domain.Estoque.Entities;
 using Gashu.SistemaMecanica.Tests.Integration.Fixture;
-using Gashu.SistemaMecanica.Tests.Integration.Helpers;
 
 namespace Gashu.SistemaMecanica.Tests.Integration.Tests;
 

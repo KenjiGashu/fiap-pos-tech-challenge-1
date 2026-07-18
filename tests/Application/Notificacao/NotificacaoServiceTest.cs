@@ -1,8 +1,6 @@
 namespace Gashu.SistemaMecanica.Tests.Application.Notificacao;
 
 using global::Gashu.SistemaMecanica.Application.Notificacao.Services;
-using global::Gashu.SistemaMecanica.Application.Notificacao.Services;
-using global::Gashu.SistemaMecanica.Application.Notificacao.Services;
 using global::Gashu.SistemaMecanica.Application.Gateway;
 using Moq;
 

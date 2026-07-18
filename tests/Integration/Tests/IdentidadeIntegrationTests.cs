@@ -1,9 +1,5 @@
 using Gashu.SistemaMecanica.Tests.Integration.Fixture;
 using System.Net.Http.Json;
-using System.Security.Cryptography;
-using Microsoft.Extensions.DependencyInjection;
-using Gashu.SistemaMecanica.Infrastructure.Data;
-using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 using Gashu.SistemaMecanica.Tests.Integration.Helpers;
 
 namespace Gashu.SistemaMecanica.Tests.Integration.Tests;

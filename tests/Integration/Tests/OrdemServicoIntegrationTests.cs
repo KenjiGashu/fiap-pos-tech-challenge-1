@@ -1,16 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
-using System.Text.Json;
 using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
-using Gashu.SistemaMecanica.Application.Metricas.Services;
-using Gashu.SistemaMecanica.Domain.Estoque.Entities;
 using Gashu.SistemaMecanica.Tests.Integration.Fixture;
 using Gashu.SistemaMecanica.Tests.Integration.Helpers;
 using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 using Gashu.SistemaMecanica.Application.Estoque.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Gashu.SistemaMecanica.Infrastructure.Data;
-using Gashu.SistemaMecanica.API.OrdensServico.Presenters;
 
 namespace Gashu.SistemaMecanica.Tests.Integration.Tests;
 
