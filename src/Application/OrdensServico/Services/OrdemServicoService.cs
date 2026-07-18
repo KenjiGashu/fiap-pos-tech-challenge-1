@@ -4,7 +4,7 @@ using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
 using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 using Gashu.SistemaMecanica.Application.Notificacao.DTOs;
 using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
-using Gashu.SistemaMecanica.Application.Estoque.Interfaces;
+using Gashu.SistemaMecanica.Application.Estoque.Services;
 using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
 using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 using Gashu.SistemaMecanica.Application.Metricas.Interfaces;

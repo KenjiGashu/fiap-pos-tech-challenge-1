@@ -1,6 +1,6 @@
 using Gashu.SistemaMecanica.Application.OrdensServico.Services;
 using Gashu.SistemaMecanica.Application.Estoque.Services;
-using Gashu.SistemaMecanica.Application.Estoque.Interfaces;
+using Gashu.SistemaMecanica.Application.Estoque.Services;
 using Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
 using Gashu.SistemaMecanica.Domain.Estoque.Interfaces;
 using Gashu.SistemaMecanica.Infrastructure.Data;

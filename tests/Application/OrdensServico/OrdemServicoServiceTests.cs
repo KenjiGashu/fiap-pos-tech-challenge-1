@@ -6,7 +6,7 @@ using global::Gashu.SistemaMecanica.Application.OrdensServico.Services;
 using global::Gashu.SistemaMecanica.Domain.OrdensServico.Interfaces;
 using global::Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 using global::Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
-using global::Gashu.SistemaMecanica.Application.Estoque.Interfaces;
+using global::Gashu.SistemaMecanica.Application.Estoque.Services;
 using global::Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
 using global::Gashu.SistemaMecanica.Application.Notificacao.DTOs;
 using global::Gashu.SistemaMecanica.Domain.Identidade.Entities;

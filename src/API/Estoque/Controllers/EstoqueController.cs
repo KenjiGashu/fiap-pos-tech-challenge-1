@@ -2,8 +2,8 @@ namespace Gashu.SistemaMecanica.API.Estoque.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 using Application.Estoque.DTOs;
-using Application.Estoque.Interfaces;
 using Gashu.SistemaMecanica.API.Estoque.Presenters;
+using Gashu.SistemaMecanica.Application.Estoque.Services;
 
 /// <inheritdoc/>
 public class EstoqueController : IEstoqueController

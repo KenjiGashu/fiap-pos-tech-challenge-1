@@ -1,6 +1,6 @@
 namespace Gashu.SistemaMecanica.Tests.Application.Etoque;
 
-using global::Gashu.SistemaMecanica.Application.Estoque.Interfaces;
+using global::Gashu.SistemaMecanica.Application.Estoque.Services;
 using global::Gashu.SistemaMecanica.Application.Estoque.Services;
 using global::Gashu.SistemaMecanica.Domain.Estoque.Entities;
 using global::Gashu.SistemaMecanica.Domain.Estoque.Interfaces;

@@ -3,7 +3,6 @@ namespace Gashu.SistemaMecanica.API.Identidade.API;
 using Microsoft.AspNetCore.Mvc;
 using Application.Estoque.Services;
 using Application.Estoque.DTOs;
-using Application.Estoque.Interfaces;
 using Application.Identidade.Interfaces;
 using Application.Identidade.DTOs;
 using Microsoft.AspNetCore.Authorization;

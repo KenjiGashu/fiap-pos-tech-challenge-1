@@ -1,7 +1,7 @@
 namespace Gashu.SistemaMecanica.Application.Estoque.Services;
 
 using Gashu.SistemaMecanica.Application.Estoque.DTOs;
-using Gashu.SistemaMecanica.Application.Estoque.Interfaces;
+using Gashu.SistemaMecanica.Application.Estoque.Services;
 using Gashu.SistemaMecanica.Domain.Estoque.Entities;
 using Gashu.SistemaMecanica.Domain.Estoque.Interfaces;
 

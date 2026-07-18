@@ -3,7 +3,6 @@ namespace Gashu.SistemaMecanica.API.Estoque.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Application.Estoque.Services;
 using Application.Estoque.DTOs;
-using Application.Estoque.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Gashu.SistemaMecanica.API.Estoque.Presenters;
 
