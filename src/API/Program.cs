@@ -15,7 +15,7 @@ using Gashu.SistemaMecanica.Application.Notificacao.Services;
 using Gashu.SistemaMecanica.Application.Notificacao.Interfaces;
 using Gashu.SistemaMecanica.Infrastructure.Notificacao.Services;
 using System.Text;
-using Gashu.SistemaMecanica.Application.Identidade.Interfaces;
+using Gashu.SistemaMecanica.Application.Identidade.Services;
 using Gashu.SistemaMecanica.Application.Identidade.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;

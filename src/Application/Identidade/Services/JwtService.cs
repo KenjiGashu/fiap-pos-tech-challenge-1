@@ -5,7 +5,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Gashu.SistemaMecanica.Domain.Identidade.Entities;
-using Gashu.SistemaMecanica.Application.Identidade.Interfaces;
+using Gashu.SistemaMecanica.Application.Identidade.Services;
 
 public class JwtService : IJwtService
 {

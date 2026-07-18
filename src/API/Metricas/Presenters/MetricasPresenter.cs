@@ -1,4 +1,4 @@
-using Gashu.SistemaMecanica.Application.Metricas.DTOs;
+using Gashu.SistemaMecanica.Application.Metricas.Services;
 
 namespace Gashu.SistemaMecanica.API.Metricas.Presenters;
 

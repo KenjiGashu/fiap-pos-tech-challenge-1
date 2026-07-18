@@ -1,6 +1,6 @@
 namespace Gashu.SistemaMecanica.Application.Metricas.Interfaces;
 
-using Gashu.SistemaMecanica.Application.Metricas.DTOs;
+using Gashu.SistemaMecanica.Application.Metricas.Services;
 
 public interface IMetricaOrdemServicoService
 {

@@ -1,6 +1,5 @@
 namespace Gashu.SistemaMecanica.API.Identidade.Presenters;
 
-using Microsoft.AspNetCore.Mvc;
 using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 using Gashu.SistemaMecanica.Application.Identidade.Services;
 

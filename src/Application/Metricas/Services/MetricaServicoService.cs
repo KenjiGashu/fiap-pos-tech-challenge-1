@@ -1,6 +1,6 @@
 namespace Gashu.SistemaMecanica.Application.Metricas.Services;
 
-using Gashu.SistemaMecanica.Application.Metricas.DTOs;
+using Gashu.SistemaMecanica.Application.Metricas.Services;
 using Gashu.SistemaMecanica.Application.Metricas.Interfaces;
 using Gashu.SistemaMecanica.Domain.Metricas.Entities;
 using Gashu.SistemaMecanica.Domain.Metricas.Interfaces;

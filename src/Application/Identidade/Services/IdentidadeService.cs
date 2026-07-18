@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Gashu.SistemaMecanica.Application.Identidade.Interfaces;
+using Gashu.SistemaMecanica.Application.Identidade.Services;
 using Gashu.SistemaMecanica.Domain.Identidade.Entities;
 using Gashu.SistemaMecanica.Domain.Identidade.Interfaces;
 using System.Linq;

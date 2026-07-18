@@ -1,10 +1,8 @@
 namespace Gashu.SistemaMecanica.API.Metricas.Controllers;
 
-using Microsoft.AspNetCore.Mvc;
-using Application.Metricas.DTOs;
 using Application.Metricas.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Gashu.SistemaMecanica.API.Metricas.Presenters;
+using Gashu.SistemaMecanica.Application.Metricas.Services;
 
 
 /// <inheritdoc/>

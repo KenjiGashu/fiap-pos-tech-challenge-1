@@ -1,6 +1,6 @@
 namespace Gashu.SistemaMecanica.API.Metricas.Presenters;
 
-using Application.Metricas.DTOs;
+using Application.Metricas.Services;
 
 /// <summary>
 /// Objeto de retorno do presenter

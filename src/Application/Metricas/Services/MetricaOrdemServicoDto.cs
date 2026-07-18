@@ -1,4 +1,4 @@
-namespace Gashu.SistemaMecanica.Application.Metricas.DTOs;
+namespace Gashu.SistemaMecanica.Application.Metricas.Services;
 
 using System.Text.Json.Serialization;
 using Gashu.SistemaMecanica.Domain.Metricas.Entities;
