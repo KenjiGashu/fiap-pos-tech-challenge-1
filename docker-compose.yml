@@ -2,13 +2,16 @@ version: "3.8"
 
 services:
   api:
-    image: kenjigashu/sistema-mecanica:main
+    build: .
+    image: sistema-mecanica:main
+    container_name: sistema-mecanica
     ports:
       - "8080:8080"
       - "8081:8081"
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - FIAP_POS_PORT=8080
+      - FIAP_POS_IP=127.0.0.1
       - FIAP_POS_EMAIL=kenjigashu@gmail.com
       - FIAP_POS_APP_PASSWORD=izvbemsvglzooife
       - FIAP_POS_SALT=pesomorto
@@ -37,6 +40,50 @@ services:
       timeout: 5s
       retries: 5
 
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./opentelemetry/otel-collector-config.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - "8889:8889"
+    depends_on:
+      - jaeger
+    restart: unless-stopped
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - LOG_LEVEL=debug
+    ports:
+      # Jaeger UI (Web Browser interface)
+      - "16686:16686"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      # Jaeger UI (Web Browser interface)
+      - "9090:9090"
+    volumes:
+      - ./opentelemetry/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - otel-collector
+
+  grafana:
+    image: grafana/grafana:nightly-slim
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
 volumes:
   postgres_data:
+  grafana-data:
 

@@ -31,6 +31,11 @@ using Gashu.SistemaMecanica.API.Metricas.Presenters;
 using Gashu.SistemaMecanica.API.OrdensServico.Controllers;
 using Gashu.SistemaMecanica.API.OrdensServico.Presenters;
 
+using System.Diagnostics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Metrics;
+
 var builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsEnvironment("Testing"))
@@ -47,6 +52,45 @@ else
 var jwtSecret = Environment.GetEnvironmentVariable("FIAP_POS_SECRET")
     ?? throw new InvalidOperationException(
         "Environment variable FIAP_POS_SECRET was not configured.");
+
+// Configure OpenTelemetry with tracing and auto-start.
+// builder.Services.AddOpenTelemetry()
+//     .ConfigureResource(resource => resource
+//         .AddService(serviceName: builder.Environment.ApplicationName))
+//     .WithTracing(tracing => tracing
+//         .AddAspNetCoreInstrumentation()
+//         .AddConsoleExporter());
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource =>
+        resource.AddService(
+            serviceName: "MinhaApi",
+            serviceVersion: "1.0.0"))
+    .WithTracing(tracing =>
+    {
+        tracing
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddEntityFrameworkCoreInstrumentation()
+            .AddOtlpExporter(options =>
+            {
+                options.Endpoint = new Uri("http://otel-collector:4317");
+            })
+            .AddConsoleExporter();
+    })
+    .WithMetrics(metrics =>
+    {
+        metrics
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddRuntimeInstrumentation()
+            .AddOtlpExporter(options =>
+            {
+                options.Endpoint = new Uri("http://otel-collector:4317");
+            })
+            .AddConsoleExporter();
+    });
+
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
