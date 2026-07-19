@@ -16,10 +16,12 @@ using Gashu.SistemaMecanica.API.Metricas.Controllers;
 public class MetricasAPI : ControllerBase
 {
     private readonly IMetricasController _controller;
+    private readonly ILogger<MetricasAPI> _logger;
 
-    public MetricasAPI(IMetricasController controller)
+    public MetricasAPI(IMetricasController controller, ILogger<MetricasAPI> logger)
     {
         _controller = controller;
+        _logger = logger;
     }
 
     /// <summary>
@@ -42,7 +44,7 @@ public class MetricasAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[GetAll] Erro interno");
+            _logger.LogDebug($"[GetAll] Erro interno");
             return StatusCode(500);
         }
     }
@@ -69,7 +71,7 @@ public class MetricasAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[TempoMedio] Erro interno");
+            _logger.LogDebug("[TempoMedio] Erro interno {idOrdemServico}", id);
             return StatusCode(500);
         }
     }
@@ -96,7 +98,7 @@ public class MetricasAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[TempoTotal] Erro interno {ex.Message}");
+            _logger.LogDebug("[TempoTotal] Erro interno {exceptionMessage}", ex.Message);
             return StatusCode(500);
         }
     }
@@ -121,7 +123,7 @@ public class MetricasAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[TempoMedioAtendimentos] Erro interno {ex.Message}");
+            _logger.LogDebug("[TempoMedioAtendimentos] Erro interno {exceptionMessage}", ex.Message);
             return StatusCode(500);
         }
     }

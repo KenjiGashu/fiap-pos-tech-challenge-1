@@ -12,6 +12,7 @@ using Gashu.SistemaMecanica.Application.Metricas.Services;
 using Gashu.SistemaMecanica.Application.Identidade.Services;
 using Gashu.SistemaMecanica.Application.Identidade.Services;
 using Gashu.SistemaMecanica.Domain.Identidade.Entities;
+using Microsoft.Extensions.Logging;
 
 public class OrdemServicoService : IOrdemServicoService
 {
@@ -25,6 +26,7 @@ public class OrdemServicoService : IOrdemServicoService
     private readonly IClienteService _clienteService;
     private readonly IClienteRepository _clienteRepo;
     private readonly IIdentidadeService _identidadeService;
+    private readonly ILogger<OrdemServicoService> _logger;
 
     public OrdemServicoService(
         IOrdemServicoRepository repo,
@@ -35,7 +37,8 @@ public class OrdemServicoService : IOrdemServicoService
         IVeiculoService veiculoService,
         IClienteService clienteService,
         IClienteRepository clienteRepository,
-        IIdentidadeService identidadeService)
+        IIdentidadeService identidadeService,
+        ILogger<OrdemServicoService> logger)
     {
         _repo = repo;
         _estoqueService = estoqueService;
@@ -46,6 +49,7 @@ public class OrdemServicoService : IOrdemServicoService
         _clienteService = clienteService;
         _clienteRepo = clienteRepository;
         _identidadeService =identidadeService;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<OrdemServicoResponseDto>> GetAll()
@@ -151,7 +155,7 @@ public class OrdemServicoService : IOrdemServicoService
 
     public async Task<ListaOrdemServicoResponseDto> ObterPorIdCliente(Guid clienteId)
     {
-        Console.WriteLine($"[obter por id cliente] {clienteId}");
+        _logger.LogDebug("[obter por id cliente] {clienteId}", clienteId);
         var ordemServicos = await _repo.ObterPorIdCliente(clienteId);
         var dto = new ListaOrdemServicoResponseDto
         {

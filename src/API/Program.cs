@@ -35,6 +35,7 @@ using System.Diagnostics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Logs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,6 +91,19 @@ builder.Services.AddOpenTelemetry()
             })
             .AddConsoleExporter();
     });
+
+//
+builder.Logging.AddOpenTelemetry(options =>
+{
+    options.IncludeScopes = true;
+    options.IncludeFormattedMessage = true;
+    options.ParseStateValues = true;
+
+    options.AddOtlpExporter(exporter =>
+    {
+        exporter.Endpoint = new Uri("http://otel-collector:4317");
+    });
+});
 
 
 builder.Services.AddControllers()

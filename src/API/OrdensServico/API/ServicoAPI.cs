@@ -19,10 +19,12 @@ using Gashu.SistemaMecanica.API.OrdensServico.Controllers;
 public class ServicoAPI : ControllerBase
 {
     private readonly IServicoController _controller;
+    private readonly ILogger<ServicoAPI> _logger;
 
-    public ServicoAPI(IServicoController controller)
+    public ServicoAPI(IServicoController controller, ILogger<ServicoAPI> logger)
     {
         _controller = controller;
+        _logger = logger;
     }
 
     /// <summary>
@@ -45,7 +47,7 @@ public class ServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Get] erro ao obter servicos. {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{ServicoAPI}] erro ao obter servicos. {ex.Message}. {ex.StackTrace}", "ServicoAPI", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -71,7 +73,7 @@ public class ServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Get] erro ao obter servico id[{id}]. {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{ServicoAPI}] erro ao obter servico id[{ServicoId}]. {ex.Message}. {ex.StackTrace}", "ServicoAPI", id, ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -93,7 +95,7 @@ public class ServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Get] erro ao criar servico. {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{ServicoAPI}] erro ao criar servico. {ex.Message}. {ex.StackTrace}", "ServicoAPI", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -116,7 +118,7 @@ public class ServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Get] erro ao atualizar servico. {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{ServicoAPI}] erro ao atualizar servico. {ex.Message}. {ex.StackTrace}", "ServicoAPI", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -138,7 +140,7 @@ public class ServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Get] erro ao deletar servico. {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{ServicoAPI}]erro ao deletar servico. {ex.Message}. {ex.StackTrace}", "ServicoAPI", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }

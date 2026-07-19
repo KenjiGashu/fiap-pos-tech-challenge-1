@@ -2,16 +2,19 @@ using Gashu.SistemaMecanica.Domain.OrdensServico.Entities;
 using Gashu.SistemaMecanica.Application.Repositories;
 using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
 using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
+using Microsoft.Extensions.Logging;
 
 namespace Gashu.SistemaMecanica.Application.OrdensServico.Services;
 
 public class ClienteService : IClienteService
 {
     private readonly IClienteRepository _repository;
+    private readonly ILogger<ClienteService> _logger;
 
-    public ClienteService(IClienteRepository repository)
+    public ClienteService(IClienteRepository repository, ILogger<ClienteService> logger)
     {
         _repository = repository;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<ClienteResponseDto>> GetAll()
@@ -102,7 +105,7 @@ public class ClienteService : IClienteService
     {
         var cliente = new Cliente(dto.Nome, dto.Cpf, dto.Cnpj, dto.TipoPessoa);
         cliente.UsuarioId = dto.UsuarioId;
-        Console.WriteLine($"adicionando cliente nome: {dto.Nome} usuario {dto.UsuarioId}");
+        _logger.LogDebug("adicionando cliente nome: {NomeCliente} usuario {UsuarioId}", dto.Nome, dto.UsuarioId);
         await _repository.Adicionar(cliente);
     }
 

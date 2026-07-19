@@ -5,14 +5,17 @@ using Gashu.SistemaMecanica.Application.Metricas.Services;
 using Gashu.SistemaMecanica.Domain.Metricas.Entities;
 using Gashu.SistemaMecanica.Application.Repositories;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 public class MetricaOrdemServicoService : IMetricaOrdemServicoService
 {
     readonly IMetricaOrdemServicoRepository _repo;
+    readonly ILogger<MetricaOrdemServicoService> _logger;
 
-    public MetricaOrdemServicoService(IMetricaOrdemServicoRepository repo)
+    public MetricaOrdemServicoService(IMetricaOrdemServicoRepository repo, ILogger<MetricaOrdemServicoService> logger)
     {
         _repo = repo;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<MetricaOrdemServicoResponseDto>> GetAll()
@@ -47,7 +50,7 @@ public class MetricaOrdemServicoService : IMetricaOrdemServicoService
             var atual = eventosOrdenados[i].DateTime;
             var anterior = eventosOrdenados[i - 1].DateTime;
 
-            Console.WriteLine($"[tempo medio...] diff[{(atual-anterior).Seconds}] ");
+            _logger.LogDebug("[tempo medio...] diff[{diff}] ", (atual-anterior).Seconds);
 
             diferencas.Add(atual - anterior);
         }
@@ -72,7 +75,7 @@ public class MetricaOrdemServicoService : IMetricaOrdemServicoService
         var media = 0;
         var numGrupos = groupedMetricas.Count();
 
-        Console.WriteLine($"Tempo medio atendimento:\n numGrupos {numGrupos}");
+        _logger.LogDebug("Tempo medio atendimento:\n numGrupos {numGrupos}", numGrupos);
 
         foreach(var grupoMetricas in groupedMetricas)
         {
@@ -82,7 +85,7 @@ public class MetricaOrdemServicoService : IMetricaOrdemServicoService
 
             var soma = timeSpanStatus.Sum(d => d.TimeSpan.Seconds);
 
-            Console.WriteLine($"OrdemServicoID: {grupoMetricas.Key}  Tempo: {soma}");
+            _logger.LogDebug("OrdemServicoID: {grupoMetricas.Key}  Tempo: {soma}", grupoMetricas.Key, soma);
             media += soma;
         }
 

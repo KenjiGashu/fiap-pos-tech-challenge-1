@@ -9,11 +9,13 @@ public class MetricasController : IMetricasController
 {
     private readonly IMetricaOrdemServicoService _service;
     private readonly IMetricasPresenter _presenter;
+    private readonly ILogger<MetricasController> _logger;
 
-    public MetricasController(IMetricaOrdemServicoService service, IMetricasPresenter presenter)
+    public MetricasController(IMetricaOrdemServicoService service, IMetricasPresenter presenter, ILogger<MetricasController> logger)
     {
         _service = service;
         _presenter = presenter;
+        _logger = logger;
     }
 
     /// <inheritdoc/>
@@ -32,7 +34,7 @@ public class MetricasController : IMetricasController
         };
 
         var segundos = await _service.TempoMedioOrdemServico(dto);
-        Console.WriteLine($"[TempoMedio] {segundos}");
+        _logger.LogDebug("[TempoMedio] {TempoMedioSegundos}", segundos);
         return _presenter.Present("Tempo medio calculado com sucesso", segundos);
     }
 

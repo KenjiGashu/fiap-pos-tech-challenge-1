@@ -12,12 +12,17 @@ processors:
 exporters:
   debug:
     verbosity: detailed
+    
   otlp/jaeger:
     endpoint: jaeger:4317
     tls:
       insecure: true
+
   prometheus:
     endpoint: "0.0.0.0:8889"
+
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
       
     
 service:
@@ -31,3 +36,8 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [debug, prometheus]     
+
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, loki]

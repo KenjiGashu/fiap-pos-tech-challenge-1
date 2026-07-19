@@ -10,11 +10,13 @@ public class OrdemServicoController : IOrdemServicoController
 {
     private readonly IOrdemServicoService _service;
     private readonly IOrdemServicoPresenter _presenter;
+    private readonly ILogger<OrdemServicoController> _logger;
 
-    public OrdemServicoController(IOrdemServicoService service, IOrdemServicoPresenter presenter)
+    public OrdemServicoController(IOrdemServicoService service, IOrdemServicoPresenter presenter, ILogger<OrdemServicoController> logger)
     {
         _service = service;
         _presenter = presenter;
+        _logger = logger;
     }
 
     public async Task<OutputOrdemServicos> GetAll()
@@ -77,7 +79,7 @@ public class OrdemServicoController : IOrdemServicoController
 
         var output = _presenter.Present($"Orçamento {id} aprovado com sucesso");
 
-        Console.WriteLine($"output: {output.Message}");
+        _logger.LogDebug("output: {OrdemServicoId} {output.Message}", id, output.Message);
         return output;
     }
 
