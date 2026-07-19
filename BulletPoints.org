@@ -1,5 +1,0 @@
-* APIs RESTful documentadas via Swagger ou similar.
-
-* Testes automatizados com cobertura mínima de 80% nos domínios críticos.
-
-* Linguagem Ubíqua aplicada.
