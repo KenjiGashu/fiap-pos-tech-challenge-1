@@ -13,10 +13,13 @@ using Gashu.SistemaMecanica.API.OrdensServico.Controllers;
 public class OrdemServicoAPI : ControllerBase
 {
     private readonly IOrdemServicoController _controller;
+    private readonly ILogger<OrdemServicoAPI> _logger;
+    private readonly string Domain = "OrdemServico";
 
-    public OrdemServicoAPI(IOrdemServicoController controller)
+    public OrdemServicoAPI(IOrdemServicoController controller, ILogger<OrdemServicoAPI> logger)
     {
         _controller = controller;
+        _logger = logger;
     }
 
     /// <summary>
@@ -39,7 +42,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][Get] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "Get", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -64,7 +67,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][ListaOrdensServicos] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "ListaOrdensServicos", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -86,7 +89,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][GetById] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "ObterPorId", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -106,7 +109,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][GetByClientId] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "ObterPorIdCliente", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -128,7 +131,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][GetByClientId] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "Post", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -150,7 +153,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][CriarComTodosOsDados] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "CriarComTodosOsDados", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -171,7 +174,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][AdicionaPecas] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "AdicionaPecas", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -192,7 +195,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][AdicionaServico] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "AdicionaServicos", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -210,15 +213,14 @@ public class OrdemServicoAPI : ControllerBase
         try
         {
             var output = await _controller.EnviarOrcamento(dto);
+            _logger.LogDebug("[{Domain}][{Endpoint}] orcamento da OS {OrdemServicoId} enviado com sucesso!", Domain, "AprovarOrcamento", dto.OrdemServicoId);
             return Ok(output);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][EnviarOrcamento] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "EnviarOrcamento", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
-        // await _controller.EnviarOrcamento(dto);
-        // return Ok(new { Message = "Orçamento enviado!" });
     }
 
     /// <summary>
@@ -232,11 +234,12 @@ public class OrdemServicoAPI : ControllerBase
         try
         {
             var output = await _controller.AprovarOrcamento(id);
-            return Ok(new { Message = output.Message });
+            _logger.LogDebug("[{Domain}][{Endpoint}] orcamento da OS {OrdemServicoId} aprovado com sucesso!", Domain, "AprovarOrcamento", id);
+            return Ok(output);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][AprovarOrcamento] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "AprovarOrcamento", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -256,7 +259,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][RejeitarOrcamento] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "RejeitarOrcamento", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -277,7 +280,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][IniciarDiagnostico] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "IniciarDiagnostico", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -298,7 +301,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][FinalizarDiagnostico] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "FinalizarDiagnostico", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -317,7 +320,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][IniciarExecucao] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "IniciarExecucao", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -336,7 +339,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][FinalizarExecucao] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "FinalizarExecucao", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -355,7 +358,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][EntregarVeiculo] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "EntregarVeiculo", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -376,7 +379,7 @@ public class OrdemServicoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OrdemServico][Delete] ex {ex.Message}. {ex.StackTrace}");
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "Delete", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }

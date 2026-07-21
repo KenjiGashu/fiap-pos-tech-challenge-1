@@ -4,19 +4,19 @@ namespace Gashu.SistemaMecanica.API.OrdensServico.Presenters;
 
 public class OutputOrdemServicos
 {
-    public string Message;
-    public IEnumerable<OrdemServicoResponseDto> OrdemServicos;
+    public string Message { get; set; }
+    public IEnumerable<OrdemServicoResponseDto> OrdemServicos { get; set; }
 }
 
 public class OutputOrdemServico
 {
-    public string Message;
-    public OrdemServicoResponseDto OrdemServico;
+    public string Message { get; set; }
+    public OrdemServicoResponseDto OrdemServico { get; set; }
 }
 
 public class OutputMessageOrdemServico
 {
-    public string Message;
+    public string Message { get; set; }
 }
 
 public interface IOrdemServicoPresenter

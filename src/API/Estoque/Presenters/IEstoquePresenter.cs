@@ -11,12 +11,12 @@ public class OutputEstoque
     /// <summary>
     /// Mensagem de retorno
     /// </summary>
-    public string message;
+    public string message { get; set; }
 
     /// <summary>
     /// peca DTO
     /// </summary>
-    public PecaResponseDto? peca;
+    public PecaResponseDto? peca { get; set; }
 }
 
 /// <summary>
@@ -27,12 +27,12 @@ public class OutputEstoqueList
     /// <summary>
     /// Mensagem de retorno
     /// </summary>
-    public string message;
+    public string message { get; set; }
 
     /// <summary>
     /// lista de pecas DTO
     /// </summary>
-    public IEnumerable<PecaResponseDto> pecas;
+    public IEnumerable<PecaResponseDto> pecas { get; set; }
 }
 
 /// <summary>

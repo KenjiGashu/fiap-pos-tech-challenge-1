@@ -4,19 +4,19 @@ namespace Gashu.SistemaMecanica.API.OrdensServico.Presenters;
 
 public class OutputClientes
 {
-    public IEnumerable<ClienteResponseDto> Clientes;
-    public string Message;
+    public IEnumerable<ClienteResponseDto> Clientes { get; set; }
+    public string Message { get; set; }
 }
 
 public class OutputCliente
 {
-    public ClienteResponseDto? Cliente;
-    public string Message;
+    public ClienteResponseDto? Cliente { get; set; }
+    public string Message { get; set; }
 }
 
 public class OutputMessage
 {
-    public string Message;
+    public string Message { get; set; }
 }
 
 public interface IClientePresenter

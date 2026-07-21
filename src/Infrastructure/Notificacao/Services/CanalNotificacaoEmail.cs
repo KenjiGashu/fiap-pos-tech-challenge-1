@@ -4,9 +4,18 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Gashu.SistemaMecanica.Application.Gateway;
+using Microsoft.Extensions.Logging;
 
 public class CanalNotificacaoEmail : ICanalNotificacao
 {
+    private readonly ILogger<CanalNotificacaoEmail> _logger;
+    private readonly string Domain = "Notificao";
+
+    public CanalNotificacaoEmail(ILogger<CanalNotificacaoEmail> logger)
+    {
+        _logger = logger;
+    }
+
     public async Task EnviarMensagem(string para, string titulo, string corpo)
     {
 			string? remetente = Environment.GetEnvironmentVariable("FIAP_POS_EMAIL");
@@ -37,7 +46,7 @@ public class CanalNotificacaoEmail : ICanalNotificacao
 			try
 			{
 				smtp.Send(email);
-				Console.WriteLine("Email enviado com sucesso!");
+        _logger.LogDebug("[{Domain}] Email enviado com sucesso!", Domain);
 			}
 			catch (Exception ex)
 			{

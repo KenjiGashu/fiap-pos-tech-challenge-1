@@ -4,19 +4,19 @@ using Gashu.SistemaMecanica.Application.OrdensServico.DTOs;
 
 public class OutputVeiculos
 {
-    public IEnumerable<VeiculoResponseDto> Veiculos;
-    public string Message;
+    public IEnumerable<VeiculoResponseDto> Veiculos { get; set; }
+    public string Message { get; set; }
 }
 
 public class OutputVeiculo
 {
-    public VeiculoResponseDto Veiculo;
-    public string Message;
+    public VeiculoResponseDto Veiculo { get; set; }
+    public string Message { get; set; }
 }
 
 public class OutputMessageVeiculo
 {
-    public string Message;
+    public string Message { get; set; }
 }
 
 public interface IVeiculoPresenter

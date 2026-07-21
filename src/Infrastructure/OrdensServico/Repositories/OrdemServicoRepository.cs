@@ -131,15 +131,6 @@ public class OrdemServicoRepository : IOrdemServicoRepository
     public async Task SaveChangesAsync()
     {
         var entries = _context.ChangeTracker.Entries();
-
-        // var entry = _context.Entry(ordemServico);
-        // Console.WriteLine(entry.State);
-
-        foreach (var e in entries)
-            {
-                Console.WriteLine($"{e.Entity.GetType().Name} - {e.State}");
-            }
-            
         await _context.SaveChangesAsync();
     }
 

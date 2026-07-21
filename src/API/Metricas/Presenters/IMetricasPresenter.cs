@@ -10,12 +10,12 @@ public class OutputMetricas
     /// <summary>
     /// lista de metricas
     /// </summary>
-    public IEnumerable<MetricaOrdemServicoResponseDto> Metricas;
+    public IEnumerable<MetricaOrdemServicoResponseDto> Metricas { get; set; }
 
     /// <summary>
     /// Mensagem de retorno
     /// </summary>
-    public string Message;
+    public string Message { get; set; }
 }
 
 /// <summary>
@@ -26,12 +26,12 @@ public class OutputMetricasSegundos
     /// <summary>
     /// tempo
     /// </summary>
-    public int Tempo;
+    public int Tempo { get; set; }
 
     /// <summary>
     /// Mensagem de retorno
     /// </summary>
-    public string Message;
+    public string Message { get; set; }
 }
 
 /// <summary>

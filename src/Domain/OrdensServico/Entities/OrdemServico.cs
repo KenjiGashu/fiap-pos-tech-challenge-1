@@ -54,7 +54,6 @@ public class OrdemServico
 				var foundServico = OrdemServicoServicos.FirstOrDefault(o => o.ServicoId == servicoId);
         if (foundServico == null)
         {
-            Console.WriteLine($"Servico ja existe na ordem serviço");
             OrdemServicoServicos.Add(new OrdemServicoServico(this.Id, servicoId, preco, nome));
         }
 				

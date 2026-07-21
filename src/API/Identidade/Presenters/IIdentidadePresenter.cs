@@ -11,12 +11,12 @@ public class OutputIdentidadeToken
     /// <summary>
     /// Mensagem de retorno
     /// </summary>
-    public string Message;
+    public string Message { get; set; }
     
     /// <summary>
     /// Token de retorno
     /// </summary>
-    public string Token;
+    public string Token { get; set; }
 }
 
 /// <summary>
@@ -27,7 +27,7 @@ public class OutputIdentidadeMensagem
     /// <summary>
     /// Mensagem de retorno
     /// </summary>
-    public string Message;
+    public string Message { get; set; }
 }
 
 /// <summary>
@@ -38,12 +38,12 @@ public class OutputIdentidadeUsuario
     /// <summary>
     /// Mensagem de retorno
     /// </summary>
-    public string Message;
+    public string Message { get; set; }
 
     /// <summary>
     /// Usuario de retorno
     /// </summary>
-    public UsuarioResponseDto Usuario;
+    public UsuarioResponseDto Usuario { get; set; }
 }
 
 /// <summary>
@@ -54,12 +54,12 @@ public class OutputIdentidadeUsuarios
     /// <summary>
     /// Mensagem de retorno
     /// </summary>
-    public string Message;
+    public string Message { get; set; }
 
     /// <summary>
     /// Usuario de retorno
     /// </summary>
-    public IEnumerable<UsuarioResponseDto> Usuarios;
+    public IEnumerable<UsuarioResponseDto> Usuarios { get; set; }
 }
 
 /// <summary>

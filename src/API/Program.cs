@@ -1,7 +1,6 @@
 using Gashu.SistemaMecanica.Application.OrdensServico.Services;
 using Gashu.SistemaMecanica.Application.Estoque.Services;
 using Gashu.SistemaMecanica.Application.Repositories;
-using Gashu.SistemaMecanica.Application.Repositories;
 using Gashu.SistemaMecanica.Infrastructure.Data;
 using Gashu.SistemaMecanica.Infrastructure.OrdensServico.Repositories;
 using Gashu.SistemaMecanica.Infrastructure.Estoque.Repositories;
@@ -15,12 +14,9 @@ using System.Text;
 using Gashu.SistemaMecanica.Application.Identidade.Services;
 using Microsoft.IdentityModel.Tokens;
 using Gashu.SistemaMecanica.Infrastructure.Identidade.Repositories;
-using Gashu.SistemaMecanica.Application.Repositories;
-using Gashu.SistemaMecanica.Application.Repositories;
 using Gashu.SistemaMecanica.Infrastructure.Metricas.Repositories;
 using Gashu.SistemaMecanica.Application.Metricas.Services;
 using Gashu.SistemaMecanica.Application.OrdensServico.Interfaces;
-using Gashu.SistemaMecanica.Application.OrdensServico.Services;
 using System.Reflection;
 using Gashu.SistemaMecanica.API.Estoque.Controllers;
 using Gashu.SistemaMecanica.API.Estoque.Presenters;
@@ -31,14 +27,36 @@ using Gashu.SistemaMecanica.API.Metricas.Presenters;
 using Gashu.SistemaMecanica.API.OrdensServico.Controllers;
 using Gashu.SistemaMecanica.API.OrdensServico.Presenters;
 
-using System.Diagnostics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.Logs;
+
+
+// Serilog
+using Serilog;
+using Serilog.Sinks.Grafana.Loki;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.GrafanaLoki(
+        "http://loki:3100",
+        labels: new[]
+        {
+            new LokiLabel
+            {
+                Key = "service",
+                Value = "sistema-mecanica-api"
+            }
+        },
+        traceIdMode: LokiFieldDestination.StructuredMetadata,
+        spanIdMode: LokiFieldDestination.StructuredMetadata)
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
+// configure database to use
 if (builder.Environment.IsEnvironment("Testing"))
 { 
     builder.Services.AddDbContext<AppDbContext>(options =>
@@ -50,18 +68,17 @@ else
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 }
 
+
+// exit when no secret configured on env
 var jwtSecret = Environment.GetEnvironmentVariable("FIAP_POS_SECRET")
     ?? throw new InvalidOperationException(
         "Environment variable FIAP_POS_SECRET was not configured.");
 
-// Configure OpenTelemetry with tracing and auto-start.
-// builder.Services.AddOpenTelemetry()
-//     .ConfigureResource(resource => resource
-//         .AddService(serviceName: builder.Environment.ApplicationName))
-//     .WithTracing(tracing => tracing
-//         .AddAspNetCoreInstrumentation()
-//         .AddConsoleExporter());
+// add serilog to builder
+builder.Host.UseSerilog();
 
+
+// open telemetry
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(resource =>
         resource.AddService(
@@ -77,7 +94,8 @@ builder.Services.AddOpenTelemetry()
             {
                 options.Endpoint = new Uri("http://otel-collector:4317");
             })
-            .AddConsoleExporter();
+        //.AddConsoleExporter()
+        ;
     })
     .WithMetrics(metrics =>
     {
@@ -89,21 +107,22 @@ builder.Services.AddOpenTelemetry()
             {
                 options.Endpoint = new Uri("http://otel-collector:4317");
             })
-            .AddConsoleExporter();
+            //.AddConsoleExporter()
+            ;
     });
 
-//
-builder.Logging.AddOpenTelemetry(options =>
-{
-    options.IncludeScopes = true;
-    options.IncludeFormattedMessage = true;
-    options.ParseStateValues = true;
+// ===== nao sera usado, pois nao tem otel collector pra loki
+// builder.Logging.AddOpenTelemetry(options =>
+// {
+//     options.IncludeScopes = true;
+//     options.IncludeFormattedMessage = true;
+//     options.ParseStateValues = true;
 
-    options.AddOtlpExporter(exporter =>
-    {
-        exporter.Endpoint = new Uri("http://otel-collector:4317");
-    });
-});
+//     options.AddOtlpExporter(exporter =>
+//     {
+//         exporter.Endpoint = new Uri("http://otel-collector:4317");
+//     });
+// });
 
 
 builder.Services.AddControllers()

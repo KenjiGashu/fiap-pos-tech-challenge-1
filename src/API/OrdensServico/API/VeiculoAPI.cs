@@ -17,10 +17,13 @@ namespace Gashu.SistemaMecanica.API.OrdensServico.API;
 public class VeiculoAPI : ControllerBase
 {
     private readonly IVeiculoController _controller;
+    private readonly ILogger<VeiculoAPI> _logger;
+    private readonly string Domain = "Veiculo";
 
-    public VeiculoAPI(IVeiculoController controller)
+    public VeiculoAPI(IVeiculoController controller, ILogger<VeiculoAPI> logger)
     {
         _controller = controller;
+        _logger = logger;
     }
 
     /// <summary>
@@ -43,7 +46,7 @@ public class VeiculoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-	          Console.WriteLine(ex.ToString());
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "Get", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -56,7 +59,7 @@ public class VeiculoAPI : ControllerBase
     /// <response code="404">Veículo não encontrado</response>
     [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         try
         {
@@ -69,7 +72,7 @@ public class VeiculoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-	          Console.WriteLine(ex.ToString());
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "Get", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -95,7 +98,7 @@ public class VeiculoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-	          Console.WriteLine(ex.ToString());
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "GetByPlaca", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -140,7 +143,7 @@ public class VeiculoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-	          Console.WriteLine(ex.ToString());
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "Put", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
@@ -162,7 +165,7 @@ public class VeiculoAPI : ControllerBase
         }
         catch (Exception ex)
         {
-	          Console.WriteLine(ex.ToString());
+            _logger.LogDebug("[{Domain}][{Endpoint}] ex {ex.Message}. {ex.StackTrace}", Domain, "Delete", ex.Message, ex.StackTrace);
             return StatusCode(500);
         }
     }
